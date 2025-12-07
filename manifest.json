@@ -1,0 +1,21 @@
+{
+  "name": "Battle of Brackets",
+  "short_name": "BoB",
+  "description": "The party game where democracy gets dumb. Hosted by BOB.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0e1a",
+  "theme_color": "#0a0e1a",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%230a0e1a' width='100' height='100' rx='20'/><text y='65' x='50' text-anchor='middle' font-size='50'>🏆</text></svg>",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["games", "entertainment"],
+  "lang": "en-US",
+  "dir": "ltr"
+}

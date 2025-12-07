@@ -1,0 +1,2112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scale=no">
+  <meta name="theme-color" content="#0a0e1a">
+  <meta name="description" content="Battle of Brackets™ - The party game where democracy gets dumb. Hosted by BOB.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Battle of Brackets™ | Hosted by BOB</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    :root {
+      --bg-deep: #0a0e1a;
+      --bg-card: #141a2e;
+      --bg-card-hover: #1c2440;
+      --accent-gold: #ffd700;
+      --accent-red: #ff3b5c;
+      --accent-green: #00e676;
+      --accent-blue: #00b4ff;
+      --accent-purple: #b388ff;
+      --accent-orange: #ff9100;
+      --accent-pink: #ff4081;
+      --text-primary: #ffffff;
+      --text-secondary: #8892b0;
+      --text-muted: #4a5578;
+      --font-display: 'Bangers', cursive;
+      --font-body: 'Outfit', sans-serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg-deep);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: 
+        radial-gradient(ellipse at 20% 20%, rgba(255, 215, 0, 0.03) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(0, 180, 255, 0.03) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 50%, rgba(179, 136, 255, 0.02) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    #root { position: relative; z-index: 1; min-height: 100vh; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px) rotate(-1deg); }
+      75% { transform: translateX(5px) rotate(1deg); }
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(-30px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes scaleIn {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    @keyframes glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.3); }
+      50% { box-shadow: 0 0 40px rgba(255, 215, 0, 0.6), 0 0 60px rgba(255, 215, 0, 0.3); }
+    }
+
+    .animate-float { animation: float 3s ease-in-out infinite; }
+    .animate-pulse { animation: pulse 2s ease-in-out infinite; }
+    .animate-shake { animation: shake 0.5s ease-in-out; }
+    .animate-slideUp { animation: slideUp 0.5s ease-out forwards; }
+    .animate-slideIn { animation: slideIn 0.5s ease-out forwards; }
+    .animate-scaleIn { animation: scaleIn 0.4s ease-out forwards; }
+    .animate-glow { animation: glow 2s ease-in-out infinite; }
+
+    /* Scrollbar styling */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--bg-deep); }
+    ::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-secondary); }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useCallback, useMemo, useRef } = React;
+
+    // ============================================
+    // CATEGORY LIBRARY - 100+ Presets
+    // ============================================
+    const CATEGORY_LIBRARY = {
+      food: {
+        name: "Food & Drink",
+        icon: "🍕",
+        color: "var(--accent-orange)",
+        categories: [
+          { name: "Best Pizza Topping", entrants: ["Pepperoni", "Mushrooms", "Sausage", "Green Peppers", "Onions", "Black Olives", "Bacon", "Pineapple", "Jalapeños", "Extra Cheese", "Anchovies", "Spinach", "Tomatoes", "Garlic", "Ham", "Chicken"] },
+          { name: "Best Fast Food Chain", entrants: ["McDonald's", "Chick-fil-A", "Wendy's", "Taco Bell", "Burger King", "Popeyes", "Five Guys", "In-N-Out", "Chipotle", "Shake Shack", "Arby's", "Panda Express", "Sonic", "Whataburger", "Jersey Mike's", "Raising Cane's"] },
+          { name: "Best Ice Cream Flavor", entrants: ["Vanilla", "Chocolate", "Strawberry", "Cookies & Cream", "Mint Chocolate Chip", "Cookie Dough", "Rocky Road", "Butter Pecan", "Salted Caramel", "Coffee", "Pistachio", "Neapolitan", "Birthday Cake", "Peanut Butter Cup", "Cherry Garcia", "Moose Tracks"] },
+          { name: "Best Breakfast Food", entrants: ["Pancakes", "Waffles", "French Toast", "Bacon", "Eggs Benedict", "Omelette", "Breakfast Burrito", "Bagel & Lox", "Cereal", "Avocado Toast", "Biscuits & Gravy", "Cinnamon Roll", "Fruit Bowl", "Hash Browns", "Smoothie Bowl", "Croissant"] },
+          { name: "Best Thanksgiving Side", entrants: ["Mashed Potatoes", "Stuffing", "Green Bean Casserole", "Cranberry Sauce", "Sweet Potato Casserole", "Mac & Cheese", "Dinner Rolls", "Gravy", "Corn on the Cob", "Brussels Sprouts", "Cornbread", "Pumpkin Pie", "Pecan Pie", "Apple Pie", "Glazed Carrots", "Coleslaw"] },
+          { name: "Best Candy", entrants: ["Reese's", "Snickers", "M&Ms", "Kit Kat", "Twix", "Skittles", "Sour Patch Kids", "Milky Way", "Butterfinger", "3 Musketeers", "Swedish Fish", "Jolly Ranchers", "Nerds", "Starburst", "Hershey's", "Almond Joy"] },
+          { name: "Best Chip Flavor", entrants: ["Classic/Original", "Sour Cream & Onion", "BBQ", "Salt & Vinegar", "Cheddar", "Ranch", "Jalapeño", "Honey BBQ", "Loaded Baked Potato", "Dill Pickle", "Cool Ranch Doritos", "Nacho Cheese Doritos", "Flamin' Hot", "Kettle Cooked", "Lime", "All Dressed"] },
+          { name: "Best Soda", entrants: ["Coca-Cola", "Pepsi", "Dr Pepper", "Sprite", "Mountain Dew", "Fanta", "7-Up", "Root Beer", "Ginger Ale", "Orange Crush", "Cherry Coke", "Cream Soda", "Grape Soda", "Sierra Mist", "Sunkist", "Big Red"] },
+          { name: "Best Coffee Order", entrants: ["Black Coffee", "Latte", "Cappuccino", "Americano", "Espresso", "Mocha", "Cold Brew", "Iced Coffee", "Macchiato", "Flat White", "Frappuccino", "Irish Coffee", "Cortado", "Affogato", "Pour Over", "Red Eye"] },
+          { name: "Best Cuisine", entrants: ["Italian", "Mexican", "Chinese", "Japanese", "Thai", "Indian", "Greek", "French", "Korean", "Vietnamese", "American", "Mediterranean", "Spanish", "Middle Eastern", "Ethiopian", "Brazilian"] },
+        ]
+      },
+      music: {
+        name: "Music",
+        icon: "🎵",
+        color: "var(--accent-purple)",
+        categories: [
+          { name: "Best Band of All Time", entrants: ["The Beatles", "Led Zeppelin", "Pink Floyd", "Queen", "The Rolling Stones", "Nirvana", "U2", "AC/DC", "Guns N' Roses", "Metallica", "The Who", "Fleetwood Mac", "Radiohead", "The Beach Boys", "Pearl Jam", "Red Hot Chili Peppers"] },
+          { name: "Best Music Genre", entrants: ["Rock", "Pop", "Hip-Hop", "R&B", "Country", "Jazz", "Classical", "Electronic", "Metal", "Indie", "Folk", "Reggae", "Blues", "Soul", "Punk", "Alternative"] },
+          { name: "Best Decade for Music", entrants: ["1950s", "1960s", "1970s", "1980s", "1990s", "2000s", "2010s", "2020s"] },
+          { name: "Best Musical Instrument", entrants: ["Guitar", "Piano", "Drums", "Violin", "Saxophone", "Bass", "Trumpet", "Flute", "Cello", "Harmonica", "Ukulele", "Banjo", "Clarinet", "Trombone", "Accordion", "Synthesizer"] },
+          { name: "Best Album Cover", entrants: ["Dark Side of the Moon", "Abbey Road", "Nevermind", "The Velvet Underground & Nico", "Unknown Pleasures", "Thriller", "Sgt. Pepper's", "Rumours", "OK Computer", "London Calling", "Born in the USA", "Blue (Joni Mitchell)", "Purple Rain", "The Miseducation of Lauryn Hill", "Kid A", "Is This It"] },
+          { name: "Best One-Hit Wonder", entrants: ["Toto - Africa", "A-ha - Take On Me", "Soft Cell - Tainted Love", "Dexys - Come On Eileen", "Lipps Inc - Funkytown", "Men at Work - Down Under", "The Vapors - Turning Japanese", "Tommy Tutone - 867-5309", "Nena - 99 Luftballons", "Chumbawamba - Tubthumping", "Right Said Fred - I'm Too Sexy", "Dexy's Midnight Runners", "Gotye - Somebody That I Used to Know", "Hanson - MMMBop", "Vanilla Ice - Ice Ice Baby", "Los Del Rio - Macarena"] },
+        ]
+      },
+      movies: {
+        name: "Movies & TV",
+        icon: "🎬",
+        color: "var(--accent-red)",
+        categories: [
+          { name: "Best Movie Genre", entrants: ["Action", "Comedy", "Drama", "Horror", "Sci-Fi", "Romance", "Thriller", "Animation", "Documentary", "Fantasy", "Mystery", "Western", "Musical", "Crime", "Adventure", "War"] },
+          { name: "Best Pixar Movie", entrants: ["Toy Story", "Finding Nemo", "The Incredibles", "Up", "WALL-E", "Monsters, Inc.", "Ratatouille", "Inside Out", "Coco", "Toy Story 3", "Finding Dory", "Cars", "Brave", "Soul", "Turning Red", "Elemental"] },
+          { name: "Best Christmas Movie", entrants: ["Home Alone", "Elf", "A Christmas Story", "It's a Wonderful Life", "Die Hard", "The Polar Express", "How the Grinch Stole Christmas", "National Lampoon's Christmas Vacation", "Miracle on 34th Street", "Love Actually", "A Charlie Brown Christmas", "The Santa Clause", "Scrooged", "White Christmas", "The Nightmare Before Christmas", "Rudolph the Red-Nosed Reindeer"] },
+          { name: "Best Movie Villain", entrants: ["Darth Vader", "The Joker", "Hannibal Lecter", "Thanos", "Lord Voldemort", "Hans Gruber", "Nurse Ratched", "Anton Chigurh", "Norman Bates", "Agent Smith", "Scar", "Hans Landa", "The Terminator", "Freddy Krueger", "Magneto", "Gollum"] },
+          { name: "Best TV Show Ever", entrants: ["Breaking Bad", "The Sopranos", "The Wire", "Game of Thrones", "Friends", "Seinfeld", "The Office", "The Simpsons", "Mad Men", "Lost", "Stranger Things", "The Crown", "Band of Brothers", "Succession", "The West Wing", "Arrested Development"] },
+          { name: "Best Movie Snack", entrants: ["Popcorn", "M&Ms", "Milk Duds", "Twizzlers", "Nachos", "Raisinets", "Junior Mints", "Sour Patch Kids", "Hot Dog", "Pretzel Bites", "Gummy Bears", "Icee", "Cookie Dough Bites", "Reese's Pieces", "Red Vines", "Buncha Crunch"] },
+          { name: "Best Disney Animated Movie", entrants: ["The Lion King", "Beauty and the Beast", "Aladdin", "The Little Mermaid", "Frozen", "Moana", "Mulan", "Tangled", "Cinderella", "Sleeping Beauty", "Snow White", "The Jungle Book", "Pocahontas", "Hercules", "Lilo & Stitch", "Encanto"] },
+          { name: "Best Sitcom", entrants: ["Friends", "Seinfeld", "The Office", "Parks and Recreation", "How I Met Your Mother", "Brooklyn Nine-Nine", "Cheers", "Frasier", "30 Rock", "Arrested Development", "Schitt's Creek", "New Girl", "Community", "Modern Family", "It's Always Sunny", "Curb Your Enthusiasm"] },
+        ]
+      },
+      sports: {
+        name: "Sports",
+        icon: "🏀",
+        color: "var(--accent-green)",
+        categories: [
+          { name: "Best Sport to Watch", entrants: ["Football (NFL)", "Basketball (NBA)", "Baseball (MLB)", "Soccer", "Hockey (NHL)", "Tennis", "Golf", "MMA/UFC", "Boxing", "College Football", "College Basketball", "Formula 1", "Olympics", "Rugby", "Cricket", "Wrestling"] },
+          { name: "Best NBA Team", entrants: ["Lakers", "Celtics", "Bulls", "Warriors", "Heat", "Spurs", "Knicks", "76ers", "Nets", "Mavericks", "Nuggets", "Bucks", "Suns", "Clippers", "Rockets", "Thunder"] },
+          { name: "Best NFL Team", entrants: ["Cowboys", "Patriots", "Packers", "Steelers", "49ers", "Chiefs", "Bears", "Eagles", "Raiders", "Giants", "Broncos", "Dolphins", "Saints", "Ravens", "Bills", "Seahawks"] },
+          { name: "Best Olympic Sport", entrants: ["Gymnastics", "Swimming", "Track & Field", "Basketball", "Soccer", "Volleyball", "Diving", "Figure Skating", "Skiing", "Snowboarding", "Boxing", "Wrestling", "Tennis", "Hockey", "Surfing", "Skateboarding"] },
+          { name: "Best Athlete of All Time", entrants: ["Michael Jordan", "Muhammad Ali", "Tom Brady", "Serena Williams", "Wayne Gretzky", "Babe Ruth", "LeBron James", "Usain Bolt", "Michael Phelps", "Lionel Messi", "Tiger Woods", "Jim Brown", "Bo Jackson", "Jackie Robinson", "Simone Biles", "Pelé"] },
+          { name: "Best Sports Video Game", entrants: ["NBA 2K", "Madden NFL", "FIFA", "MLB The Show", "NHL", "Tony Hawk Pro Skater", "Wii Sports", "Mario Kart", "Rocket League", "PGA Tour", "WWE 2K", "UFC", "SSX Tricky", "NCAA Football", "Mario Tennis", "Golf With Your Friends"] },
+        ]
+      },
+      games: {
+        name: "Games & Gaming",
+        icon: "🎮",
+        color: "var(--accent-blue)",
+        categories: [
+          { name: "Best Video Game Console", entrants: ["PlayStation 5", "Xbox Series X", "Nintendo Switch", "PlayStation 4", "PlayStation 2", "Nintendo 64", "Super Nintendo", "Xbox 360", "Wii", "GameCube", "Sega Genesis", "NES", "Game Boy", "Dreamcast", "PSP", "Steam Deck"] },
+          { name: "Best Board Game", entrants: ["Monopoly", "Scrabble", "Chess", "Clue", "Risk", "Settlers of Catan", "Ticket to Ride", "Codenames", "Pandemic", "Uno", "Trivial Pursuit", "Battleship", "Life", "Sorry!", "Jenga", "Cards Against Humanity"] },
+          { name: "Best Mario Game", entrants: ["Super Mario Bros. 3", "Super Mario World", "Super Mario 64", "Super Mario Odyssey", "Mario Kart 8", "Paper Mario", "Super Mario Galaxy", "Mario Party", "Super Mario Bros.", "New Super Mario Bros.", "Mario Kart: Double Dash", "Super Mario Sunshine", "Mario Kart Wii", "Luigi's Mansion", "Super Smash Bros. Ultimate", "Super Mario RPG"] },
+          { name: "Best Video Game Ever", entrants: ["The Legend of Zelda: Ocarina of Time", "Super Mario Bros.", "Tetris", "Minecraft", "GTA V", "The Witcher 3", "Red Dead Redemption 2", "Breath of the Wild", "Elden Ring", "Portal 2", "Half-Life 2", "Mass Effect 2", "Skyrim", "Halo", "God of War", "The Last of Us"] },
+          { name: "Best Card Game", entrants: ["Poker", "Blackjack", "Uno", "Exploding Kittens", "Cards Against Humanity", "Magic: The Gathering", "Pokémon TCG", "Skip-Bo", "Phase 10", "Rummy", "Spades", "Hearts", "Solitaire", "Go Fish", "War", "Crazy Eights"] },
+          { name: "Best Party Game", entrants: ["Mario Party", "Jackbox Games", "Rock Band", "Guitar Hero", "Just Dance", "Wii Sports", "Super Smash Bros.", "Overcooked", "Fall Guys", "Among Us", "Codenames", "Charades", "Pictionary", "Heads Up!", "Trivia Games", "Beer Pong"] },
+        ]
+      },
+      random: {
+        name: "Random & Absurd",
+        icon: "🎲",
+        color: "var(--accent-pink)",
+        categories: [
+          { name: "Best Superpower", entrants: ["Flight", "Invisibility", "Super Strength", "Teleportation", "Time Travel", "Mind Reading", "Super Speed", "Shapeshifting", "Immortality", "Telekinesis", "Healing", "X-Ray Vision", "Fire Control", "Ice Powers", "Elasticity", "Talking to Animals"] },
+          { name: "Best Mythical Creature", entrants: ["Dragon", "Phoenix", "Unicorn", "Griffin", "Kraken", "Werewolf", "Vampire", "Mermaid", "Centaur", "Pegasus", "Basilisk", "Hydra", "Bigfoot", "Loch Ness Monster", "Yeti", "Thunderbird"] },
+          { name: "Best Way to Spend a Snow Day", entrants: ["Sleep In", "Watch Movies", "Build a Snowman", "Hot Chocolate", "Video Games", "Read a Book", "Bake Cookies", "Snowball Fight", "Sledding", "Make Soup", "Puzzle", "Nap", "Clean House", "Online Shopping", "Call Friends", "Build a Blanket Fort"] },
+          { name: "Best Smell", entrants: ["Fresh Baked Cookies", "Coffee Brewing", "Rain on Pavement", "Gasoline", "Fresh Cut Grass", "Ocean Breeze", "Campfire", "Lavender", "New Car", "Bacon Cooking", "Christmas Tree", "Clean Laundry", "Vanilla", "Bookstore", "BBQ", "Cinnamon"] },
+          { name: "Best Month", entrants: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"] },
+          { name: "Best Day of the Week", entrants: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"] },
+          { name: "Best Age to Be", entrants: ["5", "10", "16", "18", "21", "25", "30", "35", "40", "50", "60", "70", "80", "90", "100", "Any Age"] },
+          { name: "Best Zoo Animal", entrants: ["Elephant", "Lion", "Giraffe", "Penguin", "Gorilla", "Tiger", "Panda", "Zebra", "Hippo", "Monkey", "Polar Bear", "Flamingo", "Koala", "Kangaroo", "Sea Lion", "Red Panda"] },
+          { name: "Best Dog Breed", entrants: ["Golden Retriever", "Labrador", "German Shepherd", "Bulldog", "Poodle", "Beagle", "Husky", "Corgi", "Dachshund", "Boxer", "Great Dane", "Dalmatian", "Pit Bull", "Shih Tzu", "Border Collie", "Rottweiler"] },
+          { name: "Best Cat Trait", entrants: ["Purring", "Kneading", "Zoomies", "Loafing", "Hunting Bugs", "Knocking Things Over", "Ignoring You", "Sudden Affection", "Box Obsession", "Laptop Sitting", "3 AM Energy", "Slow Blinks", "Chattering at Birds", "Belly Trap", "Head Bonks", "Judging You"] },
+          { name: "Best Excuse to Leave a Party", entrants: ["My Dog Needs Me", "Early Morning Tomorrow", "Not Feeling Well", "Uber's Here", "Parking Meter", "Phone Call", "Baby Sitter", "Irish Goodbye", "Work Emergency", "Forgot Something at Home", "Another Commitment", "Just Tired", "Cat's Acting Weird", "Medication", "Weather's Getting Bad", "Just Vibed Out"] },
+          { name: "Best Thing About Mondays", entrants: ["Nothing", "Fresh Start", "Coffee", "Weekend Stories", "Meal Prep Results", "Clean Inbox", "New Week Energy", "Productive Meetings", "Gym's Empty", "TV Shows Return", "Grocery Restocked", "Routines", "Monday Night Football", "Silence After Weekend Chaos", "Hope", "It Ends Eventually"] },
+        ]
+      },
+      holidays: {
+        name: "Holidays & Seasons",
+        icon: "🎄",
+        color: "var(--accent-gold)",
+        categories: [
+          { name: "Best Holiday", entrants: ["Christmas", "Thanksgiving", "Halloween", "Fourth of July", "Easter", "New Year's Eve", "Valentine's Day", "St. Patrick's Day", "Memorial Day", "Labor Day", "Mother's Day", "Father's Day", "Cinco de Mayo", "Hanukkah", "Super Bowl Sunday", "Your Birthday"] },
+          { name: "Best Halloween Candy", entrants: ["Reese's Cups", "Snickers", "Kit Kat", "M&Ms", "Twix", "Skittles", "Candy Corn", "Milky Way", "3 Musketeers", "Butterfinger", "Nerds", "Sour Patch Kids", "Tootsie Rolls", "Jolly Ranchers", "Almond Joy", "Smarties"] },
+          { name: "Best Season", entrants: ["Spring", "Summer", "Fall", "Winter"] },
+          { name: "Best Holiday Tradition", entrants: ["Decorating the Tree", "Opening Presents", "Big Family Dinner", "Watching Football", "Black Friday Shopping", "Cookie Baking", "Caroling", "Ugly Sweater Party", "Secret Santa", "New Year's Countdown", "Watching Holiday Movies", "Volunteering", "Road Trip Home", "Fireworks", "Parade Watching", "Staying in Pajamas All Day"] },
+          { name: "Best Holiday Movie Food", entrants: ["Turkey", "Ham", "Stuffing", "Mashed Potatoes", "Pumpkin Pie", "Eggnog", "Apple Cider", "Gingerbread", "Candy Canes", "Hot Chocolate", "Pecan Pie", "Sweet Potato Casserole", "Latkes", "Fruitcake", "Sugar Cookies", "Prime Rib"] },
+        ]
+      },
+      olympics: {
+        name: "Olympics",
+        icon: "🏅",
+        color: "#00a8e8",
+        categories: [
+          { name: "Winter Olympics Events", entrants: ["Figure Skating", "Alpine Skiing", "Snowboarding", "Ice Hockey", "Speed Skating", "Cross-Country Skiing", "Bobsled", "Ski Jumping", "Biathlon", "Curling", "Freestyle Skiing", "Luge", "Skeleton", "Nordic Combined", "Short Track Speed Skating", "Snowboard Cross"] },
+          { name: "Summer Olympics Events", entrants: ["Track & Field", "Swimming", "Gymnastics", "Basketball", "Soccer", "Tennis", "Diving", "Beach Volleyball", "Rowing", "Wrestling", "Boxing", "Cycling", "Weightlifting", "Volleyball", "Water Polo", "Archery"] },
+          { name: "All Olympics Events", entrants: ["Figure Skating", "Alpine Skiing", "Snowboarding", "Ice Hockey", "Speed Skating", "Bobsled", "Ski Jumping", "Curling", "Luge", "Track & Field", "Swimming", "Gymnastics", "Basketball", "Soccer", "Tennis", "Diving", "Beach Volleyball", "Rowing", "Wrestling", "Boxing", "Cycling", "Volleyball", "Water Polo", "Archery", "Fencing", "Surfing", "Skateboarding", "Breaking", "Biathlon", "Freestyle Skiing", "Triathlon", "Sailing"] },
+        ]
+      },
+    };
+
+    // ============================================
+    // UNCLE BOB'S BRAIN - Full Personality
+    // ============================================
+    const BOB = {
+      // Core personality traits from Uncle Robert Jake:
+      // - Bone dry wit, delivered completely straight
+      // - Master of the Irish Goodbye
+      // - Slightly twitchy energy
+      // - Would write letters at 4:30 AM
+      // - Chain smoker's timing (pregnant pauses)
+      // - Trombone player's sense of rhythm
+      // - One of 11 kids (seen everything, surprised by nothing)
+
+      welcome: [
+        "Welcome to Battle of Brackets. I'm BOB. Yes, the name is an acronym. No, I won't explain it.",
+        "You're here. Good. Let's crown some chaos.",
+        "Battle of Brackets. I'm your host. I've seen things. Let's add to the list.",
+        "Another bracket, another opportunity for you people to disappoint me. Kidding. Mostly.",
+        "Welcome back. The Vault remembers your choices. So do I.",
+        "Look who showed up. Let's make some democracy happen.",
+        "I'm BOB. This is Battle of Brackets. We both know why you're here.",
+        "Back for more chaos? Good. I was getting bored.",
+        "Another day, another bracket, another chance to reveal your true character.",
+      ],
+
+      // Category-specific openers
+      categoryOpeners: {
+        food: [
+          "Food bracket. Finally, a topic worth ruining friendships over.",
+          "You're voting on food? Good. I have opinions. Strong ones.",
+          "A food debate. This is where alliances crumble.",
+          "Food. The one category where everyone suddenly becomes an expert.",
+        ],
+        music: [
+          "Music bracket. Brace yourselves for takes so hot they'll melt speakers.",
+          "Ah, music. Where everyone's taste is 'eclectic' and everyone else is wrong.",
+          "Music opinions. The great equalizer. And destroyer.",
+          "Let's see whose Spotify Wrapped holds up under pressure.",
+        ],
+        movies: [
+          "Movies and TV. Time to find out who actually has taste.",
+          "Entertainment bracket. May your streaming history remain private.",
+          "Film opinions incoming. Critics are shaking.",
+          "Movies. Where 'overrated' is the most dangerous word.",
+        ],
+        sports: [
+          "Sports bracket. I can already feel the room dividing.",
+          "Sports opinions. This is where childhood loyalties meet adult disappointment.",
+          "Ah, sports. The one arena where being wrong is a personality trait.",
+          "Let the sports debates begin. May your team's record be relevant.",
+        ],
+        games: [
+          "Gaming bracket. Time to settle arguments decades in the making.",
+          "Video games. Board games. The stakes couldn't be higher.",
+          "Games. Where nostalgia battles playability.",
+          "Gaming opinions. Let's see who actually touched grass.",
+        ],
+        random: [
+          "Random category. I respect the chaos.",
+          "Absurd bracket. My favorite kind. Let's get weird.",
+          "This falls under 'random.' I have no predictions. Only anticipation.",
+          "A wildcard category. This is where BOB thrives.",
+        ],
+        holidays: [
+          "Holiday bracket. Family tensions loading...",
+          "Seasonal debates. Everyone's got trauma. I mean, opinions.",
+          "Holidays. Where nostalgia meets heated disagreement.",
+          "Holiday category. Let's see whose traditions reign supreme.",
+        ],
+        olympics: [
+          "Olympic events. Where the whole world disagrees, but politely.",
+          "The Olympics. Nationalism meets athletics meets opinions.",
+          "Winter or Summer? Speed or grace? Let's settle this.",
+          "Olympic bracket. May the best sport win. Or the one you actually watch.",
+        ],
+        custom: [
+          "Custom bracket. You made this. I'm just here to witness.",
+          "Your creation. Your rules. My commentary.",
+          "A custom category. Bold. I'll allow it.",
+          "You built this bracket yourself. Let's see if it holds up.",
+        ],
+      },
+
+      matchupIntros: [
+        "Next up:",
+        "The people must decide:",
+        "A battle for the ages:",
+        "This one's straightforward. Or is it?",
+        "Place your votes:",
+        "Democracy in action:",
+        "Here we go:",
+        "The eternal question:",
+        "Time to choose:",
+        "Another impossible decision:",
+        "Let's see where you land:",
+        "No wrong answers. Just revealing ones.",
+      ],
+
+      // Context-aware matchup commentary
+      matchupCommentary: {
+        food: [
+          "Vote with your stomach.",
+          "Think about what you'd want at 2 AM.",
+          "Your future midnight snack depends on this.",
+          "Close your eyes. Picture the smell.",
+        ],
+        music: [
+          "Vote with your ears. And your memories.",
+          "What would you listen to on a long drive?",
+          "Think about which one you'd actually put on.",
+          "This says more about you than you realize.",
+        ],
+        movies: [
+          "What would you actually rewatch?",
+          "Vote like your Netflix queue depends on it.",
+          "Picture yourself on a rainy Sunday.",
+          "Think comfort. Think legacy.",
+        ],
+        sports: [
+          "Loyalties are tested.",
+          "Stats or heart? Your call.",
+          "This might cause arguments. Good.",
+          "Vote like your bracket money's on the line.",
+        ],
+        random: [
+          "Trust your gut. It's the only way.",
+          "There's no wrong answer. Just your answer.",
+          "First instinct. Go.",
+          "This is pure vibes. I respect it.",
+        ],
+        olympics: [
+          "Think gold medal. Think glory.",
+          "Which one would you actually wake up early to watch?",
+          "Consider the athletes. The drama. The national anthems.",
+          "Two sports enter. One advances. The IOC is watching.",
+        ],
+      },
+
+      // Result reactions by margin
+      blowout: [
+        "Wasn't even close. Moving on.",
+        "A statement win. The voters have spoken.",
+        "Dominant. Absolutely dominant.",
+        "Well. That was decisive.",
+        "Yikes. Someone get the other one an ice pack.",
+        "A massacre. Next.",
+        "That's what we call a mandate.",
+        "Total annihilation. As it should be.",
+        "That margin was less a result, more a judgment.",
+        "One side got embarrassed. The other got validated.",
+        "The gap was astronomical. Advance with confidence.",
+        "Not even a competition. Just a demonstration.",
+      ],
+      close: [
+        "Nail-biter. But we have a winner.",
+        "That was... too close.",
+        "The margin was thin. The result, final.",
+        "One vote made the difference. Democracy.",
+        "A squeaker. My favorite kind.",
+        "That could've gone either way. But it didn't.",
+        "Close only counts in horseshoes. And this bracket.",
+        "Breathing room: none. Winner: decided.",
+        "One vote. Democracy in its purest, pettiest form.",
+        "The people nearly went the other way. But didn't.",
+        "Photo finish energy. Winner takes all. Barely.",
+        "Clear winner. No asterisks needed.",
+      ],
+      normal: [
+        "The people have spoken.",
+        "And we have a winner.",
+        "Moving on.",
+        "Next!",
+        "Noted. Filed. Advancing.",
+        "Democracy at work.",
+        "The voters knew what they wanted.",
+        "Clear enough. Let's keep going.",
+        "The consensus has spoken. Moving along.",
+        "No asterisks needed. Advance.",
+        "That margin was clear. Next.",
+        "Decision made. Verdict final.",
+      ],
+
+      // Tie reactions (this is where Uncle Bob's energy shines)
+      tie: [
+        "Oh no. It's tied. You know what this means.",
+        "A tie. A TIE. Someone has to make the call. Not me. I'm just the host.",
+        "Deadlocked. The voters have failed us. Summon an oracle.",
+        "Democracy has reached its limit. Time to phone a friend.",
+        "Split decision. I've seen this before. It never ends well.",
+        "Tied up. You people had ONE job.",
+        "A tie. Interesting. Also problematic. Call someone.",
+        "Equal votes. Unequal resolve. Fix this.",
+        "A tie. Democracy has frozen.",
+        "Equal votes mean no vote. Call someone. They're the oracle.",
+        "Deadlocked. No consensus. External intervention required.",
+        "The voters are split 50/50. One of you needs to fix this.",
+      ],
+
+      tieInstructions: [
+        "Call someone. Anyone. A neighbor. A delivery person. Your weird uncle. They decide.",
+        "The tie-breaker is simple: phone a friend, family member, or random stranger. Their vote counts.",
+        "Find a human being not in this room. They're the oracle now.",
+        "Dial a number. Any number. First person who answers decides this.",
+        "You need outside intervention. A neutral third party. Go.",
+        "Text someone. Call someone. Flag down a jogger. Just get a vote.",
+      ],
+
+      tieResolved: [
+        "The oracle has spoken. Moving on.",
+        "Crisis averted. Barely.",
+        "And with that ruling, we continue.",
+        "The tie-breaker came through. As they do.",
+        "Thank you, mystery voter. Your service is noted.",
+        "Settled. Let's never speak of this again.",
+        "The impasse is broken. Democracy survives another day.",
+        "External validation received. Advancing.",
+      ],
+
+      // Championship intro
+      championshipIntro: [
+        "THE FINAL BATTLE.",
+        "This is it. The championship.",
+        "Two remain. Only one gets crowned.",
+        "Everything has led to this moment.",
+        "The final showdown. No pressure.",
+        "Championship round. May the best option win.",
+        "We're here. The last matchup. Let's crown a champion.",
+        "Finals. Two contenders. One trophy. Infinite opinions.",
+      ],
+
+      // Champion crowned
+      champion: [
+        "By the power vested in me by absolutely no one — we have a champion.",
+        "AND WE HAVE A WINNER. Let the record show: on this day, a decision was made.",
+        "The champion emerges. History will decide if you were right. But for now, celebrate.",
+        "THE PEOPLE HAVE SPOKEN. A champion rises.",
+        "All hail the champion. Until the next bracket, anyway.",
+        "Crown goes on. Champion status: official.",
+        "And there it is. A winner. Your winner. THE winner.",
+        "Champion crowned. The Vault awaits. Well done, voters.",
+        "Crowned. Documented. Eternal.",
+        "The people have spoken their final word.",
+        "Legacy locked in. History made. Moving on.",
+        "Your champion. Controversial? Maybe. Final? Absolutely.",
+      ],
+
+      // Vault empty
+      vaultEmpty: [
+        "The Vault is empty. No champions yet. Get to work.",
+        "Nothing here. Crown some champions and we'll talk.",
+        "The Vault awaits its first entry. That's on you.",
+        "Empty shelves. The trophies need winners. Go make some.",
+      ],
+
+      // Vault with entries
+      vaultViewing: [
+        "The Hall of Champions. Every decision, immortalized.",
+        "The Vault. Where bracket glory lives forever.",
+        "Behold: the champions you've crowned. No refunds.",
+        "Your legacy. Every winner. Every debate. Preserved.",
+      ],
+
+      // Bracket structure commentary
+      structureReactions: {
+        perfect: [
+          "A perfect power of 2. Clean bracket. No play-ins. You people are suspiciously organized.",
+          "Clean numbers. No byes needed. I'm impressed. Suspicious, but impressed.",
+          "Perfect bracket size. Efficiency. I respect it.",
+        ],
+        playIns: [
+          "Not a clean number. We'll run some play-in games. More chaos. I approve.",
+          "We'll need play-ins to even this out. A few extra matchups never hurt anyone.",
+          "Imperfect count. Play-in games incoming. The weak get eliminated early.",
+        ],
+        chaotic: [
+          "That's... a lot of entrants. Bold. Let's do it.",
+          "Big bracket energy. I respect the ambition.",
+          "You want chaos? You've got chaos. Let's see how this plays out.",
+        ],
+        small: [
+          "Compact bracket. Quick and decisive. I can work with this.",
+          "Small but mighty. This'll be over fast.",
+          "A tight bracket. Every vote matters more.",
+        ],
+      },
+
+      // Quick actions
+      quickStart: [
+        "Quick start selected. No time to waste. I like it.",
+        "Preset category. Smart. Let's get to the voting.",
+        "Skipping the setup. Efficient. Let's battle.",
+      ],
+
+      // Surprise me
+      surpriseMe: [
+        "Surprise mode. Living dangerously. I approve.",
+        "Random category incoming. May the bracket gods be merciful.",
+        "Chaos selected. This is where memories are made.",
+        "You've chosen... unpredictability. My favorite.",
+      ],
+
+      // Get random line
+      random: (arr) => arr[Math.floor(Math.random() * arr.length)],
+
+      // Get category-aware comment
+      getCategoryComment: (categoryType, commentType) => {
+        const comments = BOB[commentType]?.[categoryType] || BOB[commentType]?.random || BOB[commentType];
+        return Array.isArray(comments) ? BOB.random(comments) : comments;
+      },
+    };
+
+    // ============================================
+    // SOUND EFFECTS (Web Audio API)
+    // ============================================
+    const SoundEffects = {
+      audioContext: null,
+      enabled: true,
+
+      init() {
+        if (!this.audioContext) {
+          this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        return this.audioContext;
+      },
+
+      play(type) {
+        if (!this.enabled) return;
+        try {
+          const ctx = this.init();
+          const oscillator = ctx.createOscillator();
+          const gainNode = ctx.createGain();
+          
+          oscillator.connect(gainNode);
+          gainNode.connect(ctx.destination);
+
+          switch (type) {
+            case 'vote':
+              oscillator.frequency.setValueAtTime(800, ctx.currentTime);
+              oscillator.frequency.exponentialRampToValueAtTime(1200, ctx.currentTime + 0.1);
+              gainNode.gain.setValueAtTime(0.1, ctx.currentTime);
+              gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+              oscillator.start(ctx.currentTime);
+              oscillator.stop(ctx.currentTime + 0.1);
+              break;
+
+            case 'lock':
+              oscillator.frequency.setValueAtTime(600, ctx.currentTime);
+              oscillator.frequency.setValueAtTime(800, ctx.currentTime + 0.1);
+              oscillator.frequency.setValueAtTime(1000, ctx.currentTime + 0.2);
+              gainNode.gain.setValueAtTime(0.15, ctx.currentTime);
+              gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+              oscillator.start(ctx.currentTime);
+              oscillator.stop(ctx.currentTime + 0.3);
+              break;
+
+            case 'champion':
+              const notes = [523, 659, 784, 1047]; // C5, E5, G5, C6
+              notes.forEach((freq, i) => {
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.frequency.setValueAtTime(freq, ctx.currentTime + i * 0.15);
+                gain.gain.setValueAtTime(0.15, ctx.currentTime + i * 0.15);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + i * 0.15 + 0.4);
+                osc.start(ctx.currentTime + i * 0.15);
+                osc.stop(ctx.currentTime + i * 0.15 + 0.4);
+              });
+              break;
+
+            case 'tie':
+              oscillator.type = 'sawtooth';
+              oscillator.frequency.setValueAtTime(200, ctx.currentTime);
+              oscillator.frequency.setValueAtTime(150, ctx.currentTime + 0.2);
+              gainNode.gain.setValueAtTime(0.1, ctx.currentTime);
+              gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
+              oscillator.start(ctx.currentTime);
+              oscillator.stop(ctx.currentTime + 0.4);
+              break;
+          }
+        } catch (e) {
+          // Silent fail - audio not critical
+        }
+      },
+
+      toggle() {
+        this.enabled = !this.enabled;
+        return this.enabled;
+      }
+    };
+
+    // ============================================
+    // BRACKET LOGIC
+    // ============================================
+    function calculateBracketStructure(entrantCount) {
+      if (entrantCount < 2) return null;
+      
+      const log = Math.log2(entrantCount);
+      const lowerPower = Math.pow(2, Math.floor(log));
+      const upperPower = Math.pow(2, Math.ceil(log));
+      
+      if (entrantCount === lowerPower) {
+        return { type: 'clean', targetSize: entrantCount, playInGames: 0, byes: 0 };
+      }
+      
+      const roundOneSlots = upperPower / 2;
+      const playInGames = entrantCount - roundOneSlots;
+      const byes = roundOneSlots - playInGames;
+      
+      return {
+        type: playInGames > 0 ? 'play-in' : 'clean',
+        targetSize: upperPower,
+        playInGames: Math.max(0, playInGames),
+        byes: Math.max(0, byes),
+      };
+    }
+
+    function generateBracket(entrants) {
+      const structure = calculateBracketStructure(entrants.length);
+      const shuffled = [...entrants].sort(() => Math.random() - 0.5);
+      const rounds = [];
+      
+      if (structure.playInGames > 0) {
+        const playInEntrants = shuffled.slice(0, structure.playInGames * 2);
+        const byeEntrants = shuffled.slice(structure.playInGames * 2);
+        
+        const playInRound = [];
+        for (let i = 0; i < playInEntrants.length; i += 2) {
+          playInRound.push({
+            id: `playin-${i/2}`,
+            entrantA: playInEntrants[i],
+            entrantB: playInEntrants[i + 1],
+            winner: null, votesA: 0, votesB: 0, isPlayIn: true,
+          });
+        }
+        rounds.push({ name: 'Play-In Round', matchups: playInRound, byes: byeEntrants });
+      } else {
+        const currentRound = [];
+        for (let i = 0; i < shuffled.length; i += 2) {
+          currentRound.push({
+            id: `r1-${i/2}`,
+            entrantA: shuffled[i],
+            entrantB: shuffled[i + 1],
+            winner: null, votesA: 0, votesB: 0,
+          });
+        }
+        rounds.push({ name: 'Round 1', matchups: currentRound });
+      }
+      
+      return { rounds, structure };
+    }
+
+    // ============================================
+    // COMPONENTS
+    // ============================================
+
+    // BOB Speech Bubble
+    function BobSays({ message, mood = 'normal', subtext = null }) {
+      const moodColors = {
+        normal: 'var(--accent-blue)',
+        excited: 'var(--accent-gold)',
+        dramatic: 'var(--accent-red)',
+        victory: 'var(--accent-green)',
+        chaos: 'var(--accent-pink)',
+      };
+
+      return (
+        <div className="animate-slideUp" style={{
+          background: 'var(--bg-card)',
+          border: `2px solid ${moodColors[mood]}`,
+          borderRadius: '16px',
+          padding: '20px 24px',
+          marginBottom: '24px',
+          position: 'relative',
+          boxShadow: `0 4px 24px ${moodColors[mood]}33`,
+        }}>
+          <div style={{
+            position: 'absolute',
+            top: '-12px',
+            left: '20px',
+            background: moodColors[mood],
+            color: 'var(--bg-deep)',
+            padding: '4px 12px',
+            borderRadius: '20px',
+            fontFamily: 'var(--font-display)',
+            fontSize: '14px',
+            letterSpacing: '1px',
+          }}>
+            BOB SAYS
+          </div>
+          <p style={{
+            fontSize: '18px',
+            lineHeight: '1.6',
+            color: 'var(--text-primary)',
+            marginTop: '8px',
+          }}>
+            "{message}"
+          </p>
+          {subtext && (
+            <p style={{
+              fontSize: '14px',
+              color: 'var(--text-secondary)',
+              marginTop: '8px',
+              fontStyle: 'italic',
+            }}>
+              {subtext}
+            </p>
+          )}
+        </div>
+      );
+    }
+
+    // Logo
+    function Logo({ size = 'large', onClick = null }) {
+      const sizes = {
+        large: { title: '64px', sub: '18px' },
+        medium: { title: '42px', sub: '14px' },
+        small: { title: '28px', sub: '12px' },
+      };
+
+      return (
+        <div 
+          onClick={onClick}
+          style={{ 
+            textAlign: 'center', 
+            marginBottom: size === 'large' ? '40px' : '20px',
+            cursor: onClick ? 'pointer' : 'default',
+          }}
+        >
+          <h1 style={{
+            fontFamily: 'var(--font-display)',
+            fontSize: sizes[size].title,
+            letterSpacing: '3px',
+            background: 'linear-gradient(135deg, var(--accent-gold) 0%, #ffed4a 50%, var(--accent-gold) 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            textShadow: '0 4px 30px rgba(255, 215, 0, 0.3)',
+            lineHeight: 1.1,
+          }}>
+            BATTLE OF<br/>BRACKETS
+          </h1>
+          <p style={{
+            fontFamily: 'var(--font-body)',
+            fontSize: sizes[size].sub,
+            color: 'var(--text-secondary)',
+            marginTop: '8px',
+            letterSpacing: '4px',
+            textTransform: 'uppercase',
+          }}>
+            Hosted by BOB
+          </p>
+        </div>
+      );
+    }
+
+    // Button
+    function Button({ children, onClick, variant = 'primary', disabled = false, size = 'medium', style = {} }) {
+      const variants = {
+        primary: { background: 'linear-gradient(135deg, var(--accent-gold) 0%, #e6c200 100%)', color: 'var(--bg-deep)', border: 'none' },
+        secondary: { background: 'transparent', color: 'var(--text-primary)', border: '2px solid var(--text-muted)' },
+        danger: { background: 'linear-gradient(135deg, var(--accent-red) 0%, #cc2f4a 100%)', color: 'white', border: 'none' },
+        success: { background: 'linear-gradient(135deg, var(--accent-green) 0%, #00b862 100%)', color: 'var(--bg-deep)', border: 'none' },
+        ghost: { background: 'rgba(255,255,255,0.05)', color: 'var(--text-secondary)', border: '1px solid var(--text-muted)' },
+      };
+      const sizes = {
+        tiny: { padding: '6px 12px', fontSize: '12px' },
+        small: { padding: '10px 20px', fontSize: '14px' },
+        medium: { padding: '14px 28px', fontSize: '16px' },
+        large: { padding: '18px 36px', fontSize: '18px' },
+        huge: { padding: '24px 48px', fontSize: '22px' },
+      };
+
+      return (
+        <button onClick={onClick} disabled={disabled} style={{
+          ...variants[variant], ...sizes[size],
+          fontFamily: 'var(--font-display)',
+          letterSpacing: '2px',
+          borderRadius: '12px',
+          cursor: disabled ? 'not-allowed' : 'pointer',
+          opacity: disabled ? 0.5 : 1,
+          transition: 'all 0.2s ease',
+          textTransform: 'uppercase',
+          ...style,
+        }}>
+          {children}
+        </button>
+      );
+    }
+
+    // Input
+    function Input({ value, onChange, placeholder, onKeyDown, style = {} }) {
+      return (
+        <input
+          type="text"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          onKeyDown={onKeyDown}
+          placeholder={placeholder}
+          style={{
+            width: '100%',
+            padding: '16px 20px',
+            fontSize: '18px',
+            fontFamily: 'var(--font-body)',
+            background: 'var(--bg-card)',
+            border: '2px solid var(--text-muted)',
+            borderRadius: '12px',
+            color: 'var(--text-primary)',
+            outline: 'none',
+            transition: 'border-color 0.2s ease',
+            ...style,
+          }}
+          onFocus={(e) => e.target.style.borderColor = 'var(--accent-blue)'}
+          onBlur={(e) => e.target.style.borderColor = 'var(--text-muted)'}
+        />
+      );
+    }
+
+    // Entrant Chip
+    function EntrantChip({ name, onRemove, index }) {
+      return (
+        <div className="animate-scaleIn" style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '8px',
+          background: 'var(--bg-card-hover)',
+          border: '1px solid var(--text-muted)',
+          borderRadius: '24px',
+          padding: '8px 16px',
+          animationDelay: `${index * 0.03}s`,
+        }}>
+          <span style={{ fontSize: '14px' }}>{name}</span>
+          {onRemove && (
+            <button onClick={onRemove} style={{
+              background: 'none', border: 'none', color: 'var(--text-secondary)',
+              cursor: 'pointer', padding: '2px', display: 'flex', fontSize: '16px',
+            }}>×</button>
+          )}
+        </div>
+      );
+    }
+
+    // Category Card for Library
+    function CategoryCard({ category, onSelect, color }) {
+      return (
+        <div
+          onClick={() => onSelect(category)}
+          className="animate-scaleIn"
+          style={{
+            background: 'var(--bg-card)',
+            border: `2px solid ${color}33`,
+            borderRadius: '16px',
+            padding: '20px',
+            cursor: 'pointer',
+            transition: 'all 0.2s ease',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.borderColor = color;
+            e.currentTarget.style.transform = 'translateY(-2px)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.borderColor = `${color}33`;
+            e.currentTarget.style.transform = 'translateY(0)';
+          }}
+        >
+          <div style={{
+            fontFamily: 'var(--font-display)',
+            fontSize: '18px',
+            color: color,
+            letterSpacing: '1px',
+            marginBottom: '8px',
+          }}>
+            {category.name}
+          </div>
+          <div style={{
+            fontSize: '13px',
+            color: 'var(--text-secondary)',
+          }}>
+            {category.entrants.length} entrants
+          </div>
+        </div>
+      );
+    }
+
+    // Theme Pill for Category Groups
+    function ThemePill({ theme, isActive, onClick }) {
+      const data = CATEGORY_LIBRARY[theme];
+      return (
+        <button
+          onClick={onClick}
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '8px',
+            padding: '10px 20px',
+            borderRadius: '24px',
+            border: isActive ? `2px solid ${data.color}` : '2px solid var(--text-muted)',
+            background: isActive ? `${data.color}22` : 'transparent',
+            color: isActive ? data.color : 'var(--text-secondary)',
+            fontFamily: 'var(--font-body)',
+            fontSize: '14px',
+            fontWeight: '500',
+            cursor: 'pointer',
+            transition: 'all 0.2s ease',
+          }}
+        >
+          <span>{data.icon}</span>
+          <span>{data.name}</span>
+        </button>
+      );
+    }
+
+    // Matchup Card
+    function MatchupCard({ matchup, onVote, playerCount, isChampionship, categoryType }) {
+      const [votesA, setVotesA] = useState(0);
+      const [votesB, setVotesB] = useState(0);
+      const [locked, setLocked] = useState(false);
+      const [showTieBreaker, setShowTieBreaker] = useState(false);
+
+      const handleVote = (side) => {
+        if (locked) return;
+        SoundEffects.play('vote');
+        if (side === 'A') setVotesA(v => v + 1);
+        else setVotesB(v => v + 1);
+      };
+
+      const handleUndo = (side) => {
+        if (locked) return;
+        if (side === 'A') setVotesA(v => Math.max(0, v - 1));
+        else setVotesB(v => Math.max(0, v - 1));
+      };
+
+      const handleLockIn = () => {
+        if (votesA === votesB) {
+          SoundEffects.play('tie');
+          setShowTieBreaker(true);
+        } else {
+          SoundEffects.play('lock');
+          const winner = votesA > votesB ? matchup.entrantA : matchup.entrantB;
+          const margin = Math.abs(votesA - votesB);
+          setLocked(true);
+          onVote(winner, votesA, votesB, margin);
+        }
+      };
+
+      const handleTieBreaker = (winner) => {
+        SoundEffects.play('lock');
+        setShowTieBreaker(false);
+        setLocked(true);
+        onVote(winner, votesA, votesB, 0, true);
+      };
+
+      if (showTieBreaker) {
+        return (
+          <div className="animate-shake" style={{
+            background: 'linear-gradient(135deg, rgba(255, 59, 92, 0.1) 0%, rgba(255, 59, 92, 0.05) 100%)',
+            border: '3px solid var(--accent-red)',
+            borderRadius: '20px',
+            padding: '32px',
+            textAlign: 'center',
+          }}>
+            <div style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: '36px',
+              color: 'var(--accent-red)',
+              marginBottom: '16px',
+              letterSpacing: '2px',
+            }}>
+              ⚠️ IT'S TIED ⚠️
+            </div>
+            <BobSays 
+              message={BOB.random(BOB.tie)} 
+              mood="dramatic"
+              subtext={BOB.random(BOB.tieInstructions)}
+            />
+            <div style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: '24px',
+              color: 'var(--accent-gold)',
+              margin: '24px 0',
+              letterSpacing: '3px',
+            }}>
+              📞 PHONE A FRIEND 📞
+            </div>
+            <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
+              <Button variant="primary" size="large" onClick={() => handleTieBreaker(matchup.entrantA)}>
+                {matchup.entrantA} Wins
+              </Button>
+              <Button variant="primary" size="large" onClick={() => handleTieBreaker(matchup.entrantB)}>
+                {matchup.entrantB} Wins
+              </Button>
+            </div>
+          </div>
+        );
+      }
+
+      return (
+        <div style={{
+          background: isChampionship 
+            ? 'linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 215, 0, 0.02) 100%)'
+            : 'var(--bg-card)',
+          border: isChampionship ? '3px solid var(--accent-gold)' : '2px solid var(--text-muted)',
+          borderRadius: '20px',
+          padding: '32px',
+          animation: isChampionship ? 'glow 2s ease-in-out infinite' : 'none',
+        }}>
+          {isChampionship && (
+            <div style={{
+              textAlign: 'center',
+              fontFamily: 'var(--font-display)',
+              fontSize: '28px',
+              color: 'var(--accent-gold)',
+              marginBottom: '24px',
+              letterSpacing: '3px',
+            }}>
+              🏆 THE CHAMPIONSHIP 🏆
+            </div>
+          )}
+          
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr auto 1fr',
+            gap: '24px',
+            alignItems: 'center',
+          }}>
+            {/* Entrant A */}
+            <div style={{ textAlign: 'center' }}>
+              <div style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: '28px',
+                color: 'var(--text-primary)',
+                marginBottom: '16px',
+                letterSpacing: '1px',
+              }}>
+                {matchup.entrantA}
+              </div>
+              <div style={{
+                fontSize: '48px',
+                fontFamily: 'var(--font-display)',
+                color: 'var(--accent-blue)',
+                marginBottom: '16px',
+              }}>
+                {votesA}
+              </div>
+              <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
+                <Button variant="primary" size="small" onClick={() => handleVote('A')} disabled={locked}>+1</Button>
+                <Button variant="secondary" size="small" onClick={() => handleUndo('A')} disabled={locked || votesA === 0}>-1</Button>
+              </div>
+            </div>
+
+            <div style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: '32px',
+              color: 'var(--text-muted)',
+              letterSpacing: '4px',
+            }}>VS</div>
+
+            {/* Entrant B */}
+            <div style={{ textAlign: 'center' }}>
+              <div style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: '28px',
+                color: 'var(--text-primary)',
+                marginBottom: '16px',
+                letterSpacing: '1px',
+              }}>
+                {matchup.entrantB}
+              </div>
+              <div style={{
+                fontSize: '48px',
+                fontFamily: 'var(--font-display)',
+                color: 'var(--accent-purple)',
+                marginBottom: '16px',
+              }}>
+                {votesB}
+              </div>
+              <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
+                <Button variant="primary" size="small" onClick={() => handleVote('B')} disabled={locked}>+1</Button>
+                <Button variant="secondary" size="small" onClick={() => handleUndo('B')} disabled={locked || votesB === 0}>-1</Button>
+              </div>
+            </div>
+          </div>
+
+          {!locked && (votesA > 0 || votesB > 0) && (
+            <div style={{ textAlign: 'center', marginTop: '32px' }}>
+              <Button variant="success" size="large" onClick={handleLockIn}>Lock In Result</Button>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // Share Card Generator
+    function ShareCard({ champion, category, runnerUp, onClose }) {
+      const canvasRef = useRef(null);
+      const [shareUrl, setShareUrl] = useState(null);
+
+      useEffect(() => {
+        const canvas = canvasRef.current;
+        const ctx = canvas.getContext('2d');
+        
+        // Background
+        ctx.fillStyle = '#0a0e1a';
+        ctx.fillRect(0, 0, 600, 400);
+        
+        // Gold gradient header
+        const gradient = ctx.createLinearGradient(0, 0, 600, 0);
+        gradient.addColorStop(0, '#ffd700');
+        gradient.addColorStop(0.5, '#ffed4a');
+        gradient.addColorStop(1, '#ffd700');
+        
+        // Title
+        ctx.font = 'bold 36px Bangers, sans-serif';
+        ctx.fillStyle = gradient;
+        ctx.textAlign = 'center';
+        ctx.fillText('BATTLE OF BRACKETS', 300, 60);
+        
+        // Trophy
+        ctx.font = '80px serif';
+        ctx.fillText('🏆', 300, 160);
+        
+        // Category
+        ctx.font = '18px Outfit, sans-serif';
+        ctx.fillStyle = '#8892b0';
+        ctx.fillText(category.toUpperCase(), 300, 210);
+        
+        // Champion
+        ctx.font = 'bold 42px Bangers, sans-serif';
+        ctx.fillStyle = '#ffd700';
+        ctx.fillText(champion.toUpperCase(), 300, 270);
+        
+        // Runner up
+        ctx.font = '16px Outfit, sans-serif';
+        ctx.fillStyle = '#8892b0';
+        ctx.fillText(`defeated ${runnerUp}`, 300, 310);
+        
+        // Footer
+        ctx.font = '14px Outfit, sans-serif';
+        ctx.fillStyle = '#4a5578';
+        ctx.fillText('Hosted by BOB', 300, 370);
+        
+        setShareUrl(canvas.toDataURL('image/png'));
+      }, [champion, category, runnerUp]);
+
+      const handleDownload = () => {
+        const link = document.createElement('a');
+        link.download = `bracket-champion-${category.replace(/\s+/g, '-').toLowerCase()}.png`;
+        link.href = shareUrl;
+        link.click();
+      };
+
+      const handleCopyText = () => {
+        const text = `🏆 ${champion.toUpperCase()} 🏆\nCrowned champion of "${category}" in Battle of Brackets!\n\ndefeated ${runnerUp} in the final\n\n#BattleOfBrackets`;
+        navigator.clipboard.writeText(text);
+        alert('Copied to clipboard!');
+      };
+
+      return (
+        <div style={{
+          position: 'fixed',
+          top: 0, left: 0, right: 0, bottom: 0,
+          background: 'rgba(0,0,0,0.9)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1000,
+          padding: '20px',
+        }}>
+          <div style={{
+            background: 'var(--bg-card)',
+            borderRadius: '20px',
+            padding: '32px',
+            maxWidth: '650px',
+            width: '100%',
+          }}>
+            <div style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: '24px',
+              color: 'var(--accent-gold)',
+              textAlign: 'center',
+              marginBottom: '24px',
+              letterSpacing: '2px',
+            }}>
+              SHARE YOUR CHAMPION
+            </div>
+            
+            <canvas 
+              ref={canvasRef} 
+              width={600} 
+              height={400}
+              style={{ 
+                width: '100%', 
+                height: 'auto',
+                borderRadius: '12px',
+                marginBottom: '24px',
+              }}
+            />
+
+            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
+              <Button variant="primary" onClick={handleDownload}>Download Image</Button>
+              <Button variant="secondary" onClick={handleCopyText}>Copy Text</Button>
+              <Button variant="ghost" onClick={onClose}>Close</Button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // Champion Screen
+    function ChampionScreen({ champion, category, runnerUp, categoryType, onNewGame, onViewVault }) {
+      const [showShare, setShowShare] = useState(false);
+
+      useEffect(() => {
+        SoundEffects.play('champion');
+        const duration = 4000;
+        const end = Date.now() + duration;
+        const frame = () => {
+          confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#ffd700', '#ffed4a', '#ff6b6b', '#4ecdc4', '#45b7d1'] });
+          confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#ffd700', '#ffed4a', '#ff6b6b', '#4ecdc4', '#45b7d1'] });
+          if (Date.now() < end) requestAnimationFrame(frame);
+        };
+        frame();
+      }, []);
+
+      return (
+        <div style={{
+          minHeight: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '24px',
+          textAlign: 'center',
+        }}>
+          <div className="animate-scaleIn" style={{
+            fontFamily: 'var(--font-display)',
+            fontSize: '24px',
+            color: 'var(--text-secondary)',
+            letterSpacing: '6px',
+            marginBottom: '16px',
+          }}>
+            {category.toUpperCase()}
+          </div>
+          
+          <div className="animate-float" style={{ fontSize: '100px', marginBottom: '16px' }}>🏆</div>
+
+          <div className="animate-scaleIn" style={{
+            fontFamily: 'var(--font-display)',
+            fontSize: '56px',
+            background: 'linear-gradient(135deg, var(--accent-gold) 0%, #ffed4a 50%, var(--accent-gold) 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            letterSpacing: '3px',
+            marginBottom: '24px',
+            animationDelay: '0.2s',
+          }}>
+            {champion.toUpperCase()}
+          </div>
+
+          <div style={{ color: 'var(--text-secondary)', fontSize: '18px', marginBottom: '32px' }}>
+            defeated <span style={{ color: 'var(--text-primary)' }}>{runnerUp}</span> in the final
+          </div>
+
+          <BobSays message={BOB.random(BOB.champion)} mood="victory" />
+
+          <div style={{ display: 'flex', gap: '16px', marginTop: '24px', flexWrap: 'wrap', justifyContent: 'center' }}>
+            <Button variant="primary" size="large" onClick={onNewGame}>New Bracket</Button>
+            <Button variant="secondary" size="large" onClick={() => setShowShare(true)}>Share</Button>
+            <Button variant="ghost" size="large" onClick={onViewVault}>The Vault</Button>
+          </div>
+
+          {showShare && (
+            <ShareCard 
+              champion={champion} 
+              category={category} 
+              runnerUp={runnerUp}
+              onClose={() => setShowShare(false)}
+            />
+          )}
+        </div>
+      );
+    }
+
+    // The Vault
+    function Vault({ history, onBack, onNewGame, onClearHistory }) {
+      if (history.length === 0) {
+        return (
+          <div style={{
+            minHeight: '100vh',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '24px',
+            textAlign: 'center',
+          }}>
+            <Logo size="medium" />
+            <div style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: '32px',
+              color: 'var(--accent-gold)',
+              letterSpacing: '3px',
+              marginBottom: '24px',
+            }}>
+              THE VAULT
+            </div>
+            <BobSays message={BOB.random(BOB.vaultEmpty)} mood="normal" />
+            <Button variant="primary" size="large" onClick={onNewGame} style={{ marginTop: '24px' }}>
+              Crown Your First Champion
+            </Button>
+          </div>
+        );
+      }
+
+      return (
+        <div style={{ minHeight: '100vh', padding: '24px', maxWidth: '600px', margin: '0 auto' }}>
+          <Logo size="small" onClick={onBack} />
+          <div style={{
+            fontFamily: 'var(--font-display)',
+            fontSize: '32px',
+            color: 'var(--accent-gold)',
+            letterSpacing: '3px',
+            textAlign: 'center',
+            marginBottom: '16px',
+          }}>
+            🏆 THE VAULT 🏆
+          </div>
+          
+          <BobSays message={BOB.random(BOB.vaultViewing)} mood="normal" />
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            {history.map((entry, i) => (
+              <div key={i} className="animate-slideUp" style={{
+                background: 'var(--bg-card)',
+                border: '2px solid var(--text-muted)',
+                borderRadius: '16px',
+                padding: '20px',
+                animationDelay: `${i * 0.1}s`,
+              }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
+                  <div style={{
+                    fontFamily: 'var(--font-display)',
+                    fontSize: '14px',
+                    color: 'var(--text-secondary)',
+                    letterSpacing: '2px',
+                  }}>
+                    {entry.category.toUpperCase()}
+                  </div>
+                  <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>{entry.date}</div>
+                </div>
+                <div style={{
+                  fontFamily: 'var(--font-display)',
+                  fontSize: '24px',
+                  color: 'var(--accent-gold)',
+                  letterSpacing: '1px',
+                }}>
+                  🏆 {entry.champion}
+                </div>
+                <div style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '4px' }}>
+                  defeated {entry.runnerUp}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ display: 'flex', gap: '16px', marginTop: '32px', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <Button variant="primary" onClick={onNewGame}>New Bracket</Button>
+            <Button variant="secondary" onClick={onBack}>Back</Button>
+            <Button variant="ghost" size="small" onClick={onClearHistory}>Clear Vault</Button>
+          </div>
+        </div>
+      );
+    }
+
+    // Category Library Browser
+    function CategoryLibrary({ onSelect, onCustom, onBack, customCategories }) {
+      const [activeTheme, setActiveTheme] = useState('food');
+      const themes = Object.keys(CATEGORY_LIBRARY);
+      const currentThemeData = CATEGORY_LIBRARY[activeTheme];
+
+      const handleSurpriseMe = () => {
+        const allCategories = [];
+        Object.entries(CATEGORY_LIBRARY).forEach(([theme, data]) => {
+          data.categories.forEach(cat => {
+            allCategories.push({ ...cat, theme });
+          });
+        });
+        const random = allCategories[Math.floor(Math.random() * allCategories.length)];
+        onSelect(random, random.theme);
+      };
+
+      return (
+        <div style={{ minHeight: '100vh', padding: '24px', maxWidth: '700px', margin: '0 auto' }}>
+          <Logo size="small" onClick={onBack} />
+          
+          <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+            <div style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: '28px',
+              color: 'var(--accent-gold)',
+              letterSpacing: '3px',
+              marginBottom: '8px',
+            }}>
+              CATEGORY LIBRARY
+            </div>
+            <p style={{ color: 'var(--text-secondary)' }}>Pick a preset or create your own</p>
+          </div>
+
+          {/* Quick Actions */}
+          <div style={{ display: 'flex', gap: '12px', marginBottom: '24px', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <Button variant="primary" onClick={handleSurpriseMe}>🎲 Surprise Me</Button>
+            <Button variant="secondary" onClick={onCustom}>✏️ Create Custom</Button>
+          </div>
+
+          {/* Theme Pills */}
+          <div style={{ 
+            display: 'flex', 
+            gap: '8px', 
+            flexWrap: 'wrap', 
+            marginBottom: '24px',
+            justifyContent: 'center',
+          }}>
+            {themes.map(theme => (
+              <ThemePill
+                key={theme}
+                theme={theme}
+                isActive={activeTheme === theme}
+                onClick={() => setActiveTheme(theme)}
+              />
+            ))}
+          </div>
+
+          {/* Category Grid */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+            gap: '16px',
+            marginBottom: '24px',
+          }}>
+            {currentThemeData.categories.map((cat, i) => (
+              <CategoryCard
+                key={cat.name}
+                category={cat}
+                color={currentThemeData.color}
+                onSelect={() => onSelect(cat, activeTheme)}
+              />
+            ))}
+          </div>
+
+          {/* Custom Categories */}
+          {customCategories.length > 0 && (
+            <>
+              <div style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: '18px',
+                color: 'var(--text-secondary)',
+                letterSpacing: '2px',
+                marginBottom: '16px',
+                textAlign: 'center',
+              }}>
+                YOUR CUSTOM CATEGORIES
+              </div>
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+                gap: '16px',
+              }}>
+                {customCategories.map((cat, i) => (
+                  <CategoryCard
+                    key={cat.name}
+                    category={cat}
+                    color="var(--accent-pink)"
+                    onSelect={() => onSelect(cat, 'custom')}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+
+          <div style={{ textAlign: 'center', marginTop: '32px' }}>
+            <Button variant="ghost" onClick={onBack}>Back to Home</Button>
+          </div>
+        </div>
+      );
+    }
+
+    // Settings Panel
+    function SettingsPanel({ soundEnabled, onToggleSound, onClose }) {
+      return (
+        <div style={{
+          position: 'fixed',
+          top: '20px',
+          right: '20px',
+          background: 'var(--bg-card)',
+          border: '2px solid var(--text-muted)',
+          borderRadius: '16px',
+          padding: '20px',
+          zIndex: 100,
+          minWidth: '200px',
+        }}>
+          <div style={{
+            fontFamily: 'var(--font-display)',
+            fontSize: '16px',
+            color: 'var(--accent-gold)',
+            letterSpacing: '2px',
+            marginBottom: '16px',
+          }}>
+            SETTINGS
+          </div>
+          
+          <div 
+            onClick={onToggleSound}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: '12px',
+              background: 'var(--bg-card-hover)',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              marginBottom: '12px',
+            }}
+          >
+            <span style={{ color: 'var(--text-primary)' }}>Sound Effects</span>
+            <span style={{ color: soundEnabled ? 'var(--accent-green)' : 'var(--text-muted)' }}>
+              {soundEnabled ? '🔊 ON' : '🔇 OFF'}
+            </span>
+          </div>
+
+          <Button variant="ghost" size="small" onClick={onClose} style={{ width: '100%' }}>
+            Close
+          </Button>
+        </div>
+      );
+    }
+
+    // ============================================
+    // MAIN APP
+    // ============================================
+    function App() {
+      const [screen, setScreen] = useState('home');
+      const [category, setCategory] = useState('');
+      const [categoryType, setCategoryType] = useState('custom');
+      const [entrants, setEntrants] = useState([]);
+      const [newEntrant, setNewEntrant] = useState('');
+      const [playerCount, setPlayerCount] = useState(4);
+      const [bracket, setBracket] = useState(null);
+      const [currentRoundIndex, setCurrentRoundIndex] = useState(0);
+      const [currentMatchupIndex, setCurrentMatchupIndex] = useState(0);
+      const [winners, setWinners] = useState([]);
+      const [champion, setChampion] = useState(null);
+      const [runnerUp, setRunnerUp] = useState(null);
+      const [bobMessage, setBobMessage] = useState('');
+      const [bobMood, setBobMood] = useState('normal');
+      const [showSettings, setShowSettings] = useState(false);
+      const [soundEnabled, setSoundEnabled] = useState(true);
+      
+      const [history, setHistory] = useState(() => {
+        const saved = localStorage.getItem('bob-vault-v2');
+        return saved ? JSON.parse(saved) : [];
+      });
+
+      const [customCategories, setCustomCategories] = useState(() => {
+        const saved = localStorage.getItem('bob-custom-categories');
+        return saved ? JSON.parse(saved) : [];
+      });
+
+      useEffect(() => {
+        localStorage.setItem('bob-vault-v2', JSON.stringify(history));
+      }, [history]);
+
+      useEffect(() => {
+        localStorage.setItem('bob-custom-categories', JSON.stringify(customCategories));
+      }, [customCategories]);
+
+      const handleToggleSound = () => {
+        const newState = SoundEffects.toggle();
+        setSoundEnabled(newState);
+      };
+
+      const handleSelectFromLibrary = (categoryData, theme) => {
+        setCategory(categoryData.name);
+        setCategoryType(theme);
+        setEntrants([...categoryData.entrants]);
+        setBobMessage(BOB.random(BOB.quickStart));
+        setBobMood('normal');
+        setScreen('setup');
+      };
+
+      const addEntrant = () => {
+        if (newEntrant.trim() && !entrants.includes(newEntrant.trim())) {
+          setEntrants([...entrants, newEntrant.trim()]);
+          setNewEntrant('');
+        }
+      };
+
+      const removeEntrant = (index) => {
+        setEntrants(entrants.filter((_, i) => i !== index));
+      };
+
+      const saveCustomCategory = () => {
+        if (category.trim() && entrants.length >= 4) {
+          const existing = customCategories.findIndex(c => c.name === category);
+          const newCat = { name: category, entrants: [...entrants] };
+          if (existing >= 0) {
+            const updated = [...customCategories];
+            updated[existing] = newCat;
+            setCustomCategories(updated);
+          } else {
+            setCustomCategories([...customCategories, newCat]);
+          }
+        }
+      };
+
+      const startGame = () => {
+        if (entrants.length < 4) {
+          setBobMessage("You need at least 4 entrants. That's barely a bracket.");
+          return;
+        }
+        
+        const { rounds, structure } = generateBracket(entrants);
+        setBracket({ rounds, structure, category });
+        setCurrentRoundIndex(0);
+        setCurrentMatchupIndex(0);
+        setWinners([]);
+        
+        // Category-aware opener
+        const opener = BOB.getCategoryComment(categoryType, 'categoryOpeners');
+        setBobMessage(opener);
+        setBobMood('normal');
+        setScreen('playing');
+      };
+
+      const handleVoteResult = (winner, votesA, votesB, margin, wasTieBreaker = false) => {
+        const newWinners = [...winners, winner];
+        setWinners(newWinners);
+
+        let reaction;
+        if (wasTieBreaker) {
+          reaction = BOB.random(BOB.tieResolved);
+        } else if (margin >= 4) {
+          reaction = BOB.random(BOB.blowout);
+        } else if (margin <= 1) {
+          reaction = BOB.random(BOB.close);
+        } else {
+          reaction = BOB.random(BOB.normal);
+        }
+        setBobMessage(reaction);
+
+        setTimeout(() => {
+          const currentRound = bracket.rounds[currentRoundIndex];
+          
+          if (currentMatchupIndex < currentRound.matchups.length - 1) {
+            setCurrentMatchupIndex(currentMatchupIndex + 1);
+            const intro = BOB.random(BOB.matchupIntros);
+            const contextComment = BOB.getCategoryComment(categoryType, 'matchupCommentary');
+            setBobMessage(`${intro} ${contextComment || ''}`);
+          } else {
+            const roundWinners = [...newWinners];
+            if (currentRound.byes) roundWinners.push(...currentRound.byes);
+            
+            if (roundWinners.length === 1) {
+              const lastMatchup = currentRound.matchups[currentMatchupIndex];
+              const loser = lastMatchup.entrantA === winner ? lastMatchup.entrantB : lastMatchup.entrantA;
+              setChampion(winner);
+              setRunnerUp(loser);
+              
+              const newEntry = {
+                category,
+                champion: winner,
+                runnerUp: loser,
+                date: new Date().toLocaleDateString(),
+                categoryType,
+              };
+              setHistory([newEntry, ...history]);
+              setScreen('champion');
+            } else if (roundWinners.length === 2) {
+              const champRound = {
+                name: 'Championship',
+                matchups: [{
+                  id: 'final',
+                  entrantA: roundWinners[0],
+                  entrantB: roundWinners[1],
+                  winner: null, votesA: 0, votesB: 0,
+                }],
+              };
+              setBracket(prev => ({ ...prev, rounds: [...prev.rounds, champRound] }));
+              setCurrentRoundIndex(currentRoundIndex + 1);
+              setCurrentMatchupIndex(0);
+              setWinners([]);
+              setBobMessage(BOB.random(BOB.championshipIntro));
+              setBobMood('excited');
+            } else {
+              const nextMatchups = [];
+              for (let i = 0; i < roundWinners.length; i += 2) {
+                nextMatchups.push({
+                  id: `r${currentRoundIndex + 2}-${i/2}`,
+                  entrantA: roundWinners[i],
+                  entrantB: roundWinners[i + 1],
+                  winner: null, votesA: 0, votesB: 0,
+                });
+              }
+              
+              const roundNames = ['Round 2', 'Round 3', 'Quarterfinals', 'Semifinals'];
+              const nextRound = { name: roundNames[currentRoundIndex] || `Round ${currentRoundIndex + 2}`, matchups: nextMatchups };
+              
+              setBracket(prev => ({ ...prev, rounds: [...prev.rounds, nextRound] }));
+              setCurrentRoundIndex(currentRoundIndex + 1);
+              setCurrentMatchupIndex(0);
+              setWinners([]);
+              setBobMessage(BOB.random(BOB.matchupIntros));
+              setBobMood('normal');
+            }
+          }
+        }, 1500);
+      };
+
+      const resetGame = () => {
+        setCategory('');
+        setCategoryType('custom');
+        setEntrants([]);
+        setNewEntrant('');
+        setBracket(null);
+        setCurrentRoundIndex(0);
+        setCurrentMatchupIndex(0);
+        setWinners([]);
+        setChampion(null);
+        setRunnerUp(null);
+        setBobMessage('');
+        setBobMood('normal');
+        setScreen('home');
+      };
+
+      const clearHistory = () => {
+        if (confirm('Clear all champions from The Vault? This cannot be undone.')) {
+          setHistory([]);
+        }
+      };
+
+      // ============================================
+      // RENDER
+      // ============================================
+
+      // Settings button (always visible except home)
+      const SettingsButton = () => (
+        <button
+          onClick={() => setShowSettings(!showSettings)}
+          style={{
+            position: 'fixed',
+            top: '20px',
+            right: '20px',
+            background: 'var(--bg-card)',
+            border: '2px solid var(--text-muted)',
+            borderRadius: '12px',
+            padding: '10px 14px',
+            cursor: 'pointer',
+            zIndex: 50,
+            fontSize: '18px',
+          }}
+        >
+          ⚙️
+        </button>
+      );
+
+      // HOME
+      if (screen === 'home') {
+        return (
+          <div style={{
+            minHeight: '100vh',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '24px',
+          }}>
+            <Logo size="large" />
+            <BobSays message={BOB.random(BOB.welcome)} mood="normal" />
+            <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', justifyContent: 'center' }}>
+              <Button variant="primary" size="huge" onClick={() => setScreen('library')}>
+                🎯 Quick Start
+              </Button>
+              <Button variant="secondary" size="huge" onClick={() => {
+                setCategoryType('custom');
+                setScreen('setup');
+              }}>
+                ✏️ Custom Bracket
+              </Button>
+            </div>
+            <div style={{ marginTop: '24px' }}>
+              <Button variant="ghost" size="large" onClick={() => setScreen('vault')}>
+                🏆 The Vault ({history.length})
+              </Button>
+            </div>
+            
+            <button
+              onClick={() => setShowSettings(!showSettings)}
+              style={{
+                position: 'fixed',
+                top: '20px',
+                right: '20px',
+                background: 'var(--bg-card)',
+                border: '2px solid var(--text-muted)',
+                borderRadius: '12px',
+                padding: '10px 14px',
+                cursor: 'pointer',
+                fontSize: '18px',
+                color: 'var(--text-primary)',
+              }}
+            >
+              ⚙️
+            </button>
+            
+            {showSettings && (
+              <SettingsPanel
+                soundEnabled={soundEnabled}
+                onToggleSound={handleToggleSound}
+                onClose={() => setShowSettings(false)}
+              />
+            )}
+          </div>
+        );
+      }
+
+      // LIBRARY
+      if (screen === 'library') {
+        return (
+          <>
+            <SettingsButton />
+            {showSettings && (
+              <SettingsPanel soundEnabled={soundEnabled} onToggleSound={handleToggleSound} onClose={() => setShowSettings(false)} />
+            )}
+            <CategoryLibrary
+              onSelect={handleSelectFromLibrary}
+              onCustom={() => {
+                setCategoryType('custom');
+                setScreen('setup');
+              }}
+              onBack={() => setScreen('home')}
+              customCategories={customCategories}
+            />
+          </>
+        );
+      }
+
+      // VAULT
+      if (screen === 'vault') {
+        return (
+          <>
+            <SettingsButton />
+            {showSettings && (
+              <SettingsPanel soundEnabled={soundEnabled} onToggleSound={handleToggleSound} onClose={() => setShowSettings(false)} />
+            )}
+            <Vault
+              history={history}
+              onBack={() => setScreen('home')}
+              onNewGame={() => setScreen('library')}
+              onClearHistory={clearHistory}
+            />
+          </>
+        );
+      }
+
+      // SETUP
+      if (screen === 'setup') {
+        const structure = calculateBracketStructure(entrants.length);
+        
+        return (
+          <div style={{ minHeight: '100vh', padding: '24px', maxWidth: '600px', margin: '0 auto' }}>
+            <SettingsButton />
+            {showSettings && (
+              <SettingsPanel soundEnabled={soundEnabled} onToggleSound={handleToggleSound} onClose={() => setShowSettings(false)} />
+            )}
+            
+            <Logo size="small" onClick={() => setScreen('home')} />
+            
+            {bobMessage && <BobSays message={bobMessage} mood={bobMood} />}
+
+            {/* Category */}
+            <div style={{ marginBottom: '32px' }}>
+              <label style={{
+                display: 'block',
+                fontFamily: 'var(--font-display)',
+                fontSize: '18px',
+                color: 'var(--text-secondary)',
+                letterSpacing: '2px',
+                marginBottom: '12px',
+              }}>
+                CATEGORY
+              </label>
+              <Input value={category} onChange={setCategory} placeholder="Best Pizza Topping..." />
+            </div>
+
+            {/* Player Count */}
+            <div style={{ marginBottom: '32px' }}>
+              <label style={{
+                display: 'block',
+                fontFamily: 'var(--font-display)',
+                fontSize: '18px',
+                color: 'var(--text-secondary)',
+                letterSpacing: '2px',
+                marginBottom: '12px',
+              }}>
+                HOW MANY VOTERS?
+              </label>
+              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                {[2, 3, 4, 5, 6, 7, 8, 9, 10].map(n => (
+                  <button
+                    key={n}
+                    onClick={() => setPlayerCount(n)}
+                    style={{
+                      width: '48px', height: '48px', borderRadius: '12px',
+                      border: playerCount === n ? '2px solid var(--accent-gold)' : '2px solid var(--text-muted)',
+                      background: playerCount === n ? 'rgba(255, 215, 0, 0.1)' : 'var(--bg-card)',
+                      color: playerCount === n ? 'var(--accent-gold)' : 'var(--text-primary)',
+                      fontFamily: 'var(--font-display)',
+                      fontSize: '20px',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    {n}
+                  </button>
+                ))}
+              </div>
+              {playerCount % 2 === 0 && (
+                <p style={{ color: 'var(--text-muted)', fontSize: '14px', marginTop: '8px' }}>
+                  Even voters = ties possible. BOB will make you phone a friend.
+                </p>
+              )}
+            </div>
+
+            {/* Entrants */}
+            <div style={{ marginBottom: '32px' }}>
+              <label style={{
+                display: 'block',
+                fontFamily: 'var(--font-display)',
+                fontSize: '18px',
+                color: 'var(--text-secondary)',
+                letterSpacing: '2px',
+                marginBottom: '12px',
+              }}>
+                ENTRANTS ({entrants.length})
+              </label>
+              <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
+                <Input
+                  value={newEntrant}
+                  onChange={setNewEntrant}
+                  placeholder="Add entrant..."
+                  onKeyDown={(e) => e.key === 'Enter' && addEntrant()}
+                  style={{ flex: 1 }}
+                />
+                <Button variant="primary" onClick={addEntrant}>ADD</Button>
+              </div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                {entrants.map((e, i) => (
+                  <EntrantChip key={e} name={e} index={i} onRemove={() => removeEntrant(i)} />
+                ))}
+              </div>
+            </div>
+
+            {/* Structure Preview */}
+            {entrants.length >= 4 && structure && (
+              <div style={{
+                background: 'var(--bg-card)',
+                border: '2px solid var(--text-muted)',
+                borderRadius: '16px',
+                padding: '20px',
+                marginBottom: '32px',
+              }}>
+                <div style={{
+                  fontFamily: 'var(--font-display)',
+                  fontSize: '14px',
+                  color: 'var(--text-secondary)',
+                  letterSpacing: '2px',
+                  marginBottom: '12px',
+                }}>
+                  BRACKET STRUCTURE
+                </div>
+                <div style={{ color: 'var(--text-primary)' }}>
+                  {structure.type === 'clean' ? (
+                    <span style={{ color: 'var(--accent-green)' }}>✓ Clean bracket! No play-ins needed.</span>
+                  ) : (
+                    <span style={{ color: 'var(--accent-blue)' }}>
+                      {structure.playInGames} play-in game{structure.playInGames !== 1 ? 's' : ''}, {structure.byes} bye{structure.byes !== 1 ? 's' : ''}
+                    </span>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Actions */}
+            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
+              <Button variant="primary" size="large" onClick={startGame} disabled={!category.trim() || entrants.length < 4}>
+                Start Battle!
+              </Button>
+              {categoryType === 'custom' && entrants.length >= 4 && (
+                <Button variant="secondary" size="large" onClick={saveCustomCategory}>
+                  💾 Save Category
+                </Button>
+              )}
+              <Button variant="ghost" size="large" onClick={resetGame}>Cancel</Button>
+            </div>
+          </div>
+        );
+      }
+
+      // PLAYING
+      if (screen === 'playing' && bracket) {
+        const currentRound = bracket.rounds[currentRoundIndex];
+        const currentMatchup = currentRound?.matchups[currentMatchupIndex];
+        const isChampionship = currentRound?.name === 'Championship';
+
+        return (
+          <div style={{ minHeight: '100vh', padding: '24px', maxWidth: '700px', margin: '0 auto' }}>
+            <SettingsButton />
+            {showSettings && (
+              <SettingsPanel soundEnabled={soundEnabled} onToggleSound={handleToggleSound} onClose={() => setShowSettings(false)} />
+            )}
+            
+            <Logo size="small" onClick={() => {
+              if (confirm('Exit bracket? Progress will be lost.')) resetGame();
+            }} />
+            
+            <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+              <div style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: '20px',
+                color: 'var(--accent-gold)',
+                letterSpacing: '3px',
+              }}>
+                {category.toUpperCase()}
+              </div>
+              <div style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '8px' }}>
+                {currentRound?.name} • Match {currentMatchupIndex + 1} of {currentRound?.matchups.length}
+              </div>
+            </div>
+
+            <BobSays message={bobMessage} mood={bobMood} />
+
+            {currentMatchup && (
+              <MatchupCard
+                key={currentMatchup.id}
+                matchup={currentMatchup}
+                onVote={handleVoteResult}
+                playerCount={playerCount}
+                isChampionship={isChampionship}
+                categoryType={categoryType}
+              />
+            )}
+
+            <div style={{ marginTop: '24px', textAlign: 'center', color: 'var(--text-muted)', fontSize: '14px' }}>
+              {winners.length} of {currentRound?.matchups.length + (currentRound?.byes?.length || 0)} advancing
+            </div>
+          </div>
+        );
+      }
+
+      // CHAMPION
+      if (screen === 'champion') {
+        return (
+          <>
+            <SettingsButton />
+            {showSettings && (
+              <SettingsPanel soundEnabled={soundEnabled} onToggleSound={handleToggleSound} onClose={() => setShowSettings(false)} />
+            )}
+            <ChampionScreen
+              champion={champion}
+              category={category}
+              runnerUp={runnerUp}
+              categoryType={categoryType}
+              onNewGame={() => setScreen('library')}
+              onViewVault={() => setScreen('vault')}
+            />
+          </>
+        );
+      }
+
+      return null;
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
