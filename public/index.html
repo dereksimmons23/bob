@@ -867,6 +867,87 @@
       );
     }
 
+    // Bracket Progress Indicator
+    function BracketProgress({ rounds, currentRoundIndex, currentMatchupIndex, categoryColor }) {
+      const totalRounds = rounds.length;
+
+      return (
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '8px',
+          marginBottom: '20px',
+          padding: '12px 16px',
+          background: 'var(--bg-card)',
+          borderRadius: '12px',
+          border: '1px solid var(--bg-elevated)',
+        }}>
+          {rounds.map((round, idx) => {
+            const isCompleted = idx < currentRoundIndex;
+            const isCurrent = idx === currentRoundIndex;
+            const isFuture = idx > currentRoundIndex;
+            const isChampionship = round.name === 'Championship';
+
+            return (
+              <React.Fragment key={round.name}>
+                {/* Round indicator */}
+                <div style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: '4px',
+                }}>
+                  <div style={{
+                    width: isChampionship ? '32px' : '24px',
+                    height: isChampionship ? '32px' : '24px',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: isChampionship ? '16px' : '12px',
+                    fontWeight: '600',
+                    background: isCompleted ? 'var(--accent-green)' :
+                               isCurrent ? (categoryColor || 'var(--accent-gold)') :
+                               'var(--bg-elevated)',
+                    color: (isCompleted || isCurrent) ? 'var(--bg-deep)' : 'var(--text-muted)',
+                    border: isCurrent ? '2px solid var(--text-primary)' : 'none',
+                    boxShadow: isCurrent ? '0 0 12px ' + (categoryColor || 'var(--accent-gold)') + '66' : 'none',
+                    transition: 'all 0.3s ease',
+                  }}>
+                    {isCompleted ? '✓' : isChampionship ? '🏆' : idx + 1}
+                  </div>
+                  <div style={{
+                    fontSize: '10px',
+                    color: isCurrent ? 'var(--text-primary)' : 'var(--text-muted)',
+                    fontWeight: isCurrent ? '600' : '400',
+                    textAlign: 'center',
+                    maxWidth: '60px',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                  }}>
+                    {round.name}
+                  </div>
+                </div>
+
+                {/* Connector line (not after last round) */}
+                {idx < totalRounds - 1 && (
+                  <div style={{
+                    width: '20px',
+                    height: '2px',
+                    background: isCompleted ? 'var(--accent-green)' : 'var(--bg-elevated)',
+                    borderRadius: '1px',
+                    marginBottom: '18px',
+                  }} />
+                )}
+              </React.Fragment>
+            );
+          })}
+        </div>
+      );
+    }
+
     // Logo
     function Logo({ size = 'large', onClick = null }) {
       const sizes = {
@@ -2176,7 +2257,7 @@
               if (confirm('Exit bracket? Progress will be lost.')) resetGame();
             }} />
             
-            <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+            <div style={{ textAlign: 'center', marginBottom: '16px' }}>
               <div style={{
                 fontFamily: 'var(--font-display)',
                 fontSize: '20px',
@@ -2186,9 +2267,16 @@
                 {category.toUpperCase()}
               </div>
               <div style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '8px' }}>
-                {currentRound?.name} • Match {currentMatchupIndex + 1} of {currentRound?.matchups.length}
+                Match {currentMatchupIndex + 1} of {currentRound?.matchups.length}
               </div>
             </div>
+
+            <BracketProgress
+              rounds={bracket.rounds}
+              currentRoundIndex={currentRoundIndex}
+              currentMatchupIndex={currentMatchupIndex}
+              categoryColor={CATEGORY_LIBRARY[categoryType]?.color}
+            />
 
             <BobSays message={bobMessage} mood={bobMood} />
 
