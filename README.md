@@ -111,27 +111,30 @@ Then visit `http://localhost:8000`
 
 ```
 bob/
-├── index.html              # The entire app (single-file PWA)
-├── manifest.json           # PWA manifest for home screen install
+├── public/                 # Deployed to Netlify
+│   ├── index.html          # The entire app (single-file PWA)
+│   └── manifest.json       # PWA manifest for home screen install
+├── docs/                   # Documentation (not deployed)
+│   ├── BOB-CHARACTER-BIBLE.md
+│   ├── CATEGORY-LIBRARY.md
+│   ├── FEATURE-ROADMAP.md
+│   ├── V2.5-SPRINT-PLAN.md
+│   ├── OLYMPICS-DATA.md
+│   ├── VOICE-STRATEGY.md
+│   ├── BRACKET-VISUALIZATION-SPEC.md
+│   ├── EXPANDED-DIALOGUE.md
+│   ├── BANNERS-AND-BANTER-SOCIAL.md
+│   ├── GAME-SHOW-HOST-RESEARCH.md
+│   ├── MULTIMEDIA-STRATEGY.md
+│   ├── PROJECT-README.md
+│   ├── PROJECT-CUSTOM-INSTRUCTIONS.md
+│   ├── CLAUDE-PROJECT-SETUP.md
+│   └── bob-ip-analysis.md
 ├── README.md               # You are here
-├── LICENSE                 # MIT License
-│
-├── BOB-CHARACTER-BIBLE.md  # BOB's personality guide & dialogue
-├── CATEGORY-LIBRARY.md     # All preset categories with entrants
-├── FEATURE-ROADMAP.md      # What's built, what's planned
-├── V2.5-SPRINT-PLAN.md     # Current sprint (Dec 5-19, 2025)
-├── OLYMPICS-DATA.md        # Olympic event data
-├── VOICE-STRATEGY.md       # Voice integration plans
-├── BRACKET-VISUALIZATION-SPEC.md
-├── EXPANDED-DIALOGUE.md    # Extended BOB dialogue
-├── BANNERS-AND-BANTER-SOCIAL.md  # Future social features
-├── GAME-SHOW-HOST-RESEARCH.md
-├── MULTIMEDIA-STRATEGY.md
-├── PROJECT-README.md       # Internal project notes
-├── PROJECT-CUSTOM-INSTRUCTIONS.md
-├── CLAUDE-PROJECT-SETUP.md
-└── bob-ip-analysis.md      # Trademark/copyright research
+└── LICENSE                 # MIT License
 ```
+
+**Netlify:** Set publish directory to `public/`
 
 ---
 
