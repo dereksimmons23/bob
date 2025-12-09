@@ -135,6 +135,72 @@
       animation: trophyFloat 3s ease-in-out infinite, bracketGlow 2s ease-in-out infinite;
     }
 
+    /* Battle Animations */
+    @keyframes vsClash {
+      0%, 100% { transform: scale(1); }
+      25% { transform: scale(1.2) rotate(-5deg); }
+      50% { transform: scale(0.9); }
+      75% { transform: scale(1.15) rotate(5deg); }
+    }
+    @keyframes vsPulse {
+      0%, 100% { text-shadow: 0 0 10px var(--accent-red), 0 0 20px var(--accent-red); }
+      50% { text-shadow: 0 0 20px var(--accent-gold), 0 0 40px var(--accent-gold), 0 0 60px var(--accent-orange); }
+    }
+    @keyframes winnerCelebrate {
+      0% { transform: scale(1); }
+      25% { transform: scale(1.1) rotate(-2deg); }
+      50% { transform: scale(1.15); }
+      75% { transform: scale(1.1) rotate(2deg); }
+      100% { transform: scale(1.1); }
+    }
+    @keyframes loserFade {
+      from { opacity: 1; transform: scale(1); }
+      to { opacity: 0.4; transform: scale(0.95); }
+    }
+    @keyframes entrantEnter {
+      from { opacity: 0; transform: translateY(20px) scale(0.9); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes votePopIn {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.3); }
+      100% { transform: scale(1); }
+    }
+    .vs-badge {
+      animation: vsClash 2s ease-in-out infinite, vsPulse 1.5s ease-in-out infinite;
+    }
+    .entrant-card {
+      animation: entrantEnter 0.5s ease-out forwards;
+    }
+    .entrant-winner {
+      animation: winnerCelebrate 0.6s ease-out forwards;
+    }
+    .entrant-loser {
+      animation: loserFade 0.5s ease-out forwards;
+    }
+    .vote-pop {
+      animation: votePopIn 0.2s ease-out;
+    }
+
+    /* Button hover effects */
+    button:not(:disabled):hover {
+      transform: translateY(-2px);
+      filter: brightness(1.1);
+    }
+    button:not(:disabled):active {
+      transform: translateY(0);
+      filter: brightness(0.95);
+    }
+
+    /* Lock In button pulse */
+    @keyframes lockPulse {
+      0%, 100% { box-shadow: 0 4px 15px rgba(0, 230, 118, 0.3); }
+      50% { box-shadow: 0 4px 25px rgba(0, 230, 118, 0.5), 0 0 40px rgba(0, 230, 118, 0.2); }
+    }
+    .lock-in-btn {
+      animation: lockPulse 2s ease-in-out infinite;
+    }
+
     /* Scrollbar styling */
     ::-webkit-scrollbar { width: 8px; }
     ::-webkit-scrollbar-track { background: var(--bg-deep); }
@@ -772,6 +838,46 @@
               oscillator.start(ctx.currentTime);
               oscillator.stop(ctx.currentTime + 0.4);
               break;
+
+            case 'advance':
+              // Triumphant two-note advancement
+              oscillator.type = 'triangle';
+              oscillator.frequency.setValueAtTime(440, ctx.currentTime);
+              oscillator.frequency.setValueAtTime(554, ctx.currentTime + 0.12);
+              gainNode.gain.setValueAtTime(0.12, ctx.currentTime);
+              gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.25);
+              oscillator.start(ctx.currentTime);
+              oscillator.stop(ctx.currentTime + 0.25);
+              break;
+
+            case 'roundComplete':
+              // Fanfare for completing a round
+              const fanfare = [392, 440, 523, 659]; // G4, A4, C5, E5
+              fanfare.forEach((freq, i) => {
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'triangle';
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.frequency.setValueAtTime(freq, ctx.currentTime + i * 0.1);
+                gain.gain.setValueAtTime(0.1, ctx.currentTime + i * 0.1);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + i * 0.1 + 0.3);
+                osc.start(ctx.currentTime + i * 0.1);
+                osc.stop(ctx.currentTime + i * 0.1 + 0.3);
+              });
+              break;
+
+            case 'dramatic':
+              // Tension builder for championship
+              oscillator.type = 'sine';
+              oscillator.frequency.setValueAtTime(150, ctx.currentTime);
+              oscillator.frequency.exponentialRampToValueAtTime(300, ctx.currentTime + 0.5);
+              gainNode.gain.setValueAtTime(0.08, ctx.currentTime);
+              gainNode.gain.setValueAtTime(0.12, ctx.currentTime + 0.25);
+              gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.6);
+              oscillator.start(ctx.currentTime);
+              oscillator.stop(ctx.currentTime + 0.6);
+              break;
           }
         } catch (e) {
           // Silent fail - audio not critical
@@ -1197,7 +1303,7 @@
     }
 
     // Button
-    function Button({ children, onClick, variant = 'primary', disabled = false, size = 'medium', style = {} }) {
+    function Button({ children, onClick, variant = 'primary', disabled = false, size = 'medium', style = {}, className = '' }) {
       const variants = {
         primary: { background: 'linear-gradient(135deg, var(--accent-gold) 0%, #e6c200 100%)', color: 'var(--bg-deep)', border: 'none' },
         secondary: { background: 'transparent', color: 'var(--text-primary)', border: '2px solid var(--text-muted)' },
@@ -1214,7 +1320,7 @@
       };
 
       return (
-        <button onClick={onClick} disabled={disabled} style={{
+        <button onClick={onClick} disabled={disabled} className={className} style={{
           ...variants[variant], ...sizes[size],
           fontFamily: 'var(--font-display)',
           letterSpacing: '2px',
@@ -1358,10 +1464,13 @@
       const [votesB, setVotesB] = useState(0);
       const [locked, setLocked] = useState(false);
       const [showTieBreaker, setShowTieBreaker] = useState(false);
+      const [winnerSide, setWinnerSide] = useState(null);
+      const [voteKey, setVoteKey] = useState(0); // For vote pop animation
 
       const handleVote = (side) => {
         if (locked) return;
         SoundEffects.play('vote');
+        setVoteKey(k => k + 1); // Trigger pop animation
         if (side === 'A') setVotesA(v => v + 1);
         else setVotesB(v => v + 1);
       };
@@ -1380,16 +1489,19 @@
           SoundEffects.play('lock');
           const winner = votesA > votesB ? matchup.entrantA : matchup.entrantB;
           const margin = Math.abs(votesA - votesB);
+          setWinnerSide(votesA > votesB ? 'A' : 'B');
           setLocked(true);
-          onVote(winner, votesA, votesB, margin);
+          // Small delay to show winner animation before advancing
+          setTimeout(() => onVote(winner, votesA, votesB, margin), 800);
         }
       };
 
       const handleTieBreaker = (winner) => {
         SoundEffects.play('lock');
         setShowTieBreaker(false);
+        setWinnerSide(winner === matchup.entrantA ? 'A' : 'B');
         setLocked(true);
-        onVote(winner, votesA, votesB, 0, true);
+        setTimeout(() => onVote(winner, votesA, votesB, 0, true), 800);
       };
 
       if (showTieBreaker) {
@@ -1466,22 +1578,33 @@
             alignItems: 'center',
           }}>
             {/* Entrant A */}
-            <div style={{ textAlign: 'center' }}>
+            <div
+              className={`entrant-card ${locked ? (winnerSide === 'A' ? 'entrant-winner' : 'entrant-loser') : ''}`}
+              style={{ textAlign: 'center' }}
+            >
               <div style={{
                 fontFamily: 'var(--font-display)',
                 fontSize: '28px',
-                color: 'var(--text-primary)',
+                color: locked && winnerSide === 'A' ? 'var(--accent-gold)' : 'var(--text-primary)',
                 marginBottom: '16px',
                 letterSpacing: '1px',
+                transition: 'color 0.3s ease',
               }}>
+                {locked && winnerSide === 'A' && '👑 '}
                 {matchup.entrantA}
+                {locked && winnerSide === 'A' && ' 👑'}
               </div>
-              <div style={{
-                fontSize: '48px',
-                fontFamily: 'var(--font-display)',
-                color: 'var(--accent-blue)',
-                marginBottom: '16px',
-              }}>
+              <div
+                key={`a-${voteKey}`}
+                className={votesA > 0 ? 'vote-pop' : ''}
+                style={{
+                  fontSize: '48px',
+                  fontFamily: 'var(--font-display)',
+                  color: locked && winnerSide === 'A' ? 'var(--accent-gold)' : 'var(--accent-blue)',
+                  marginBottom: '16px',
+                  transition: 'color 0.3s ease',
+                }}
+              >
                 {votesA}
               </div>
               <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
@@ -1490,30 +1613,48 @@
               </div>
             </div>
 
-            <div style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: '32px',
-              color: 'var(--text-muted)',
-              letterSpacing: '4px',
-            }}>VS</div>
+            {/* VS Badge */}
+            <div
+              className={!locked ? 'vs-badge' : ''}
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: '32px',
+                color: locked ? 'var(--text-muted)' : 'var(--accent-red)',
+                letterSpacing: '4px',
+                transition: 'all 0.3s ease',
+              }}
+            >
+              {locked ? '⚔️' : 'VS'}
+            </div>
 
             {/* Entrant B */}
-            <div style={{ textAlign: 'center' }}>
+            <div
+              className={`entrant-card ${locked ? (winnerSide === 'B' ? 'entrant-winner' : 'entrant-loser') : ''}`}
+              style={{ textAlign: 'center', animationDelay: '0.1s' }}
+            >
               <div style={{
                 fontFamily: 'var(--font-display)',
                 fontSize: '28px',
-                color: 'var(--text-primary)',
+                color: locked && winnerSide === 'B' ? 'var(--accent-gold)' : 'var(--text-primary)',
                 marginBottom: '16px',
                 letterSpacing: '1px',
+                transition: 'color 0.3s ease',
               }}>
+                {locked && winnerSide === 'B' && '👑 '}
                 {matchup.entrantB}
+                {locked && winnerSide === 'B' && ' 👑'}
               </div>
-              <div style={{
-                fontSize: '48px',
-                fontFamily: 'var(--font-display)',
-                color: 'var(--accent-purple)',
-                marginBottom: '16px',
-              }}>
+              <div
+                key={`b-${voteKey}`}
+                className={votesB > 0 ? 'vote-pop' : ''}
+                style={{
+                  fontSize: '48px',
+                  fontFamily: 'var(--font-display)',
+                  color: locked && winnerSide === 'B' ? 'var(--accent-gold)' : 'var(--accent-purple)',
+                  marginBottom: '16px',
+                  transition: 'color 0.3s ease',
+                }}
+              >
                 {votesB}
               </div>
               <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
@@ -1525,7 +1666,7 @@
 
           {!locked && (votesA > 0 || votesB > 0) && (
             <div style={{ textAlign: 'center', marginTop: '32px' }}>
-              <Button variant="success" size="large" onClick={handleLockIn}>Lock In Result</Button>
+              <Button variant="success" size="large" onClick={handleLockIn} className="lock-in-btn">Lock In Result</Button>
             </div>
           )}
         </div>
@@ -2085,7 +2226,10 @@
         } else if (margin <= 1) {
           reaction = BOB.random(BOB.close);
         } else {
-          reaction = BOB.random(BOB.normal);
+          // Normal result - sometimes use deadpan for variety
+          reaction = Math.random() < 0.3
+            ? BOB.random(BOB.deadpan)
+            : BOB.random(BOB.normal);
         }
         setBobMessage(reaction);
 
@@ -2094,9 +2238,15 @@
           
           if (currentMatchupIndex < currentRound.matchups.length - 1) {
             setCurrentMatchupIndex(currentMatchupIndex + 1);
-            const intro = BOB.random(BOB.matchupIntros);
-            const contextComment = BOB.getCategoryComment(categoryType, 'matchupCommentary');
-            setBobMessage(`${intro} ${contextComment || ''}`);
+            SoundEffects.play('advance');
+            // Occasionally drop life advice between matchups
+            if (Math.random() < 0.15) {
+              setBobMessage(BOB.random(BOB.bobAdvice));
+            } else {
+              const intro = BOB.random(BOB.matchupIntros);
+              const contextComment = BOB.getCategoryComment(categoryType, 'matchupCommentary');
+              setBobMessage(`${intro} ${contextComment || ''}`);
+            }
           } else {
             const roundWinners = [...newWinners];
             if (currentRound.byes) roundWinners.push(...currentRound.byes);
@@ -2130,6 +2280,7 @@
               setCurrentRoundIndex(currentRoundIndex + 1);
               setCurrentMatchupIndex(0);
               setWinners([]);
+              SoundEffects.play('dramatic');
               setBobMessage(BOB.random(BOB.championshipIntro));
               setBobMood('excited');
             } else {
@@ -2150,7 +2301,13 @@
               setCurrentRoundIndex(currentRoundIndex + 1);
               setCurrentMatchupIndex(0);
               setWinners([]);
-              setBobMessage(BOB.random(BOB.matchupIntros));
+              SoundEffects.play('roundComplete');
+              // Sometimes show impatience when starting new round
+              if (Math.random() < 0.25) {
+                setBobMessage(BOB.random(BOB.impatience));
+              } else {
+                setBobMessage(BOB.random(BOB.matchupIntros));
+              }
               setBobMood('normal');
             }
           }
