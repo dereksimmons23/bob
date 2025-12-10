@@ -1762,8 +1762,10 @@
     }
 
     // Champion Screen
-    function ChampionScreen({ champion, category, runnerUp, categoryType, onNewGame, onViewVault }) {
+    function ChampionScreen({ champion, category, runnerUp, categoryType, bobComment, onNewGame, onViewVault }) {
       const [showShare, setShowShare] = useState(false);
+      // Use passed bobComment or fall back to random
+      const displayComment = bobComment || BOB.random(BOB.champion);
 
       useEffect(() => {
         SoundEffects.play('champion');
@@ -1816,7 +1818,7 @@
             defeated <span style={{ color: 'var(--text-primary)' }}>{runnerUp}</span> in the final
           </div>
 
-          <BobSays message={BOB.random(BOB.champion)} mood="victory" />
+          <BobSays message={displayComment} mood="victory" />
 
           <div style={{ display: 'flex', gap: '16px', marginTop: '24px', flexWrap: 'wrap', justifyContent: 'center' }}>
             <Button variant="primary" size="large" onClick={onNewGame}>New Bracket</Button>
@@ -1914,6 +1916,19 @@
                 <div style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '4px' }}>
                   defeated {entry.runnerUp}
                 </div>
+                {entry.bobComment && (
+                  <div style={{
+                    fontSize: '13px',
+                    color: 'var(--text-muted)',
+                    fontStyle: 'italic',
+                    marginTop: '8px',
+                    paddingTop: '8px',
+                    borderTop: '1px solid var(--text-muted)',
+                    opacity: 0.8,
+                  }}>
+                    "{entry.bobComment}" — BOB
+                  </div>
+                )}
               </div>
             ))}
           </div>
@@ -2106,6 +2121,116 @@
     }
 
     // ============================================
+    // SEED VAULT DATA (Family Bracket Winners)
+    // ============================================
+    const SEED_VAULT_DATA = [
+      {
+        category: "Christmas Songs",
+        champion: "Baby Please Come Home (Darlene Love)",
+        runnerUp: "All I Want For Christmas (Mariah Carey)",
+        date: "12/8/2024",
+        categoryType: "preset",
+        bobComment: "Mariah had the whistle tone. Darlene had the soul. Soul won."
+      },
+      {
+        category: "Cereal",
+        champion: "Cinnamon Toast Crunch",
+        runnerUp: "Honey Nut Cheerios",
+        date: "12/8/2024",
+        categoryType: "preset",
+        bobComment: "The cereal that sees why kids love it defeated the one endorsed by a bee. Nature is healing."
+      },
+      {
+        category: "College Mascots",
+        champion: "Michigan Wolverines",
+        runnerUp: "Kansas Jayhawks",
+        date: "12/7/2024",
+        categoryType: "custom",
+        bobComment: "The Jayhawks flew too close to the sun. Wolverines don't fly. They win."
+      },
+      {
+        category: "Animated Movies",
+        champion: "Toy Story",
+        runnerUp: "Monsters Inc.",
+        date: "12/7/2024",
+        categoryType: "preset",
+        bobComment: "You've got a friend in democracy."
+      },
+      {
+        category: "Rock Bands",
+        champion: "Nirvana",
+        runnerUp: "Guns N' Roses",
+        date: "12/6/2024",
+        categoryType: "preset",
+        bobComment: "Foo got knocked out by Coldplay? Yeah, that really happened."
+      },
+      {
+        category: "Chips",
+        champion: "Dill Pickle",
+        runnerUp: "Sour Cream & Onion",
+        date: "12/6/2024",
+        categoryType: "preset",
+        bobComment: "Chaos prevailed. As it should."
+      },
+      {
+        category: "Christmas Cookies",
+        champion: "Molasses",
+        runnerUp: "Sugar Cookie",
+        date: "12/5/2024",
+        categoryType: "custom",
+        bobComment: "Slow and steady wins the cookie race. Poetic."
+      },
+      {
+        category: "Cheese",
+        champion: "Aged Havarti",
+        runnerUp: "Sharp Cheddar",
+        date: "12/5/2024",
+        categoryType: "preset",
+        bobComment: "A cheese with patience. I respect that."
+      },
+      {
+        category: "Candy",
+        champion: "Werther's Original",
+        runnerUp: "Reese's",
+        date: "12/4/2024",
+        categoryType: "preset",
+        bobComment: "Grandma energy. Undefeated."
+      },
+      {
+        category: "Crayon Colors",
+        champion: "Sea Foam Green",
+        runnerUp: "Cerulean",
+        date: "12/4/2024",
+        categoryType: "custom",
+        bobComment: "Bold. Controversial. Correct."
+      },
+      {
+        category: "Dog Breeds",
+        champion: "Golden Retriever",
+        runnerUp: "Goldendoodle",
+        date: "12/3/2024",
+        categoryType: "preset",
+        bobComment: "Jordy the doodle against Jasper the greyhound. The retriever outlasted them all."
+      },
+      {
+        category: "Thanksgiving Food",
+        champion: "Green Bean Casserole",
+        runnerUp: "Mashed Potatoes",
+        date: "11/28/2024",
+        categoryType: "preset",
+        bobComment: "The side dish that hosts Thanksgiving. Turkey is just the venue."
+      },
+      {
+        category: "Food Pairings",
+        champion: "Bacon and Eggs",
+        runnerUp: "Peanut Butter & Jelly",
+        date: "11/27/2024",
+        categoryType: "custom",
+        bobComment: "The combo that built empires."
+      },
+    ];
+
+    // ============================================
     // MAIN APP
     // ============================================
     function App() {
@@ -2121,6 +2246,7 @@
       const [winners, setWinners] = useState([]);
       const [champion, setChampion] = useState(null);
       const [runnerUp, setRunnerUp] = useState(null);
+      const [championComment, setChampionComment] = useState('');
       const [bobMessage, setBobMessage] = useState('');
       const [bobMood, setBobMood] = useState('normal');
       const [showSettings, setShowSettings] = useState(false);
@@ -2130,7 +2256,11 @@
 
       const [history, setHistory] = useState(() => {
         const saved = localStorage.getItem('bob-vault-v2');
-        return saved ? JSON.parse(saved) : [];
+        if (saved) {
+          return JSON.parse(saved);
+        }
+        // Pre-populate with family bracket winners for new users
+        return SEED_VAULT_DATA;
       });
 
       const [customCategories, setCustomCategories] = useState(() => {
@@ -2254,13 +2384,18 @@
               const loser = lastMatchup.entrantA === winner ? lastMatchup.entrantB : lastMatchup.entrantA;
               setChampion(winner);
               setRunnerUp(loser);
-              
+
+              // Generate and capture BOB's championship comment
+              const comment = BOB.random(BOB.champion);
+              setChampionComment(comment);
+
               const newEntry = {
                 category,
                 champion: winner,
                 runnerUp: loser,
                 date: new Date().toLocaleDateString(),
                 categoryType,
+                bobComment: comment,
               };
               setHistory([newEntry, ...history]);
               setScreen('champion');
@@ -2346,6 +2481,7 @@
         setWinners([]);
         setChampion(null);
         setRunnerUp(null);
+        setChampionComment('');
         setBobMessage('');
         setBobMood('normal');
         setScreen('home');
@@ -2731,6 +2867,7 @@
               category={category}
               runnerUp={runnerUp}
               categoryType={categoryType}
+              bobComment={championComment}
               onNewGame={() => setScreen('library')}
               onViewVault={() => setScreen('vault')}
             />
