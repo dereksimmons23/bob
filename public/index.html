@@ -2137,7 +2137,9 @@
       const [bobMood, setBobMood] = useState('normal');
       const [showSettings, setShowSettings] = useState(false);
       const [soundEnabled, setSoundEnabled] = useState(true);
-      
+      const [canUndo, setCanUndo] = useState(false);
+      const [undoState, setUndoState] = useState(null);
+
       const [history, setHistory] = useState(() => {
         const saved = localStorage.getItem('bob-vault-v2');
         return saved ? JSON.parse(saved) : [];
@@ -2215,6 +2217,14 @@
       };
 
       const handleVoteResult = (winner, votesA, votesB, margin, wasTieBreaker = false) => {
+        // Save state for undo before advancing
+        setUndoState({
+          winners: [...winners],
+          currentMatchupIndex,
+          currentRoundIndex,
+          bracket: JSON.parse(JSON.stringify(bracket)),
+        });
+
         const newWinners = [...winners, winner];
         setWinners(newWinners);
 
@@ -2311,7 +2321,24 @@
               setBobMood('normal');
             }
           }
+          // Enable undo for 5 seconds after advancing
+          setCanUndo(true);
+          setTimeout(() => setCanUndo(false), 5000);
         }, 1500);
+      };
+
+      const handleUndo = () => {
+        if (!canUndo || !undoState) return;
+
+        // Restore previous state
+        setWinners(undoState.winners);
+        setCurrentMatchupIndex(undoState.currentMatchupIndex);
+        setCurrentRoundIndex(undoState.currentRoundIndex);
+        setBracket(undoState.bracket);
+        setCanUndo(false);
+        setUndoState(null);
+        setBobMessage("Fine. Let's redo that one. Democracy demands accuracy.");
+        SoundEffects.play('vote');
       };
 
       const resetGame = () => {
@@ -2655,6 +2682,24 @@
             <div style={{ marginTop: '24px', textAlign: 'center', color: 'var(--text-muted)', fontSize: '14px' }}>
               {winners.length} of {currentRound?.matchups.length + (currentRound?.byes?.length || 0)} advancing
             </div>
+
+            {/* Undo button - 5 second window */}
+            {canUndo && (
+              <div style={{
+                marginTop: '16px',
+                textAlign: 'center',
+                animation: 'slideUp 0.3s ease-out',
+              }}>
+                <Button
+                  variant="ghost"
+                  size="small"
+                  onClick={handleUndo}
+                  style={{ opacity: 0.8 }}
+                >
+                  ↩ Wait, go back
+                </Button>
+              </div>
+            )}
           </div>
         );
       }
