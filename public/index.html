@@ -1948,23 +1948,39 @@
         <div style={{ minHeight: '100vh', padding: '24px', maxWidth: '700px', margin: '0 auto' }}>
           <Logo size="small" onClick={onBack} />
           
-          <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+          <div style={{ textAlign: 'center', marginBottom: '20px' }}>
             <div style={{
               fontFamily: 'var(--font-display)',
-              fontSize: '28px',
+              fontSize: '24px',
               color: 'var(--accent-gold)',
               letterSpacing: '3px',
               marginBottom: '8px',
             }}>
-              CATEGORY LIBRARY
+              PICK A CATEGORY
             </div>
-            <p style={{ color: 'var(--text-secondary)' }}>Pick a preset or create your own</p>
           </div>
 
-          {/* Quick Actions */}
-          <div style={{ display: 'flex', gap: '12px', marginBottom: '24px', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <Button variant="primary" onClick={handleSurpriseMe}>🎲 Surprise Me</Button>
+          {/* Quick Actions - Prominent */}
+          <div style={{
+            display: 'flex',
+            gap: '12px',
+            marginBottom: '20px',
+            justifyContent: 'center',
+            flexWrap: 'wrap',
+            padding: '16px',
+            background: 'var(--bg-card)',
+            borderRadius: '16px',
+            border: '1px solid var(--bg-elevated)',
+          }}>
+            <div style={{ width: '100%', textAlign: 'center', marginBottom: '8px' }}>
+              <span style={{ color: 'var(--text-muted)', fontSize: '13px' }}>Quick start:</span>
+            </div>
+            <Button variant="primary" size="large" onClick={handleSurpriseMe}>🎲 Surprise Me!</Button>
             <Button variant="secondary" onClick={onCustom}>✏️ Create Custom</Button>
+          </div>
+
+          <div style={{ textAlign: 'center', color: 'var(--text-muted)', fontSize: '13px', marginBottom: '16px' }}>
+            — or tap a category below —
           </div>
 
           {/* Theme Pills */}
@@ -2467,141 +2483,145 @@
       // SETUP
       if (screen === 'setup') {
         const structure = calculateBracketStructure(entrants.length);
-        
+        const canStart = category.trim() && entrants.length >= 4;
+
         return (
-          <div style={{ minHeight: '100vh', padding: '24px', maxWidth: '600px', margin: '0 auto' }}>
-            <SettingsButton />
-            {showSettings && (
-              <SettingsPanel soundEnabled={soundEnabled} onToggleSound={handleToggleSound} onClose={() => setShowSettings(false)} />
-            )}
-            
-            <Logo size="small" onClick={() => setScreen('home')} />
-            
-            {bobMessage && <BobSays message={bobMessage} mood={bobMood} />}
-
-            {/* Category */}
-            <div style={{ marginBottom: '32px' }}>
-              <label style={{
-                display: 'block',
-                fontFamily: 'var(--font-display)',
-                fontSize: '18px',
-                color: 'var(--text-secondary)',
-                letterSpacing: '2px',
-                marginBottom: '12px',
-              }}>
-                CATEGORY
-              </label>
-              <Input value={category} onChange={setCategory} placeholder="Best Pizza Topping..." />
-            </div>
-
-            {/* Player Count */}
-            <div style={{ marginBottom: '32px' }}>
-              <label style={{
-                display: 'block',
-                fontFamily: 'var(--font-display)',
-                fontSize: '18px',
-                color: 'var(--text-secondary)',
-                letterSpacing: '2px',
-                marginBottom: '12px',
-              }}>
-                HOW MANY VOTERS?
-              </label>
-              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                {[2, 3, 4, 5, 6, 7, 8, 9, 10].map(n => (
-                  <button
-                    key={n}
-                    onClick={() => setPlayerCount(n)}
-                    style={{
-                      width: '48px', height: '48px', borderRadius: '12px',
-                      border: playerCount === n ? '2px solid var(--accent-gold)' : '2px solid var(--text-muted)',
-                      background: playerCount === n ? 'rgba(255, 215, 0, 0.1)' : 'var(--bg-card)',
-                      color: playerCount === n ? 'var(--accent-gold)' : 'var(--text-primary)',
-                      fontFamily: 'var(--font-display)',
-                      fontSize: '20px',
-                      cursor: 'pointer',
-                    }}
-                  >
-                    {n}
-                  </button>
-                ))}
-              </div>
-              {playerCount % 2 === 0 && (
-                <p style={{ color: 'var(--text-muted)', fontSize: '14px', marginTop: '8px' }}>
-                  Even voters = ties possible. BOB will make you phone a friend.
-                </p>
+          <div style={{ minHeight: '100vh', paddingBottom: '100px' }}>
+            <div style={{ padding: '24px', maxWidth: '600px', margin: '0 auto' }}>
+              <SettingsButton />
+              {showSettings && (
+                <SettingsPanel soundEnabled={soundEnabled} onToggleSound={handleToggleSound} onClose={() => setShowSettings(false)} />
               )}
-            </div>
 
-            {/* Entrants */}
-            <div style={{ marginBottom: '32px' }}>
-              <label style={{
-                display: 'block',
-                fontFamily: 'var(--font-display)',
-                fontSize: '18px',
-                color: 'var(--text-secondary)',
-                letterSpacing: '2px',
-                marginBottom: '12px',
-              }}>
-                ENTRANTS ({entrants.length})
-              </label>
-              <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
-                <Input
-                  value={newEntrant}
-                  onChange={setNewEntrant}
-                  placeholder="Add entrant..."
-                  onKeyDown={(e) => e.key === 'Enter' && addEntrant()}
-                  style={{ flex: 1 }}
-                />
-                <Button variant="primary" onClick={addEntrant}>ADD</Button>
-              </div>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                {entrants.map((e, i) => (
-                  <EntrantChip key={e} name={e} index={i} onRemove={() => removeEntrant(i)} />
-                ))}
-              </div>
-            </div>
+              <Logo size="small" onClick={() => setScreen('home')} />
 
-            {/* Structure Preview */}
-            {entrants.length >= 4 && structure && (
-              <div style={{
-                background: 'var(--bg-card)',
-                border: '2px solid var(--text-muted)',
-                borderRadius: '16px',
-                padding: '20px',
-                marginBottom: '32px',
-              }}>
-                <div style={{
+              {bobMessage && <BobSays message={bobMessage} mood={bobMood} />}
+
+              {/* Category */}
+              <div style={{ marginBottom: '24px' }}>
+                <label style={{
+                  display: 'block',
                   fontFamily: 'var(--font-display)',
-                  fontSize: '14px',
+                  fontSize: '16px',
                   color: 'var(--text-secondary)',
                   letterSpacing: '2px',
-                  marginBottom: '12px',
+                  marginBottom: '8px',
                 }}>
-                  BRACKET STRUCTURE
+                  CATEGORY
+                </label>
+                <Input value={category} onChange={setCategory} placeholder="Best Pizza Topping..." />
+              </div>
+
+              {/* Player Count */}
+              <div style={{ marginBottom: '24px' }}>
+                <label style={{
+                  display: 'block',
+                  fontFamily: 'var(--font-display)',
+                  fontSize: '16px',
+                  color: 'var(--text-secondary)',
+                  letterSpacing: '2px',
+                  marginBottom: '8px',
+                }}>
+                  VOTERS: {playerCount}
+                </label>
+                <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                  {[2, 3, 4, 5, 6, 7, 8, 9, 10].map(n => (
+                    <button
+                      key={n}
+                      onClick={() => setPlayerCount(n)}
+                      style={{
+                        width: '40px', height: '40px', borderRadius: '10px',
+                        border: playerCount === n ? '2px solid var(--accent-gold)' : '2px solid var(--text-muted)',
+                        background: playerCount === n ? 'rgba(255, 215, 0, 0.1)' : 'var(--bg-card)',
+                        color: playerCount === n ? 'var(--accent-gold)' : 'var(--text-primary)',
+                        fontFamily: 'var(--font-display)',
+                        fontSize: '18px',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      {n}
+                    </button>
+                  ))}
                 </div>
-                <div style={{ color: 'var(--text-primary)' }}>
+              </div>
+
+              {/* Entrants */}
+              <div style={{ marginBottom: '24px' }}>
+                <label style={{
+                  display: 'block',
+                  fontFamily: 'var(--font-display)',
+                  fontSize: '16px',
+                  color: 'var(--text-secondary)',
+                  letterSpacing: '2px',
+                  marginBottom: '8px',
+                }}>
+                  ENTRANTS ({entrants.length})
+                  {entrants.length < 4 && <span style={{ color: 'var(--accent-red)', marginLeft: '8px' }}>Need {4 - entrants.length} more</span>}
+                </label>
+                <div style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
+                  <Input
+                    value={newEntrant}
+                    onChange={setNewEntrant}
+                    placeholder="Add entrant..."
+                    onKeyDown={(e) => e.key === 'Enter' && addEntrant()}
+                    style={{ flex: 1 }}
+                  />
+                  <Button variant="primary" onClick={addEntrant}>+</Button>
+                </div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                  {entrants.map((e, i) => (
+                    <EntrantChip key={e} name={e} index={i} onRemove={() => removeEntrant(i)} />
+                  ))}
+                </div>
+              </div>
+
+              {/* Structure Preview - Compact */}
+              {entrants.length >= 4 && structure && (
+                <div style={{
+                  background: 'var(--bg-card)',
+                  borderRadius: '12px',
+                  padding: '12px 16px',
+                  marginBottom: '24px',
+                  fontSize: '14px',
+                }}>
+                  <span style={{ color: 'var(--text-muted)' }}>Bracket: </span>
                   {structure.type === 'clean' ? (
-                    <span style={{ color: 'var(--accent-green)' }}>✓ Clean bracket! No play-ins needed.</span>
+                    <span style={{ color: 'var(--accent-green)' }}>✓ Clean ({entrants.length} entrants)</span>
                   ) : (
                     <span style={{ color: 'var(--accent-blue)' }}>
-                      {structure.playInGames} play-in game{structure.playInGames !== 1 ? 's' : ''}, {structure.byes} bye{structure.byes !== 1 ? 's' : ''}
+                      {structure.playInGames} play-in{structure.playInGames !== 1 ? 's' : ''}, {structure.byes} bye{structure.byes !== 1 ? 's' : ''}
                     </span>
                   )}
                 </div>
-              </div>
-            )}
-
-            {/* Actions */}
-            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
-              <Button variant="primary" size="large" onClick={startGame} disabled={!category.trim() || entrants.length < 4}>
-                Start Battle!
-              </Button>
-              {categoryType === 'custom' && entrants.length >= 4 && (
-                <Button variant="secondary" size="large" onClick={saveCustomCategory}>
-                  💾 Save Category
-                </Button>
               )}
-              <Button variant="ghost" size="large" onClick={resetGame}>Cancel</Button>
+            </div>
+
+            {/* Sticky Footer Actions */}
+            <div style={{
+              position: 'fixed',
+              bottom: 0,
+              left: 0,
+              right: 0,
+              padding: '16px 24px',
+              background: 'linear-gradient(to top, var(--bg-deep) 80%, transparent)',
+              display: 'flex',
+              gap: '12px',
+              justifyContent: 'center',
+              zIndex: 100,
+            }}>
+              <Button variant="ghost" onClick={resetGame}>Cancel</Button>
+              {categoryType === 'custom' && entrants.length >= 4 && (
+                <Button variant="secondary" onClick={saveCustomCategory}>💾 Save</Button>
+              )}
+              <Button
+                variant="primary"
+                size="large"
+                onClick={startGame}
+                disabled={!canStart}
+                className={canStart ? 'lock-in-btn' : ''}
+              >
+                {canStart ? '⚔️ Start Battle!' : `Need ${4 - entrants.length} more`}
+              </Button>
             </div>
           </div>
         );
@@ -2657,7 +2677,23 @@
               />
             )}
 
-            <div style={{ marginTop: '24px', textAlign: 'center', color: 'var(--text-muted)', fontSize: '14px' }}>
+            {/* First-time hint - only on first matchup of first round */}
+            {currentRoundIndex === 0 && currentMatchupIndex === 0 && winners.length === 0 && (
+              <div style={{
+                marginTop: '16px',
+                padding: '12px 16px',
+                background: 'var(--bg-card)',
+                borderRadius: '12px',
+                border: '1px dashed var(--text-muted)',
+                textAlign: 'center',
+                fontSize: '13px',
+                color: 'var(--text-secondary)',
+              }}>
+                💡 <strong>How to play:</strong> Tally votes with +1/-1, then tap "Lock In Result"
+              </div>
+            )}
+
+            <div style={{ marginTop: '16px', textAlign: 'center', color: 'var(--text-muted)', fontSize: '13px' }}>
               {winners.length} of {currentRound?.matchups.length + (currentRound?.byes?.length || 0)} advancing
             </div>
 
