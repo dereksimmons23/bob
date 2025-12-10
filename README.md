@@ -140,7 +140,7 @@ bob/
 
 ## Roadmap
 
-### v2 (Current)
+### v2 (Shipped Dec 4, 2025)
 - ✅ Bracket engine with play-ins/byes
 - ✅ Category library (100+ presets)
 - ✅ BOB personality system
@@ -149,11 +149,18 @@ bob/
 - ✅ The Vault (history)
 - ✅ Custom category builder
 
-### v2.5 (Pre-Christmas Polish)
-- 🔲 Expanded dialogue (50+ new BOB lines)
-- 🔲 Voice integration (ElevenLabs)
-- 🔲 Bracket tree visualization
-- 🔲 Vote correction/undo
+### v2.5 (Pre-Christmas Polish — In Progress)
+- ✅ Expanded dialogue (bobAdvice, deadpan, impatience wired up)
+- ✅ Battle animations (VS clash, winner/loser effects, vote pop)
+- ✅ New sounds (advance, roundComplete, dramatic)
+- ✅ UI polish (button hover, pulsing Lock In)
+- ✅ Vote correction/undo (5-second window)
+- ✅ Compact bracket visualization (March Madness naming)
+- ✅ Mobile UX improvements (sticky footer, first-time hints)
+- ✅ BOB comments in The Vault
+- ✅ Pre-populated Vault with family winners
+- 🔲 Voice integration (ElevenLabs) — stretch goal
+- 🔲 Olympics categories
 
 ### v3 (Future)
 - 🔲 Banners & Banter (social layer)

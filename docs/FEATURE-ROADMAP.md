@@ -78,37 +78,83 @@
 
 ## v2.5 Features (Pre-Christmas Polish)
 
+### ✅ Battle Animations & UI Polish (Shipped Dec 9, 2025)
+**Status:** Complete
+
+- VS badge clash animation with pulse
+- Winner celebration scale animation
+- Loser fade-out animation
+- Vote pop animation on tallying
+- Button hover effects
+- Pulsing Lock In button
+
+### ✅ Expanded Dialogue (Shipped Dec 9, 2025)
+**Status:** Complete
+
+- Wired up unused BOB arrays: `bobAdvice` (15%), `deadpan` (30%), `impatience` (25%)
+- Random probability for variety
+- No repetition in single bracket
+
+### ✅ New Sound Effects (Shipped Dec 9, 2025)
+**Status:** Complete
+
+- `advance` — Rising tone when winner advances
+- `roundComplete` — Fanfare when completing a round
+- `dramatic` — Deep build for championship intro
+
+### ✅ Vote Correction / Undo (Shipped Dec 9, 2025)
+**Status:** Complete
+
+- 5-second undo window after each vote
+- State snapshot preserved for rollback
+- BOB acknowledges: "Fine. Let's redo that one. Democracy demands accuracy."
+
+### ✅ Compact Bracket Visualization (Shipped Dec 9, 2025)
+**Status:** Complete
+
+- Horizontal bracket path view (replaced tall vertical)
+- March Madness-style naming: Sweet 16, Elite 8, Final Four, Finals
+- Visual bracket lines connecting rounds
+- Current round highlighted with accent color
+
+### ✅ Mobile UX Improvements (Shipped Dec 9, 2025)
+**Status:** Complete
+
+- Sticky footer action buttons (always visible)
+- Reduced padding to fit content above fold
+- First-time user hints (disappear after first vote)
+- Smaller font for category cards on mobile
+
+### ✅ BOB Comments in Vault (Shipped Dec 10, 2025)
+**Status:** Complete
+
+- `bobComment` field added to entry structure
+- BOB comment captured at championship moment
+- Displayed in Vault with "— BOB" attribution
+- Same comment shown on ChampionScreen and stored
+
+### ✅ Pre-populated Vault (Shipped Dec 10, 2025)
+**Status:** Complete
+
+- 13 family bracket winners seeded for new users
+- Custom BOB comments for each entry
+- Dates span Nov 27 - Dec 8, 2024 (last year's play)
+
 ### 🔲 Olympics Categories
 **Status:** Designed, not yet added to app
 
 - Winter Olympics Events (16 entrants)
-- Summer Olympics Events (16 entrants)  
+- Summer Olympics Events (16 entrants)
 - All Olympics Combined (32 entrants)
 
-**Implementation:** Add to category library data structure in index-v2.html
+**Implementation:** Add to category library data structure in index.html
 
-### 🔲 Vote Correction / Undo
-**Status:** Not built
+### 🔲 Voice Integration (ElevenLabs)
+**Status:** Stretch goal — not critical for MVP
 
-Options discussed:
-- Undo button after each matchup (~5 seconds)
-- "Wait, go back" visible during next matchup
-- Review screen at end of each round
-
-**Recommendation:** Undo button with 5-second window
-
-### 🔲 Bracket Visualization
-**Status:** Not built
-
-Options discussed:
-- Mini bracket at top showing progression
-- "View Full Bracket" button with tree view
-- Round summary between rounds
-- Final bracket recap at champion screen
-
-**Challenge:** Mobile-friendly full bracket is tricky
-
-**Recommendation:** Start with round summary screens
+- Derek's cloned voice for BOB
+- Settings toggle for audio on/off
+- API endpoint integration
 
 ---
 
@@ -267,9 +313,16 @@ BOB has opinions on specific entrants:
 - [x] Sound toggle
 - [ ] Olympics categories added
 
-**Nice to have:**
-- [ ] Vote correction
-- [ ] Basic bracket visualization
+**Nice to have (ALL COMPLETE!):**
+- [x] Vote correction / undo
+- [x] Basic bracket visualization
+- [x] Battle animations
+- [x] Mobile UX polish
+- [x] BOB comments in Vault
+- [x] Pre-populated Vault
+
+**Stretch goal:**
+- [ ] Voice integration (ElevenLabs)
 
 **Not needed for debut:**
 - Social features
