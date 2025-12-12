@@ -140,14 +140,14 @@
 - Custom BOB comments for each entry
 - Dates span Nov 27 - Dec 8, 2024 (last year's play)
 
-### 🔲 Olympics Categories
-**Status:** Designed, not yet added to app
+### ✅ Olympics Categories (Shipped Dec 11, 2025)
+**Status:** Complete
 
 - Winter Olympics Events (16 entrants)
 - Summer Olympics Events (16 entrants)
 - All Olympics Combined (32 entrants)
 
-**Implementation:** Add to category library data structure in index.html
+Already integrated in category library.
 
 ### 🔲 Voice Integration (ElevenLabs)
 **Status:** Stretch goal — not critical for MVP
@@ -303,7 +303,7 @@ BOB has opinions on specific entrants:
 
 ---
 
-## Christmas Eve Checklist
+## Christmas Eve Checklist — ALL COMPLETE 🎄
 
 **Must have:**
 - [x] Working bracket flow
@@ -311,9 +311,9 @@ BOB has opinions on specific entrants:
 - [x] BOB personality
 - [x] Share results
 - [x] Sound toggle
-- [ ] Olympics categories added
+- [x] Olympics categories
 
-**Nice to have (ALL COMPLETE!):**
+**Nice to have:**
 - [x] Vote correction / undo
 - [x] Basic bracket visualization
 - [x] Battle animations
@@ -321,7 +321,7 @@ BOB has opinions on specific entrants:
 - [x] BOB comments in Vault
 - [x] Pre-populated Vault
 
-**Stretch goal:**
+**Deferred to v3:**
 - [ ] Voice integration (ElevenLabs)
 
 **Not needed for debut:**
