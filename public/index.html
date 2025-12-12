@@ -1839,7 +1839,35 @@
     }
 
     // The Vault
-    function Vault({ history, onBack, onNewGame, onClearHistory }) {
+    function Vault({ history, onBack, onNewGame, onClearHistory, onDeleteEntry, onEditEntry }) {
+      const [editingIndex, setEditingIndex] = useState(null);
+      const [editForm, setEditForm] = useState({});
+
+      const startEdit = (index, entry) => {
+        setEditingIndex(index);
+        setEditForm({
+          champion: entry.champion,
+          runnerUp: entry.runnerUp,
+          note: entry.bobComment || entry.note || '',
+        });
+      };
+
+      const saveEdit = (index) => {
+        onEditEntry(index, {
+          champion: editForm.champion,
+          runnerUp: editForm.runnerUp,
+          bobComment: editForm.note, // Keep field name for compatibility
+          note: editForm.note,
+        });
+        setEditingIndex(null);
+        setEditForm({});
+      };
+
+      const cancelEdit = () => {
+        setEditingIndex(null);
+        setEditForm({});
+      };
+
       if (history.length === 0) {
         return (
           <div style={{
@@ -1882,7 +1910,7 @@
           }}>
             🏆 THE VAULT 🏆
           </div>
-          
+
           <BobSays message={BOB.random(BOB.vaultViewing)} mood="normal" />
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -1894,40 +1922,144 @@
                 padding: '20px',
                 animationDelay: `${i * 0.1}s`,
               }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
-                  <div style={{
-                    fontFamily: 'var(--font-display)',
-                    fontSize: '14px',
-                    color: 'var(--text-secondary)',
-                    letterSpacing: '2px',
-                  }}>
-                    {entry.category.toUpperCase()}
+                {editingIndex === i ? (
+                  // Edit mode
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                    <div style={{ fontSize: '12px', color: 'var(--text-muted)', letterSpacing: '2px' }}>
+                      {entry.category.toUpperCase()} • {entry.date}
+                    </div>
+                    <div>
+                      <label style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Champion</label>
+                      <input
+                        type="text"
+                        value={editForm.champion}
+                        onChange={(e) => setEditForm({...editForm, champion: e.target.value})}
+                        style={{
+                          width: '100%',
+                          padding: '8px 12px',
+                          background: 'var(--bg-deep)',
+                          border: '1px solid var(--text-muted)',
+                          borderRadius: '8px',
+                          color: 'var(--accent-gold)',
+                          fontFamily: 'var(--font-display)',
+                          fontSize: '18px',
+                        }}
+                      />
+                    </div>
+                    <div>
+                      <label style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Runner-up</label>
+                      <input
+                        type="text"
+                        value={editForm.runnerUp}
+                        onChange={(e) => setEditForm({...editForm, runnerUp: e.target.value})}
+                        style={{
+                          width: '100%',
+                          padding: '8px 12px',
+                          background: 'var(--bg-deep)',
+                          border: '1px solid var(--text-muted)',
+                          borderRadius: '8px',
+                          color: 'var(--text-primary)',
+                          fontSize: '14px',
+                        }}
+                      />
+                    </div>
+                    <div>
+                      <label style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Note / Highlight</label>
+                      <input
+                        type="text"
+                        value={editForm.note}
+                        onChange={(e) => setEditForm({...editForm, note: e.target.value})}
+                        placeholder="A memorable moment or quote..."
+                        style={{
+                          width: '100%',
+                          padding: '8px 12px',
+                          background: 'var(--bg-deep)',
+                          border: '1px solid var(--text-muted)',
+                          borderRadius: '8px',
+                          color: 'var(--text-primary)',
+                          fontSize: '13px',
+                          fontStyle: 'italic',
+                        }}
+                      />
+                    </div>
+                    <div style={{ display: 'flex', gap: '8px', marginTop: '4px' }}>
+                      <Button variant="primary" size="small" onClick={() => saveEdit(i)}>Save</Button>
+                      <Button variant="ghost" size="small" onClick={cancelEdit}>Cancel</Button>
+                    </div>
                   </div>
-                  <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>{entry.date}</div>
-                </div>
-                <div style={{
-                  fontFamily: 'var(--font-display)',
-                  fontSize: '24px',
-                  color: 'var(--accent-gold)',
-                  letterSpacing: '1px',
-                }}>
-                  🏆 {entry.champion}
-                </div>
-                <div style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '4px' }}>
-                  defeated {entry.runnerUp}
-                </div>
-                {entry.bobComment && (
-                  <div style={{
-                    fontSize: '13px',
-                    color: 'var(--text-muted)',
-                    fontStyle: 'italic',
-                    marginTop: '8px',
-                    paddingTop: '8px',
-                    borderTop: '1px solid var(--text-muted)',
-                    opacity: 0.8,
-                  }}>
-                    "{entry.bobComment}" — BOB
-                  </div>
+                ) : (
+                  // View mode
+                  <>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
+                      <div style={{
+                        fontFamily: 'var(--font-display)',
+                        fontSize: '14px',
+                        color: 'var(--text-secondary)',
+                        letterSpacing: '2px',
+                      }}>
+                        {entry.category.toUpperCase()}
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>{entry.date}</div>
+                        <button
+                          onClick={() => startEdit(i, entry)}
+                          style={{
+                            background: 'none',
+                            border: 'none',
+                            color: 'var(--text-muted)',
+                            cursor: 'pointer',
+                            fontSize: '14px',
+                            padding: '2px 6px',
+                          }}
+                          title="Edit"
+                        >
+                          ✏️
+                        </button>
+                        <button
+                          onClick={() => {
+                            if (confirm(`Delete "${entry.champion}" from ${entry.category}?`)) {
+                              onDeleteEntry(i);
+                            }
+                          }}
+                          style={{
+                            background: 'none',
+                            border: 'none',
+                            color: 'var(--text-muted)',
+                            cursor: 'pointer',
+                            fontSize: '14px',
+                            padding: '2px 6px',
+                          }}
+                          title="Delete"
+                        >
+                          🗑️
+                        </button>
+                      </div>
+                    </div>
+                    <div style={{
+                      fontFamily: 'var(--font-display)',
+                      fontSize: '24px',
+                      color: 'var(--accent-gold)',
+                      letterSpacing: '1px',
+                    }}>
+                      🏆 {entry.champion}
+                    </div>
+                    <div style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '4px' }}>
+                      defeated {entry.runnerUp}
+                    </div>
+                    {(entry.bobComment || entry.note) && (
+                      <div style={{
+                        fontSize: '13px',
+                        color: 'var(--text-muted)',
+                        fontStyle: 'italic',
+                        marginTop: '8px',
+                        paddingTop: '8px',
+                        borderTop: '1px solid var(--text-muted)',
+                        opacity: 0.8,
+                      }}>
+                        "{entry.bobComment || entry.note}"
+                      </div>
+                    )}
+                  </>
                 )}
               </div>
             ))}
@@ -2497,6 +2629,16 @@
         }
       };
 
+      const deleteEntry = (index) => {
+        setHistory(prev => prev.filter((_, i) => i !== index));
+      };
+
+      const editEntry = (index, updates) => {
+        setHistory(prev => prev.map((entry, i) =>
+          i === index ? { ...entry, ...updates } : entry
+        ));
+      };
+
       // ============================================
       // RENDER
       // ============================================
@@ -2615,6 +2757,8 @@
               onBack={() => setScreen('home')}
               onNewGame={() => setScreen('library')}
               onClearHistory={clearHistory}
+              onDeleteEntry={deleteEntry}
+              onEditEntry={editEntry}
             />
           </>
         );
@@ -2665,7 +2809,7 @@
                   VOTERS: {playerCount}
                 </label>
                 <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-                  {[2, 3, 4, 5, 6, 7, 8, 9, 10].map(n => (
+                  {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(n => (
                     <button
                       key={n}
                       onClick={() => setPlayerCount(n)}
