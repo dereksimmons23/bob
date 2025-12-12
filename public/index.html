@@ -2257,7 +2257,11 @@
       const [history, setHistory] = useState(() => {
         const saved = localStorage.getItem('bob-vault-v2');
         if (saved) {
-          return JSON.parse(saved);
+          const parsed = JSON.parse(saved);
+          // Only use saved data if it has entries, otherwise seed with family data
+          if (parsed.length > 0) {
+            return parsed;
+          }
         }
         // Pre-populate with family bracket winners for new users
         return SEED_VAULT_DATA;
