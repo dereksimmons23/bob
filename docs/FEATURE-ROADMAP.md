@@ -280,11 +280,45 @@ BOB has opinions on specific entrants:
 | **Freemium** | Free core + premium categories | Limits engagement |
 | **One-time purchase** | Simple, fair | Limited ongoing revenue |
 | **Subscription** | Recurring revenue | Hard sell for party game |
-| **Ad-supported** | Free for users | Disrupts party vibe |
+| **Ad-supported (interstitial)** | Free for users | Disrupts party vibe |
+| **Ad-supported (on-open only)** | Non-intrusive, Wordle-style | Lower revenue than interstitial |
 | **Corporate licensing** | High value per sale | Different audience |
 | **Tip jar / Donate** | Goodwill | Unpredictable |
+| **Sponsorship** | Brand integration | Requires traction first |
 
-**Current recommendation:** Free with optional tip jar. Monetize corporate version if demand emerges.
+### Recommended Approach (Phased)
+
+**Phase 1: Launch (2025)**
+- Free with tip jar ("Buy BOB a coffee")
+- No ads, build goodwill and user base
+
+**Phase 2: Monetization (2026)**
+- One-time ad on app open (Wordle-style)
+  - Shows once per session, not between matchups
+  - Doesn't interrupt gameplay
+  - Could be skippable after 5 seconds
+- Premium category packs ($1.99-4.99)
+  - Licensed content (sports teams, movie franchises)
+  - Exclusive seasonal packs
+  - Early access to new categories
+
+**Phase 3: Scale (If traction)**
+- Corporate/Team Building Edition ($500-2000/event)
+  - Custom branding
+  - Private hosting
+  - Analytics dashboard
+- Brand sponsorship
+  - "Best Chip Flavor, presented by Frito-Lay"
+  - Category-specific sponsors
+- Remove ads option ($2.99 one-time)
+
+### In-App Purchases with PWA
+
+Yes, PWAs can handle payments:
+- Stripe Checkout (redirect to payment page)
+- Web Payment Request API
+- Simple unlock codes stored in localStorage
+- No App Store cut (30%)
 
 ---
 
