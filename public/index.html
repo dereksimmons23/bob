@@ -16,6 +16,7 @@
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     :root {
       --bg-deep: #0a0e1a;
@@ -213,6 +214,14 @@
 
   <script type="text/babel">
     const { useState, useEffect, useCallback, useMemo, useRef } = React;
+
+    // ============================================
+    // SUPABASE CLIENT
+    // ============================================
+    const supabase = window.supabase.createClient(
+      'https://vvroarbpvfsoiznkbfvt.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2cm9hcmJwdmZzb2l6bmtiZnZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYxOTgzMDQsImV4cCI6MjA4MTc3NDMwNH0.nI9kUemYIkVaAULWs3piPVfQeCoUqZ8CYGX8MwNn0Wk'
+    );
 
     // ============================================
     // CATEGORY LIBRARY - 100+ Presets
@@ -2203,7 +2212,7 @@
     }
 
     // Settings Panel
-    function SettingsPanel({ soundEnabled, onToggleSound, onClose }) {
+    function SettingsPanel({ soundEnabled, onToggleSound, onFeedback, onAdmin, onClose }) {
       return (
         <div style={{
           position: 'fixed',
@@ -2225,8 +2234,8 @@
           }}>
             SETTINGS
           </div>
-          
-          <div 
+
+          <div
             onClick={onToggleSound}
             style={{
               display: 'flex',
@@ -2245,9 +2254,314 @@
             </span>
           </div>
 
+          <div
+            onClick={() => { onClose(); onFeedback(); }}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: '12px',
+              background: 'var(--bg-card-hover)',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              marginBottom: '12px',
+            }}
+          >
+            <span style={{ color: 'var(--text-primary)' }}>Send Feedback</span>
+            <span style={{ color: 'var(--accent-blue)' }}>💬</span>
+          </div>
+
+          <div
+            onClick={() => { onClose(); onAdmin(); }}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: '12px',
+              background: 'var(--bg-card-hover)',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              marginBottom: '12px',
+            }}
+          >
+            <span style={{ color: 'var(--text-primary)' }}>View Feedback</span>
+            <span style={{ color: 'var(--accent-purple)' }}>📊</span>
+          </div>
+
           <Button variant="ghost" size="small" onClick={onClose} style={{ width: '100%' }}>
             Close
           </Button>
+        </div>
+      );
+    }
+
+    // Feedback Modal
+    function FeedbackModal({ onClose }) {
+      const [message, setMessage] = useState('');
+      const [status, setStatus] = useState('idle'); // idle, sending, sent, error
+
+      const handleSubmit = async () => {
+        if (!message.trim()) return;
+
+        setStatus('sending');
+        try {
+          const { error } = await supabase
+            .from('feedback')
+            .insert([{ message: message.trim(), category: 'general' }]);
+
+          if (error) throw error;
+          setStatus('sent');
+          setTimeout(() => onClose(), 1500);
+        } catch (err) {
+          console.error('Feedback error:', err);
+          setStatus('error');
+        }
+      };
+
+      return (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(0, 0, 0, 0.8)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 200,
+          padding: '20px',
+        }}>
+          <div style={{
+            background: 'var(--bg-card)',
+            border: '2px solid var(--accent-gold)',
+            borderRadius: '16px',
+            padding: '24px',
+            maxWidth: '400px',
+            width: '100%',
+          }}>
+            <div style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: '20px',
+              color: 'var(--accent-gold)',
+              letterSpacing: '2px',
+              marginBottom: '16px',
+              textAlign: 'center',
+            }}>
+              SEND FEEDBACK
+            </div>
+
+            <p style={{
+              color: 'var(--text-secondary)',
+              marginBottom: '16px',
+              textAlign: 'center',
+              fontSize: '14px',
+            }}>
+              What's broken? What's fun? What would make you play again?
+            </p>
+
+            <textarea
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              placeholder="Your feedback..."
+              disabled={status !== 'idle'}
+              style={{
+                width: '100%',
+                minHeight: '120px',
+                padding: '12px',
+                background: 'var(--bg-deep)',
+                border: '2px solid var(--text-muted)',
+                borderRadius: '8px',
+                color: 'var(--text-primary)',
+                fontFamily: 'var(--font-body)',
+                fontSize: '16px',
+                resize: 'vertical',
+                marginBottom: '16px',
+              }}
+            />
+
+            {status === 'sent' && (
+              <div style={{
+                color: 'var(--accent-green)',
+                textAlign: 'center',
+                marginBottom: '16px',
+                fontWeight: '600',
+              }}>
+                Thanks! BOB appreciates it.
+              </div>
+            )}
+
+            {status === 'error' && (
+              <div style={{
+                color: 'var(--accent-red)',
+                textAlign: 'center',
+                marginBottom: '16px',
+              }}>
+                Oops, something went wrong. Try again?
+              </div>
+            )}
+
+            <div style={{ display: 'flex', gap: '12px' }}>
+              <Button
+                variant="ghost"
+                onClick={onClose}
+                disabled={status === 'sending'}
+                style={{ flex: 1 }}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="primary"
+                onClick={handleSubmit}
+                disabled={!message.trim() || status === 'sending' || status === 'sent'}
+                style={{ flex: 1 }}
+              >
+                {status === 'sending' ? 'Sending...' : status === 'sent' ? 'Sent!' : 'Send'}
+              </Button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // Feedback Admin Panel
+    function FeedbackAdmin({ onClose }) {
+      const [feedback, setFeedback] = useState([]);
+      const [loading, setLoading] = useState(true);
+
+      useEffect(() => {
+        loadFeedback();
+      }, []);
+
+      const loadFeedback = async () => {
+        setLoading(true);
+        const { data, error } = await supabase
+          .from('feedback')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        if (!error && data) {
+          setFeedback(data);
+        }
+        setLoading(false);
+      };
+
+      const deleteFeedback = async (id) => {
+        await supabase.from('feedback').delete().eq('id', id);
+        setFeedback(feedback.filter(f => f.id !== id));
+      };
+
+      const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', {
+          month: 'short',
+          day: 'numeric',
+          hour: 'numeric',
+          minute: '2-digit'
+        });
+      };
+
+      return (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(0, 0, 0, 0.9)',
+          display: 'flex',
+          alignItems: 'flex-start',
+          justifyContent: 'center',
+          zIndex: 200,
+          padding: '20px',
+          overflowY: 'auto',
+        }}>
+          <div style={{
+            background: 'var(--bg-card)',
+            border: '2px solid var(--accent-purple)',
+            borderRadius: '16px',
+            padding: '24px',
+            maxWidth: '600px',
+            width: '100%',
+            marginTop: '20px',
+            marginBottom: '20px',
+          }}>
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: '20px',
+            }}>
+              <div style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: '20px',
+                color: 'var(--accent-purple)',
+                letterSpacing: '2px',
+              }}>
+                FEEDBACK ({feedback.length})
+              </div>
+              <Button variant="ghost" size="small" onClick={onClose}>Close</Button>
+            </div>
+
+            {loading ? (
+              <div style={{ textAlign: 'center', color: 'var(--text-secondary)', padding: '40px' }}>
+                Loading...
+              </div>
+            ) : feedback.length === 0 ? (
+              <div style={{ textAlign: 'center', color: 'var(--text-secondary)', padding: '40px' }}>
+                No feedback yet
+              </div>
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                {feedback.map((item) => (
+                  <div
+                    key={item.id}
+                    style={{
+                      background: 'var(--bg-deep)',
+                      borderRadius: '8px',
+                      padding: '16px',
+                      border: '1px solid var(--text-muted)',
+                    }}
+                  >
+                    <div style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'flex-start',
+                      marginBottom: '8px',
+                    }}>
+                      <div style={{
+                        fontSize: '12px',
+                        color: 'var(--text-muted)',
+                      }}>
+                        {formatDate(item.created_at)}
+                      </div>
+                      <button
+                        onClick={() => deleteFeedback(item.id)}
+                        style={{
+                          background: 'none',
+                          border: 'none',
+                          color: 'var(--accent-red)',
+                          cursor: 'pointer',
+                          fontSize: '12px',
+                          opacity: 0.7,
+                        }}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                    <div style={{
+                      color: 'var(--text-primary)',
+                      fontSize: '14px',
+                      lineHeight: '1.5',
+                      whiteSpace: 'pre-wrap',
+                    }}>
+                      {item.message}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       );
     }
@@ -2382,6 +2696,8 @@
       const [bobMessage, setBobMessage] = useState('');
       const [bobMood, setBobMood] = useState('normal');
       const [showSettings, setShowSettings] = useState(false);
+      const [showFeedback, setShowFeedback] = useState(false);
+      const [showAdmin, setShowAdmin] = useState(false);
       const [soundEnabled, setSoundEnabled] = useState(true);
       const [canUndo, setCanUndo] = useState(false);
       const [undoState, setUndoState] = useState(null);
@@ -2716,9 +3032,13 @@
               <SettingsPanel
                 soundEnabled={soundEnabled}
                 onToggleSound={handleToggleSound}
+                onFeedback={() => setShowFeedback(true)}
+                onAdmin={() => setShowAdmin(true)}
                 onClose={() => setShowSettings(false)}
               />
             )}
+            {showFeedback && <FeedbackModal onClose={() => setShowFeedback(false)} />}
+            {showAdmin && <FeedbackAdmin onClose={() => setShowAdmin(false)} />}
           </div>
         );
       }
@@ -2729,7 +3049,7 @@
           <>
             <SettingsButton />
             {showSettings && (
-              <SettingsPanel soundEnabled={soundEnabled} onToggleSound={handleToggleSound} onClose={() => setShowSettings(false)} />
+              <SettingsPanel soundEnabled={soundEnabled} onToggleSound={handleToggleSound} onFeedback={() => setShowFeedback(true)} onAdmin={() => setShowAdmin(true)} onClose={() => setShowSettings(false)} />
             )}
             <CategoryLibrary
               onSelect={handleSelectFromLibrary}
@@ -2740,6 +3060,8 @@
               onBack={() => setScreen('home')}
               customCategories={customCategories}
             />
+            {showFeedback && <FeedbackModal onClose={() => setShowFeedback(false)} />}
+            {showAdmin && <FeedbackAdmin onClose={() => setShowAdmin(false)} />}
           </>
         );
       }
@@ -2750,7 +3072,7 @@
           <>
             <SettingsButton />
             {showSettings && (
-              <SettingsPanel soundEnabled={soundEnabled} onToggleSound={handleToggleSound} onClose={() => setShowSettings(false)} />
+              <SettingsPanel soundEnabled={soundEnabled} onToggleSound={handleToggleSound} onFeedback={() => setShowFeedback(true)} onAdmin={() => setShowAdmin(true)} onClose={() => setShowSettings(false)} />
             )}
             <Vault
               history={history}
@@ -2760,6 +3082,8 @@
               onDeleteEntry={deleteEntry}
               onEditEntry={editEntry}
             />
+            {showFeedback && <FeedbackModal onClose={() => setShowFeedback(false)} />}
+            {showAdmin && <FeedbackAdmin onClose={() => setShowAdmin(false)} />}
           </>
         );
       }
@@ -2774,7 +3098,7 @@
             <div style={{ padding: '24px', maxWidth: '600px', margin: '0 auto' }}>
               <SettingsButton />
               {showSettings && (
-                <SettingsPanel soundEnabled={soundEnabled} onToggleSound={handleToggleSound} onClose={() => setShowSettings(false)} />
+                <SettingsPanel soundEnabled={soundEnabled} onToggleSound={handleToggleSound} onFeedback={() => setShowFeedback(true)} onAdmin={() => setShowAdmin(true)} onClose={() => setShowSettings(false)} />
               )}
 
               <Logo size="small" onClick={() => setScreen('home')} />
@@ -2907,6 +3231,8 @@
                 {canStart ? '⚔️ Start Battle!' : `Need ${4 - entrants.length} more`}
               </Button>
             </div>
+            {showFeedback && <FeedbackModal onClose={() => setShowFeedback(false)} />}
+            {showAdmin && <FeedbackAdmin onClose={() => setShowAdmin(false)} />}
           </div>
         );
       }
@@ -2921,7 +3247,7 @@
           <div style={{ minHeight: '100vh', padding: '24px', maxWidth: '700px', margin: '0 auto' }}>
             <SettingsButton />
             {showSettings && (
-              <SettingsPanel soundEnabled={soundEnabled} onToggleSound={handleToggleSound} onClose={() => setShowSettings(false)} />
+              <SettingsPanel soundEnabled={soundEnabled} onToggleSound={handleToggleSound} onFeedback={() => setShowFeedback(true)} onAdmin={() => setShowAdmin(true)} onClose={() => setShowSettings(false)} />
             )}
             
             <Logo size="small" onClick={() => {
@@ -2998,6 +3324,8 @@
                 </Button>
               </div>
             )}
+            {showFeedback && <FeedbackModal onClose={() => setShowFeedback(false)} />}
+            {showAdmin && <FeedbackAdmin onClose={() => setShowAdmin(false)} />}
           </div>
         );
       }
@@ -3008,7 +3336,7 @@
           <>
             <SettingsButton />
             {showSettings && (
-              <SettingsPanel soundEnabled={soundEnabled} onToggleSound={handleToggleSound} onClose={() => setShowSettings(false)} />
+              <SettingsPanel soundEnabled={soundEnabled} onToggleSound={handleToggleSound} onFeedback={() => setShowFeedback(true)} onAdmin={() => setShowAdmin(true)} onClose={() => setShowSettings(false)} />
             )}
             <ChampionScreen
               champion={champion}
@@ -3019,6 +3347,8 @@
               onNewGame={() => setScreen('library')}
               onViewVault={() => setScreen('vault')}
             />
+            {showFeedback && <FeedbackModal onClose={() => setShowFeedback(false)} />}
+            {showAdmin && <FeedbackAdmin onClose={() => setShowAdmin(false)} />}
           </>
         );
       }
