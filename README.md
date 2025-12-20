@@ -52,6 +52,7 @@ BOB provides context-aware commentary for every moment—category openers, match
 - **Custom Categories** — Create and save your own brackets
 - **Share Results** — Download champion cards or copy shareable text
 - **Sound Effects** — Optional audio feedback (toggle in settings)
+- **In-App Feedback** — Send feedback directly from settings (Supabase backend)
 - **PWA Support** — Install to home screen, works offline
 
 ---
@@ -89,8 +90,9 @@ Then visit `http://localhost:8000`
 
 ### Stack
 - **Single-file React PWA** — No build process required
-- **CDN dependencies:** React 18, Babel standalone, canvas-confetti
-- **localStorage** for persistence (no backend needed)
+- **CDN dependencies:** React 18, Babel standalone, canvas-confetti, Supabase JS
+- **localStorage** for game persistence
+- **Supabase** for feedback collection (project: `bob`)
 - **Web Audio API** for sound effects
 - **Canvas API** for share image generation
 
@@ -149,7 +151,7 @@ bob/
 - ✅ The Vault (history)
 - ✅ Custom category builder
 
-### v2.5 (Pre-Christmas Polish — In Progress)
+### v2.5 (Pre-Christmas Polish — Complete)
 - ✅ Expanded dialogue (bobAdvice, deadpan, impatience wired up)
 - ✅ Battle animations (VS clash, winner/loser effects, vote pop)
 - ✅ New sounds (advance, roundComplete, dramatic)
@@ -159,8 +161,8 @@ bob/
 - ✅ Mobile UX improvements (sticky footer, first-time hints)
 - ✅ BOB comments in The Vault
 - ✅ Pre-populated Vault with family winners
+- ✅ In-app feedback system (Supabase backend + admin view)
 - 🔲 Voice integration (ElevenLabs) — stretch goal
-- 🔲 Olympics categories
 
 ### v3 (Future)
 - 🔲 Banners & Banter (social layer)

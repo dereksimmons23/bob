@@ -149,6 +149,15 @@
 
 Already integrated in category library.
 
+### ✅ In-App Feedback System (Shipped Dec 20, 2025)
+**Status:** Complete
+
+- Supabase project created (`bob`)
+- Feedback table with RLS policies
+- Submit feedback modal in settings
+- Admin panel to view/delete feedback
+- Accessible via Settings → View Feedback
+
 ### 🔲 Voice Integration (ElevenLabs)
 **Status:** Stretch goal — not critical for MVP
 
@@ -354,6 +363,7 @@ Yes, PWAs can handle payments:
 - [x] Mobile UX polish
 - [x] BOB comments in Vault
 - [x] Pre-populated Vault
+- [x] In-app feedback system
 
 **Deferred to v3:**
 - [ ] Voice integration (ElevenLabs)

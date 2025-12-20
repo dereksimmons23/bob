@@ -1,65 +1,69 @@
 # Session Handoff — Battle o' Brackets
 
-**Last Updated:** December 10, 2025
-**Last Session:** Dec 10, 2025 (~2 hours)
-**Next Session:** Dec 11, 2025
+**Last Updated:** December 20, 2025
+**Last Session:** Dec 20, 2025 (~1 hour)
+**Next Session:** Post-Christmas (testing feedback from family game night)
 
 ---
 
 ## Quick Context
 
-Battle o' Brackets (BOB) is a party game PWA for bracket-style voting tournaments. MVP target is December 20, 2025 with Christmas Eve debut.
+Battle o' Brackets (BOB) is a party game PWA for bracket-style voting tournaments. MVP complete. Christmas Eve debut ready.
 
 **Live at:** https://bob.claudewill.io
 
 ---
 
-## What Was Done Today (Dec 10)
+## What Was Done Today (Dec 20)
 
-1. **BOB Comments in Vault**
-   - Added `bobComment` field to entry structure
-   - BOB's championship comment captured when saving results
-   - Displayed in Vault with "— BOB" attribution
-   - Same comment shown on ChampionScreen
+1. **In-App Feedback System**
+   - Created Supabase project `bob` (us-east-1)
+   - Feedback table with RLS policies (anyone can submit, anyone can read/delete for admin)
+   - Submit feedback modal accessible via Settings → Send Feedback
+   - Admin panel accessible via Settings → View Feedback
+   - Delete capability for managing feedback
 
-2. **Pre-populated Vault with Family Winners**
-   - 13 bracket results from family playtesting
-   - Custom BOB comments for each entry
-   - Seeded for new users (empty localStorage)
+2. **Documentation Updates**
+   - Updated README.md with feedback feature
+   - Updated FEATURE-ROADMAP.md (marked feedback complete)
+   - Updated SESSION-HANDOFF.md (this file)
 
 **Key files changed:**
-- `/public/index.html` — Main app (lines 2126-2231 seed data, 2259-2270 comment capture)
+- `/public/index.html` — Added Supabase client, FeedbackModal, FeedbackAdmin, SettingsPanel updates
+
+**Supabase Details:**
+- Project: `bob` (ID: vvroarbpvfsoiznkbfvt)
+- Region: us-east-1
+- Dashboard: https://supabase.com/dashboard/project/vvroarbpvfsoiznkbfvt
+- Table: `feedback` (id, message, category, created_at)
 
 ---
 
 ## What's Left for MVP
 
-| Task | Priority | Est. Time |
-|------|----------|-----------|
-| Olympics categories | Medium | 1 hour |
-| Device testing (iOS, Android, desktop) | High | 1 hour |
-| Bug fixes from testing | Medium | TBD |
+| Task | Priority | Status |
+|------|----------|--------|
+| Test feedback system locally | High | Ready to test |
+| Family game night test (Dec 24) | High | Scheduled |
+| LinkedIn announcement | Medium | Draft ready |
 
 ---
 
 ## User's Key Decisions/Preferences
 
-1. **December 20 MVP target** — 10 days away, well ahead of schedule
+1. **December 20 MVP target** — COMPLETE
 2. **Christmas Eve 2025 debut** — Family gathering showcase
 3. **Late summer/early fall 2026** — Broader release target
-4. **Mobile-first** — Family tested on mobile, "decent not great"
-5. **Single-file architecture** — No build process, runs in browser
-6. **Voice integration** — Stretch goal, not critical for MVP
+4. **In-app feedback** — Chosen over Netlify Forms for Supabase integration
+5. **LinkedIn post timing** — Decided to wait until after family test for authentic story
 
 ---
 
-## Credentials (for future features)
+## Credentials
 
-User shared API credentials for voice/backend experiments:
-- Anthropic API key (for AI features)
-- Supabase URL + anon key (for future Banners & Banter)
-
-**Note:** These are NOT in the codebase — stored separately
+**Supabase (bob project):**
+- URL: https://vvroarbpvfsoiznkbfvt.supabase.co
+- Anon key: In index.html (public, safe for client-side)
 
 ---
 
@@ -68,11 +72,11 @@ User shared API credentials for voice/backend experiments:
 ```
 bob/
 ├── public/
-│   ├── index.html      # THE ENTIRE APP (~2800 lines)
+│   ├── index.html      # THE ENTIRE APP (~3200 lines)
 │   └── manifest.json   # PWA manifest
 ├── docs/               # Documentation
 │   ├── FEATURE-ROADMAP.md
-│   ├── V2.5-SPRINT-PLAN.md
+│   ├── SESSION-HANDOFF.md
 │   ├── BOB-CHARACTER-BIBLE.md
 │   └── ...
 ├── netlify.toml        # Netlify config
@@ -83,48 +87,43 @@ bob/
 - `bob-vault-v2` — Champion history
 - `bob-custom-categories` — User-created categories
 
+**Supabase tables:**
+- `feedback` — User feedback submissions
+
 ---
 
 ## Git Workflow
 
-- Branch naming: `claude/{feature}-01MkdJrVy16C2VeVbvXquVfV`
+- Branch naming: `claude/{feature}-{id}`
 - Push to claude/ branches only (main requires PR)
 - User merges via GitHub
 
 ---
 
-## Tomorrow's Suggested Focus
+## Post-Christmas Suggested Focus
 
-1. **Add Olympics categories** — Winter, Summer, Combined events
-   - Data already exists in `/docs/OLYMPICS-DATA.md`
-   - Add to CATEGORY_LIBRARY in index.html
-
-2. **Device testing** — iOS Safari, Android Chrome, desktop
-   - Test full bracket flow
-   - Check sound effects
-   - Verify sticky footer on mobile
-
-3. **Any bug fixes** that emerge from testing
-
----
-
-## Family Playtest Insights (Dec 9)
-
-- Two family members played on mobile
-- Positive reception: "Can you make money from this?"
-- Issues identified and fixed:
-  - Buttons not visible without scrolling → Sticky footer
-  - Can't go back on wrong votes → 5-second undo
-  - No bracket feel → March Madness naming
-  - Overwhelmed by categories → (future: category recommendations)
+1. **Review feedback** — Check Supabase dashboard or in-app admin
+2. **LinkedIn post** — Share results from family game night
+3. **Bug fixes** — Address any issues from testing
+4. **Voice integration** — If time permits (stretch goal)
 
 ---
 
 ## Sprint Status
 
 **Original estimate:** 10 hours
-**Time used:** ~4 hours
-**Days remaining:** 10 (to Dec 20)
-**Status:** AHEAD OF SCHEDULE
+**Time used:** ~5 hours total
+**Status:** MVP COMPLETE
 
-All "nice to have" features complete. Only Olympics categories and testing remain.
+All features for Christmas Eve debut are complete. Ready for family testing.
+
+---
+
+## Family Game Night Plan (Dec 24)
+
+1. Open app on TV/shared device
+2. Let family play 2-3 brackets
+3. Collect verbal feedback
+4. Check in-app feedback submissions after
+5. Note any bugs or UX issues
+6. Use experience for LinkedIn post
