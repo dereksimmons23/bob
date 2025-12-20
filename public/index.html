@@ -1032,17 +1032,29 @@
     function BracketProgress({ rounds, currentRoundIndex, currentMatchupIndex, categoryColor }) {
       const totalRounds = rounds.length;
 
+      // Shorten round names for mobile
+      const getShortName = (name) => {
+        if (name === 'Championship') return 'Final';
+        if (name === 'Semifinals') return 'Semis';
+        if (name === 'Quarterfinals') return 'Quarters';
+        if (name.includes('Round')) return name.replace('Round ', 'R');
+        if (name === 'Play-In') return 'Play-In';
+        return name;
+      };
+
       return (
         <div style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          gap: '8px',
+          gap: '4px',
           marginBottom: '20px',
           padding: '12px 16px',
           background: 'var(--bg-card)',
           borderRadius: '12px',
           border: '1px solid var(--bg-elevated)',
+          overflowX: 'auto',
+          maxWidth: '100%',
         }}>
           {rounds.map((round, idx) => {
             const isCompleted = idx < currentRoundIndex;
@@ -1058,6 +1070,7 @@
                   flexDirection: 'column',
                   alignItems: 'center',
                   gap: '4px',
+                  flexShrink: 0,
                 }}>
                   <div style={{
                     width: isChampionship ? '32px' : '24px',
@@ -1079,27 +1092,25 @@
                     {isCompleted ? '✓' : isChampionship ? '🏆' : idx + 1}
                   </div>
                   <div style={{
-                    fontSize: '10px',
+                    fontSize: '9px',
                     color: isCurrent ? 'var(--text-primary)' : 'var(--text-muted)',
                     fontWeight: isCurrent ? '600' : '400',
                     textAlign: 'center',
-                    maxWidth: '60px',
                     whiteSpace: 'nowrap',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
                   }}>
-                    {round.name}
+                    {getShortName(round.name)}
                   </div>
                 </div>
 
                 {/* Connector line (not after last round) */}
                 {idx < totalRounds - 1 && (
                   <div style={{
-                    width: '20px',
+                    width: '12px',
                     height: '2px',
                     background: isCompleted ? 'var(--accent-green)' : 'var(--bg-elevated)',
                     borderRadius: '1px',
                     marginBottom: '18px',
+                    flexShrink: 0,
                   }} />
                 )}
               </React.Fragment>
@@ -1294,7 +1305,7 @@
       };
       const sizes = {
         tiny: { padding: '6px 12px', fontSize: '12px' },
-        small: { padding: '10px 20px', fontSize: '14px' },
+        small: { padding: '14px 24px', fontSize: '14px', minHeight: '44px' },
         medium: { padding: '14px 28px', fontSize: '16px' },
         large: { padding: '18px 36px', fontSize: '18px' },
         huge: { padding: '24px 48px', fontSize: '22px' },
@@ -1448,6 +1459,30 @@
       const [winnerSide, setWinnerSide] = useState(null);
       const [voteKey, setVoteKey] = useState(0); // For vote pop animation
 
+      // Keyboard navigation: Left arrow = vote A, Right arrow = vote B
+      useEffect(() => {
+        const handleKeyDown = (e) => {
+          if (locked || showTieBreaker) return;
+          if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            setVotesA(v => v + 1);
+            setVoteKey(k => k + 1);
+            SoundEffects.play('vote');
+          } else if (e.key === 'ArrowRight') {
+            e.preventDefault();
+            setVotesB(v => v + 1);
+            setVoteKey(k => k + 1);
+            SoundEffects.play('vote');
+          } else if (e.key === 'Enter' && (votesA > 0 || votesB > 0)) {
+            e.preventDefault();
+            // Trigger lock in via a click on the button
+            document.querySelector('.lock-in-btn')?.click();
+          }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+      }, [locked, showTieBreaker, votesA, votesB]);
+
       const handleVote = (side) => {
         if (locked) return;
         SoundEffects.play('vote');
@@ -1501,7 +1536,7 @@
               marginBottom: '16px',
               letterSpacing: '2px',
             }}>
-              ⚠️ IT'S TIED ⚠️
+              ⚠️ IT'S TIED
             </div>
             <BobSays 
               message={BOB.random(BOB.tie)} 
@@ -1548,7 +1583,7 @@
               marginBottom: '24px',
               letterSpacing: '3px',
             }}>
-              🏆 THE CHAMPIONSHIP 🏆
+              🏆 THE CHAMPIONSHIP
             </div>
           )}
           
@@ -1714,7 +1749,7 @@
       };
 
       const handleCopyText = () => {
-        const text = `🏆 ${champion.toUpperCase()} 🏆\nCrowned champion of "${category}" in Battle o' Brackets!\n\ndefeated ${runnerUp} in the final\n\n#BattleOBrackets`;
+        const text = `🏆 ${champion.toUpperCase()}\nCrowned champion of "${category}" in Battle o' Brackets!\n\ndefeated ${runnerUp} in the final\n\n#BattleOBrackets`;
         navigator.clipboard.writeText(text);
         alert('Copied to clipboard!');
       };
@@ -1848,7 +1883,7 @@
     }
 
     // The Vault
-    function Vault({ history, onBack, onNewGame, onClearHistory, onDeleteEntry, onEditEntry }) {
+    function Vault({ history, onBack, onNewGame, onClearHistory, onDeleteEntry, onEditEntry, onConfirmDelete }) {
       const [editingIndex, setEditingIndex] = useState(null);
       const [editForm, setEditForm] = useState({});
 
@@ -1917,7 +1952,7 @@
             textAlign: 'center',
             marginBottom: '16px',
           }}>
-            🏆 THE VAULT 🏆
+            🏆 THE VAULT
           </div>
 
           <BobSays message={BOB.random(BOB.vaultViewing)} mood="normal" />
@@ -2025,11 +2060,7 @@
                           ✏️
                         </button>
                         <button
-                          onClick={() => {
-                            if (confirm(`Delete "${entry.champion}" from ${entry.category}?`)) {
-                              onDeleteEntry(i);
-                            }
-                          }}
+                          onClick={() => onConfirmDelete(i, entry)}
                           style={{
                             background: 'none',
                             border: 'none',
@@ -2076,7 +2107,7 @@
 
           <div style={{ display: 'flex', gap: '16px', marginTop: '32px', justifyContent: 'center', flexWrap: 'wrap' }}>
             <Button variant="primary" onClick={onNewGame}>New Bracket</Button>
-            <Button variant="secondary" onClick={onBack}>Back</Button>
+            <Button variant="secondary" onClick={onBack}>← Home</Button>
             <Button variant="ghost" size="small" onClick={onClearHistory}>Clear Vault</Button>
           </div>
         </div>
@@ -2205,7 +2236,7 @@
           )}
 
           <div style={{ textAlign: 'center', marginTop: '32px' }}>
-            <Button variant="ghost" onClick={onBack}>Back to Home</Button>
+            <Button variant="ghost" onClick={onBack}>← Home</Button>
           </div>
         </div>
       );
@@ -2730,6 +2761,56 @@
       );
     }
 
+    // Confirm Modal (replaces browser confirm)
+    function ConfirmModal({ message, onConfirm, onCancel, confirmText = "Yes", cancelText = "Cancel", variant = "danger" }) {
+      return (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(0, 0, 0, 0.9)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 300,
+          padding: '20px',
+        }}>
+          <div style={{
+            background: 'var(--bg-card)',
+            border: `2px solid ${variant === 'danger' ? 'var(--accent-red)' : 'var(--accent-gold)'}`,
+            borderRadius: '16px',
+            padding: '32px',
+            maxWidth: '400px',
+            width: '100%',
+            textAlign: 'center',
+          }}>
+            <div style={{
+              fontSize: '18px',
+              color: 'var(--text-primary)',
+              lineHeight: '1.6',
+              marginBottom: '24px',
+            }}>
+              {message}
+            </div>
+            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
+              <Button variant="ghost" onClick={onCancel}>
+                {cancelText}
+              </Button>
+              <Button
+                variant={variant === 'danger' ? 'secondary' : 'primary'}
+                onClick={onConfirm}
+                style={variant === 'danger' ? { background: 'var(--accent-red)', borderColor: 'var(--accent-red)' } : {}}
+              >
+                {confirmText}
+              </Button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
     // ============================================
     // SEED VAULT DATA (Family Bracket Winners)
     // ============================================
@@ -2863,6 +2944,7 @@
       const [showFeedback, setShowFeedback] = useState(false);
       const [showAdmin, setShowAdmin] = useState(false);
       const [showAbout, setShowAbout] = useState(false);
+      const [confirmModal, setConfirmModal] = useState(null);
       const [soundEnabled, setSoundEnabled] = useState(true);
       const [canUndo, setCanUndo] = useState(false);
       const [undoState, setUndoState] = useState(null);
@@ -2892,6 +2974,15 @@
       useEffect(() => {
         localStorage.setItem('bob-custom-categories', JSON.stringify(customCategories));
       }, [customCategories]);
+
+      // Show About modal on first visit
+      useEffect(() => {
+        const hasVisited = localStorage.getItem('bob-has-visited');
+        if (!hasVisited) {
+          setShowAbout(true);
+          localStorage.setItem('bob-has-visited', 'true');
+        }
+      }, []);
 
       const handleToggleSound = () => {
         const newState = SoundEffects.toggle();
@@ -3105,9 +3196,14 @@
       };
 
       const clearHistory = () => {
-        if (confirm('Clear all champions from The Vault? This cannot be undone.')) {
-          setHistory([]);
-        }
+        setConfirmModal({
+          message: 'Clear all champions from The Vault? This cannot be undone.',
+          confirmText: 'Clear All',
+          onConfirm: () => {
+            setHistory([]);
+            setConfirmModal(null);
+          },
+        });
       };
 
       const deleteEntry = (index) => {
@@ -3171,7 +3267,7 @@
             </div>
             <div style={{ marginTop: '24px' }}>
               <Button variant="ghost" size="large" onClick={() => setScreen('vault')}>
-                🏆 The Vault ({history.length})
+                🏆 The Vault{history.length > 0 ? ` (${history.length})` : ''}
               </Button>
             </div>
             
@@ -3206,6 +3302,7 @@
             {showFeedback && <FeedbackModal onClose={() => setShowFeedback(false)} />}
             {showAdmin && <FeedbackAdmin onClose={() => setShowAdmin(false)} />}
             {showAbout && <AboutModal onClose={() => setShowAbout(false)} />}
+            {confirmModal && <ConfirmModal message={confirmModal.message} confirmText={confirmModal.confirmText} onConfirm={confirmModal.onConfirm} onCancel={() => setConfirmModal(null)} variant={confirmModal.variant} />}
           </div>
         );
       }
@@ -3230,6 +3327,7 @@
             {showFeedback && <FeedbackModal onClose={() => setShowFeedback(false)} />}
             {showAdmin && <FeedbackAdmin onClose={() => setShowAdmin(false)} />}
             {showAbout && <AboutModal onClose={() => setShowAbout(false)} />}
+            {confirmModal && <ConfirmModal message={confirmModal.message} confirmText={confirmModal.confirmText} onConfirm={confirmModal.onConfirm} onCancel={() => setConfirmModal(null)} variant={confirmModal.variant} />}
           </>
         );
       }
@@ -3249,10 +3347,21 @@
               onClearHistory={clearHistory}
               onDeleteEntry={deleteEntry}
               onEditEntry={editEntry}
+              onConfirmDelete={(index, entry) => {
+                setConfirmModal({
+                  message: `Delete "${entry.champion}" from ${entry.category}?`,
+                  confirmText: 'Delete',
+                  onConfirm: () => {
+                    deleteEntry(index);
+                    setConfirmModal(null);
+                  },
+                });
+              }}
             />
             {showFeedback && <FeedbackModal onClose={() => setShowFeedback(false)} />}
             {showAdmin && <FeedbackAdmin onClose={() => setShowAdmin(false)} />}
             {showAbout && <AboutModal onClose={() => setShowAbout(false)} />}
+            {confirmModal && <ConfirmModal message={confirmModal.message} confirmText={confirmModal.confirmText} onConfirm={confirmModal.onConfirm} onCancel={() => setConfirmModal(null)} variant={confirmModal.variant} />}
           </>
         );
       }
@@ -3403,6 +3512,7 @@
             {showFeedback && <FeedbackModal onClose={() => setShowFeedback(false)} />}
             {showAdmin && <FeedbackAdmin onClose={() => setShowAdmin(false)} />}
             {showAbout && <AboutModal onClose={() => setShowAbout(false)} />}
+            {confirmModal && <ConfirmModal message={confirmModal.message} confirmText={confirmModal.confirmText} onConfirm={confirmModal.onConfirm} onCancel={() => setConfirmModal(null)} variant={confirmModal.variant} />}
           </div>
         );
       }
@@ -3421,7 +3531,15 @@
             )}
             
             <Logo size="small" onClick={() => {
-              if (confirm('Exit bracket? Progress will be lost.')) resetGame();
+              setConfirmModal({
+                message: 'Exit bracket? Progress will be lost.',
+                confirmText: 'Exit',
+                variant: 'warning',
+                onConfirm: () => {
+                  setConfirmModal(null);
+                  resetGame();
+                },
+              });
             }} />
             
             <div style={{ textAlign: 'center', marginBottom: '16px' }}>
@@ -3469,7 +3587,7 @@
                 fontSize: '13px',
                 color: 'var(--text-secondary)',
               }}>
-                💡 <strong>How to play:</strong> Tally votes with +1/-1, then tap "Lock In Result"
+                💡 <strong>How to play:</strong> Tally votes with +1/-1 (or ← → keys), then tap "Lock In Result" (or Enter)
               </div>
             )}
 
@@ -3497,6 +3615,7 @@
             {showFeedback && <FeedbackModal onClose={() => setShowFeedback(false)} />}
             {showAdmin && <FeedbackAdmin onClose={() => setShowAdmin(false)} />}
             {showAbout && <AboutModal onClose={() => setShowAbout(false)} />}
+            {confirmModal && <ConfirmModal message={confirmModal.message} confirmText={confirmModal.confirmText} onConfirm={confirmModal.onConfirm} onCancel={() => setConfirmModal(null)} variant={confirmModal.variant} />}
           </div>
         );
       }
@@ -3521,6 +3640,7 @@
             {showFeedback && <FeedbackModal onClose={() => setShowFeedback(false)} />}
             {showAdmin && <FeedbackAdmin onClose={() => setShowAdmin(false)} />}
             {showAbout && <AboutModal onClose={() => setShowAbout(false)} />}
+            {confirmModal && <ConfirmModal message={confirmModal.message} confirmText={confirmModal.confirmText} onConfirm={confirmModal.onConfirm} onCancel={() => setConfirmModal(null)} variant={confirmModal.variant} />}
           </>
         );
       }
