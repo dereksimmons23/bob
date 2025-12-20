@@ -2212,7 +2212,7 @@
     }
 
     // Settings Panel
-    function SettingsPanel({ soundEnabled, onToggleSound, onFeedback, onAdmin, onClose }) {
+    function SettingsPanel({ soundEnabled, onToggleSound, onFeedback, onAdmin, onAbout, onClose }) {
       return (
         <div style={{
           position: 'fixed',
@@ -2286,6 +2286,23 @@
           >
             <span style={{ color: 'var(--text-primary)' }}>View Feedback</span>
             <span style={{ color: 'var(--accent-purple)' }}>📊</span>
+          </div>
+
+          <div
+            onClick={() => { onClose(); onAbout(); }}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: '12px',
+              background: 'var(--bg-card-hover)',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              marginBottom: '12px',
+            }}
+          >
+            <span style={{ color: 'var(--text-primary)' }}>About</span>
+            <span style={{ color: 'var(--accent-gold)' }}>ℹ️</span>
           </div>
 
           <Button variant="ghost" size="small" onClick={onClose} style={{ width: '100%' }}>
@@ -2566,6 +2583,85 @@
       );
     }
 
+    // About Modal
+    function AboutModal({ onClose }) {
+      return (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(0, 0, 0, 0.9)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 200,
+          padding: '20px',
+        }}>
+          <div style={{
+            background: 'var(--bg-card)',
+            border: '2px solid var(--accent-gold)',
+            borderRadius: '16px',
+            padding: '32px',
+            maxWidth: '400px',
+            width: '100%',
+            textAlign: 'center',
+          }}>
+            <div style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: '48px',
+              marginBottom: '8px',
+            }}>
+              🎯
+            </div>
+            <div style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: '28px',
+              color: 'var(--accent-gold)',
+              letterSpacing: '3px',
+              marginBottom: '8px',
+            }}>
+              BEST OF BOB
+            </div>
+            <div style={{
+              fontSize: '14px',
+              color: 'var(--text-muted)',
+              marginBottom: '24px',
+            }}>
+              Version 1.0
+            </div>
+
+            <div style={{
+              fontSize: '16px',
+              color: 'var(--text-primary)',
+              lineHeight: '1.6',
+              marginBottom: '24px',
+            }}>
+              A bracket-style decision maker for settling life's important debates.
+              Add your options, vote head-to-head, and let the best choice rise to the top.
+            </div>
+
+            <div style={{
+              fontSize: '14px',
+              color: 'var(--text-secondary)',
+              marginBottom: '24px',
+              padding: '16px',
+              background: 'var(--bg-deep)',
+              borderRadius: '8px',
+            }}>
+              <div style={{ marginBottom: '8px', color: 'var(--accent-gold)' }}>Created by</div>
+              <div>The Simmons Family</div>
+            </div>
+
+            <Button variant="primary" onClick={onClose}>
+              Got it!
+            </Button>
+          </div>
+        </div>
+      );
+    }
+
     // ============================================
     // SEED VAULT DATA (Family Bracket Winners)
     // ============================================
@@ -2698,6 +2794,7 @@
       const [showSettings, setShowSettings] = useState(false);
       const [showFeedback, setShowFeedback] = useState(false);
       const [showAdmin, setShowAdmin] = useState(false);
+      const [showAbout, setShowAbout] = useState(false);
       const [soundEnabled, setSoundEnabled] = useState(true);
       const [canUndo, setCanUndo] = useState(false);
       const [undoState, setUndoState] = useState(null);
@@ -3034,11 +3131,13 @@
                 onToggleSound={handleToggleSound}
                 onFeedback={() => setShowFeedback(true)}
                 onAdmin={() => setShowAdmin(true)}
+                onAbout={() => setShowAbout(true)}
                 onClose={() => setShowSettings(false)}
               />
             )}
             {showFeedback && <FeedbackModal onClose={() => setShowFeedback(false)} />}
             {showAdmin && <FeedbackAdmin onClose={() => setShowAdmin(false)} />}
+            {showAbout && <AboutModal onClose={() => setShowAbout(false)} />}
           </div>
         );
       }
@@ -3049,7 +3148,7 @@
           <>
             <SettingsButton />
             {showSettings && (
-              <SettingsPanel soundEnabled={soundEnabled} onToggleSound={handleToggleSound} onFeedback={() => setShowFeedback(true)} onAdmin={() => setShowAdmin(true)} onClose={() => setShowSettings(false)} />
+              <SettingsPanel soundEnabled={soundEnabled} onToggleSound={handleToggleSound} onFeedback={() => setShowFeedback(true)} onAdmin={() => setShowAdmin(true)} onAbout={() => setShowAbout(true)} onClose={() => setShowSettings(false)} />
             )}
             <CategoryLibrary
               onSelect={handleSelectFromLibrary}
@@ -3062,6 +3161,7 @@
             />
             {showFeedback && <FeedbackModal onClose={() => setShowFeedback(false)} />}
             {showAdmin && <FeedbackAdmin onClose={() => setShowAdmin(false)} />}
+            {showAbout && <AboutModal onClose={() => setShowAbout(false)} />}
           </>
         );
       }
@@ -3072,7 +3172,7 @@
           <>
             <SettingsButton />
             {showSettings && (
-              <SettingsPanel soundEnabled={soundEnabled} onToggleSound={handleToggleSound} onFeedback={() => setShowFeedback(true)} onAdmin={() => setShowAdmin(true)} onClose={() => setShowSettings(false)} />
+              <SettingsPanel soundEnabled={soundEnabled} onToggleSound={handleToggleSound} onFeedback={() => setShowFeedback(true)} onAdmin={() => setShowAdmin(true)} onAbout={() => setShowAbout(true)} onClose={() => setShowSettings(false)} />
             )}
             <Vault
               history={history}
@@ -3084,6 +3184,7 @@
             />
             {showFeedback && <FeedbackModal onClose={() => setShowFeedback(false)} />}
             {showAdmin && <FeedbackAdmin onClose={() => setShowAdmin(false)} />}
+            {showAbout && <AboutModal onClose={() => setShowAbout(false)} />}
           </>
         );
       }
@@ -3098,7 +3199,7 @@
             <div style={{ padding: '24px', maxWidth: '600px', margin: '0 auto' }}>
               <SettingsButton />
               {showSettings && (
-                <SettingsPanel soundEnabled={soundEnabled} onToggleSound={handleToggleSound} onFeedback={() => setShowFeedback(true)} onAdmin={() => setShowAdmin(true)} onClose={() => setShowSettings(false)} />
+                <SettingsPanel soundEnabled={soundEnabled} onToggleSound={handleToggleSound} onFeedback={() => setShowFeedback(true)} onAdmin={() => setShowAdmin(true)} onAbout={() => setShowAbout(true)} onClose={() => setShowSettings(false)} />
               )}
 
               <Logo size="small" onClick={() => setScreen('home')} />
@@ -3233,6 +3334,7 @@
             </div>
             {showFeedback && <FeedbackModal onClose={() => setShowFeedback(false)} />}
             {showAdmin && <FeedbackAdmin onClose={() => setShowAdmin(false)} />}
+            {showAbout && <AboutModal onClose={() => setShowAbout(false)} />}
           </div>
         );
       }
@@ -3247,7 +3349,7 @@
           <div style={{ minHeight: '100vh', padding: '24px', maxWidth: '700px', margin: '0 auto' }}>
             <SettingsButton />
             {showSettings && (
-              <SettingsPanel soundEnabled={soundEnabled} onToggleSound={handleToggleSound} onFeedback={() => setShowFeedback(true)} onAdmin={() => setShowAdmin(true)} onClose={() => setShowSettings(false)} />
+              <SettingsPanel soundEnabled={soundEnabled} onToggleSound={handleToggleSound} onFeedback={() => setShowFeedback(true)} onAdmin={() => setShowAdmin(true)} onAbout={() => setShowAbout(true)} onClose={() => setShowSettings(false)} />
             )}
             
             <Logo size="small" onClick={() => {
@@ -3326,6 +3428,7 @@
             )}
             {showFeedback && <FeedbackModal onClose={() => setShowFeedback(false)} />}
             {showAdmin && <FeedbackAdmin onClose={() => setShowAdmin(false)} />}
+            {showAbout && <AboutModal onClose={() => setShowAbout(false)} />}
           </div>
         );
       }
@@ -3336,7 +3439,7 @@
           <>
             <SettingsButton />
             {showSettings && (
-              <SettingsPanel soundEnabled={soundEnabled} onToggleSound={handleToggleSound} onFeedback={() => setShowFeedback(true)} onAdmin={() => setShowAdmin(true)} onClose={() => setShowSettings(false)} />
+              <SettingsPanel soundEnabled={soundEnabled} onToggleSound={handleToggleSound} onFeedback={() => setShowFeedback(true)} onAdmin={() => setShowAdmin(true)} onAbout={() => setShowAbout(true)} onClose={() => setShowSettings(false)} />
             )}
             <ChampionScreen
               champion={champion}
@@ -3349,6 +3452,7 @@
             />
             {showFeedback && <FeedbackModal onClose={() => setShowFeedback(false)} />}
             {showAdmin && <FeedbackAdmin onClose={() => setShowAdmin(false)} />}
+            {showAbout && <AboutModal onClose={() => setShowAbout(false)} />}
           </>
         );
       }
