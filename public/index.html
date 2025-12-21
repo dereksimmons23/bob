@@ -1690,68 +1690,110 @@
     }
 
     // Share Card Generator
-    function ShareCard({ champion, category, runnerUp, onClose }) {
+    function ShareCard({ champion, category, runnerUp, entrants, playerCount, bobComment, onClose }) {
       const canvasRef = useRef(null);
-      const [shareUrl, setShareUrl] = useState(null);
+      const [imageUrl, setImageUrl] = useState(null);
+      const [shareLink, setShareLink] = useState(null);
+      const [isGeneratingLink, setIsGeneratingLink] = useState(false);
+      const [linkCopied, setLinkCopied] = useState(false);
 
       useEffect(() => {
         const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d');
-        
+
         // Background
         ctx.fillStyle = '#0a0e1a';
         ctx.fillRect(0, 0, 600, 400);
-        
+
         // Gold gradient header
         const gradient = ctx.createLinearGradient(0, 0, 600, 0);
         gradient.addColorStop(0, '#ffd700');
         gradient.addColorStop(0.5, '#ffed4a');
         gradient.addColorStop(1, '#ffd700');
-        
+
         // Title
         ctx.font = 'bold 36px Bangers, sans-serif';
         ctx.fillStyle = gradient;
         ctx.textAlign = 'center';
         ctx.fillText("BATTLE o' BRACKETS", 300, 60);
-        
+
         // Trophy
         ctx.font = '80px serif';
         ctx.fillText('🏆', 300, 160);
-        
+
         // Category
         ctx.font = '18px Outfit, sans-serif';
         ctx.fillStyle = '#8892b0';
         ctx.fillText(category.toUpperCase(), 300, 210);
-        
+
         // Champion
         ctx.font = 'bold 42px Bangers, sans-serif';
         ctx.fillStyle = '#ffd700';
         ctx.fillText(champion.toUpperCase(), 300, 270);
-        
+
         // Runner up
         ctx.font = '16px Outfit, sans-serif';
         ctx.fillStyle = '#8892b0';
         ctx.fillText(`defeated ${runnerUp}`, 300, 310);
-        
+
         // Footer
         ctx.font = '14px Outfit, sans-serif';
         ctx.fillStyle = '#4a5578';
-        ctx.fillText('Hosted by BOB', 300, 370);
-        
-        setShareUrl(canvas.toDataURL('image/png'));
+        ctx.fillText('bob.claudewill.io', 300, 370);
+
+        setImageUrl(canvas.toDataURL('image/png'));
       }, [champion, category, runnerUp]);
 
       const handleDownload = () => {
         const link = document.createElement('a');
         link.download = `bracket-champion-${category.replace(/\s+/g, '-').toLowerCase()}.png`;
-        link.href = shareUrl;
+        link.href = imageUrl;
         link.click();
       };
 
       const handleCopyText = () => {
-        const text = `🏆 ${champion.toUpperCase()}\nCrowned champion of "${category}" in Battle o' Brackets!\n\ndefeated ${runnerUp} in the final\n\n#BattleOBrackets`;
+        const text = `🏆 ${champion.toUpperCase()}\nCrowned champion of "${category}" in Battle o' Brackets!\n\ndefeated ${runnerUp} in the final\n\n${shareLink || 'bob.claudewill.io'}\n\n#BattleOBrackets`;
         navigator.clipboard.writeText(text);
         alert('Copied to clipboard!');
+      };
+
+      const handleGetLink = async () => {
+        if (shareLink) {
+          // Already have a link, just copy it
+          await navigator.clipboard.writeText(shareLink);
+          setLinkCopied(true);
+          setTimeout(() => setLinkCopied(false), 2000);
+          return;
+        }
+
+        setIsGeneratingLink(true);
+        try {
+          const { data, error } = await supabase
+            .from('shared_brackets')
+            .insert({
+              category,
+              champion,
+              runner_up: runnerUp,
+              entrants: entrants || [],
+              player_count: playerCount || 1,
+              bob_comment: bobComment || '',
+            })
+            .select('id')
+            .single();
+
+          if (error) throw error;
+
+          const link = `${window.location.origin}/b/${data.id}`;
+          setShareLink(link);
+          await navigator.clipboard.writeText(link);
+          setLinkCopied(true);
+          setTimeout(() => setLinkCopied(false), 2000);
+        } catch (err) {
+          console.error('Error creating share link:', err);
+          alert('Failed to create share link. Please try again.');
+        } finally {
+          setIsGeneratingLink(false);
+        }
       };
 
       return (
@@ -1782,22 +1824,44 @@
             }}>
               SHARE YOUR CHAMPION
             </div>
-            
-            <canvas 
-              ref={canvasRef} 
-              width={600} 
+
+            <canvas
+              ref={canvasRef}
+              width={600}
               height={400}
-              style={{ 
-                width: '100%', 
+              style={{
+                width: '100%',
                 height: 'auto',
                 borderRadius: '12px',
                 marginBottom: '24px',
               }}
             />
 
+            {shareLink && (
+              <div style={{
+                background: 'var(--bg-deep)',
+                borderRadius: '8px',
+                padding: '12px',
+                marginBottom: '16px',
+                textAlign: 'center',
+                fontSize: '14px',
+                color: 'var(--accent-gold)',
+                wordBreak: 'break-all',
+              }}>
+                {shareLink}
+              </div>
+            )}
+
             <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
-              <Button variant="primary" onClick={handleDownload}>Download Image</Button>
-              <Button variant="secondary" onClick={handleCopyText}>Copy Text</Button>
+              <Button
+                variant="primary"
+                onClick={handleGetLink}
+                disabled={isGeneratingLink}
+              >
+                {isGeneratingLink ? 'Creating...' : linkCopied ? '✓ Link Copied!' : shareLink ? 'Copy Link' : '🔗 Get Shareable Link'}
+              </Button>
+              <Button variant="secondary" onClick={handleDownload}>Download Image</Button>
+              <Button variant="ghost" onClick={handleCopyText}>Copy Text</Button>
               <Button variant="ghost" onClick={onClose}>Close</Button>
             </div>
           </div>
@@ -1806,7 +1870,7 @@
     }
 
     // Champion Screen
-    function ChampionScreen({ champion, category, runnerUp, categoryType, bobComment, onNewGame, onViewVault }) {
+    function ChampionScreen({ champion, category, runnerUp, categoryType, bobComment, entrants, playerCount, onNewGame, onViewVault }) {
       const [showShare, setShowShare] = useState(false);
       // Use passed bobComment or fall back to random
       const displayComment = bobComment || BOB.random(BOB.champion);
@@ -1871,13 +1935,200 @@
           </div>
 
           {showShare && (
-            <ShareCard 
-              champion={champion} 
-              category={category} 
+            <ShareCard
+              champion={champion}
+              category={category}
               runnerUp={runnerUp}
+              entrants={entrants}
+              playerCount={playerCount}
+              bobComment={displayComment}
               onClose={() => setShowShare(false)}
             />
           )}
+        </div>
+      );
+    }
+
+    // Shared Bracket View - Public read-only view for shared links
+    function SharedBracketView({ bracketId }) {
+      const [bracket, setBracket] = useState(null);
+      const [loading, setLoading] = useState(true);
+      const [error, setError] = useState(null);
+
+      useEffect(() => {
+        const fetchBracket = async () => {
+          try {
+            const { data, error: fetchError } = await supabase
+              .from('shared_brackets')
+              .select('*')
+              .eq('id', bracketId)
+              .single();
+
+            if (fetchError) throw fetchError;
+            if (!data) throw new Error('Bracket not found');
+
+            setBracket(data);
+
+            // Increment view count
+            await supabase
+              .from('shared_brackets')
+              .update({ view_count: (data.view_count || 0) + 1 })
+              .eq('id', bracketId);
+
+          } catch (err) {
+            setError(err.message);
+          } finally {
+            setLoading(false);
+          }
+        };
+
+        fetchBracket();
+      }, [bracketId]);
+
+      const handlePlayOwn = () => {
+        window.location.href = '/';
+      };
+
+      if (loading) {
+        return (
+          <div style={{
+            minHeight: '100vh',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: 'var(--bg-deep)',
+          }}>
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: '48px', marginBottom: '16px' }}>🏆</div>
+              <div style={{ color: 'var(--text-secondary)' }}>Loading bracket...</div>
+            </div>
+          </div>
+        );
+      }
+
+      if (error || !bracket) {
+        return (
+          <div style={{
+            minHeight: '100vh',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: 'var(--bg-deep)',
+            padding: '24px',
+            textAlign: 'center',
+          }}>
+            <Logo size="medium" />
+            <div style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: '32px',
+              color: 'var(--accent-red)',
+              marginBottom: '16px',
+              letterSpacing: '2px',
+            }}>
+              BRACKET NOT FOUND
+            </div>
+            <BobSays message="This bracket has vanished into the void. Like tears in rain. Very dramatic." mood="normal" />
+            <Button variant="primary" size="large" onClick={handlePlayOwn} style={{ marginTop: '24px' }}>
+              Create Your Own Bracket
+            </Button>
+          </div>
+        );
+      }
+
+      return (
+        <div style={{
+          minHeight: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          background: 'var(--bg-deep)',
+          padding: '24px',
+          textAlign: 'center',
+        }}>
+          <Logo size="small" onClick={handlePlayOwn} />
+
+          <div style={{
+            fontFamily: 'var(--font-display)',
+            fontSize: '20px',
+            color: 'var(--text-secondary)',
+            letterSpacing: '4px',
+            marginBottom: '16px',
+            marginTop: '24px',
+          }}>
+            {bracket.category.toUpperCase()}
+          </div>
+
+          <div style={{ fontSize: '80px', marginBottom: '16px' }}>🏆</div>
+
+          <div style={{
+            fontFamily: 'var(--font-display)',
+            fontSize: '48px',
+            background: 'linear-gradient(135deg, var(--accent-gold) 0%, #ffed4a 50%, var(--accent-gold) 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            letterSpacing: '3px',
+            marginBottom: '16px',
+          }}>
+            {bracket.champion.toUpperCase()}
+          </div>
+
+          <div style={{ color: 'var(--text-secondary)', fontSize: '16px', marginBottom: '24px' }}>
+            defeated <span style={{ color: 'var(--text-primary)' }}>{bracket.runner_up}</span> in the final
+          </div>
+
+          {bracket.bob_comment && (
+            <BobSays message={bracket.bob_comment} mood="normal" />
+          )}
+
+          <div style={{
+            display: 'flex',
+            gap: '8px',
+            marginTop: '16px',
+            color: 'var(--text-muted)',
+            fontSize: '14px',
+          }}>
+            <span>{bracket.player_count || 1} voter{(bracket.player_count || 1) !== 1 ? 's' : ''}</span>
+            <span>•</span>
+            <span>{bracket.entrants?.length || 0} entrants</span>
+            {bracket.view_count > 0 && (
+              <>
+                <span>•</span>
+                <span>{bracket.view_count} view{bracket.view_count !== 1 ? 's' : ''}</span>
+              </>
+            )}
+          </div>
+
+          <div style={{
+            marginTop: '32px',
+            padding: '20px',
+            background: 'var(--bg-card)',
+            borderRadius: '16px',
+            maxWidth: '400px',
+            width: '100%',
+          }}>
+            <div style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: '18px',
+              color: 'var(--accent-gold)',
+              marginBottom: '12px',
+              letterSpacing: '2px',
+            }}>
+              THINK YOU CAN DO BETTER?
+            </div>
+            <Button variant="primary" size="large" onClick={handlePlayOwn}>
+              Create Your Own Bracket
+            </Button>
+          </div>
+
+          <div style={{
+            marginTop: '24px',
+            color: 'var(--text-muted)',
+            fontSize: '12px',
+          }}>
+            Shared via Battle o' Brackets™ • Hosted by BOB
+          </div>
         </div>
       );
     }
@@ -3142,6 +3393,12 @@
     // MAIN APP
     // ============================================
     function App() {
+      // Check for shared bracket view: /b/[id]
+      const sharedBracketMatch = window.location.pathname.match(/^\/b\/([a-f0-9-]+)$/i);
+      if (sharedBracketMatch) {
+        return <SharedBracketView bracketId={sharedBracketMatch[1]} />;
+      }
+
       // Dev mode: add ?dev=true to URL for testing tools
       const isDevMode = new URLSearchParams(window.location.search).get('dev') === 'true';
 
@@ -3885,6 +4142,8 @@
               runnerUp={runnerUp}
               categoryType={categoryType}
               bobComment={championComment}
+              entrants={entrants}
+              playerCount={playerCount}
               onNewGame={() => setScreen('library')}
               onViewVault={() => setScreen('vault')}
             />
