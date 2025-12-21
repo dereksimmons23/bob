@@ -211,6 +211,15 @@ Already integrated in category library.
 - Tracks view count
 - CTA to create your own bracket
 
+### ✅ Privacy Policy & Terms of Use (Shipped Dec 21, 2025)
+**Status:** Complete
+
+- Tabbed modal accessible from Settings → "Privacy & Terms"
+- Privacy Policy covers: data collection, local storage, no tracking, data deletion
+- Terms of Use covers: game usage, shared brackets, content policy
+- Human-readable, plain English (not legalese)
+- Contact email for data requests
+
 ### 🔲 Voice Integration (ElevenLabs)
 **Status:** Stretch goal — not critical for MVP
 
@@ -229,6 +238,19 @@ Already integrated in category library.
 - Public view page (read-only)
 - No accounts required
 - View count tracking
+
+### 🔲 Run It Back — Replay Previous Brackets
+**Status:** Concept only
+
+Replay brackets from The Vault with original or new voters.
+
+- Select any past bracket from The Vault
+- Re-run with same entrants, fresh votes
+- Compare results: "Then vs Now" view
+- Seasonal rotation: auto-surface relevant brackets (holiday music in December, chips during Super Bowl)
+- Track how opinions shift over time
+
+**Use cases:** Cheese, chips, holiday music, annual traditions
 
 ### 🔲 Banners & Banter Phase 2 — Public Feed
 **Status:** Not started
@@ -437,6 +459,7 @@ Yes, PWAs can handle payments:
 - [x] Vault carousel redesign
 - [x] Dev mode for testing
 - [x] Supabase analytics
+- [x] Privacy Policy & Terms of Use
 
 **Deferred to v3:**
 - [ ] Voice integration (ElevenLabs)

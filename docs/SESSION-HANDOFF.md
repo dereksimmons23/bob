@@ -1,7 +1,7 @@
 # Session Handoff — Battle o' Brackets
 
-**Last Updated:** December 20, 2025
-**Last Session:** Dec 20, 2025 (extended session)
+**Last Updated:** December 21, 2025
+**Last Session:** Dec 21, 2025
 **Next Session:** Post-Christmas (Dec 26+)
 
 ---
@@ -15,7 +15,19 @@ Battle o' Brackets (BOB) is a party game PWA for bracket-style voting tournament
 
 ---
 
-## What Was Done Today (Dec 20 — Extended Session)
+## What Was Done Today (Dec 21)
+
+### Features Built
+
+1. **Privacy Policy & Terms of Use Modal**
+   - Tabbed modal accessible from Settings → "Privacy & Terms"
+   - Privacy Policy: data collection, local storage, no tracking, data deletion
+   - Terms of Use: game usage, shared brackets, content policy
+   - Human-readable, BOB-appropriate tone
+
+---
+
+## What Was Done (Dec 20 — Extended Session)
 
 ### Features Built
 
@@ -84,6 +96,7 @@ Battle o' Brackets (BOB) is a party game PWA for bracket-style voting tournament
 | All v2.5 features | ✅ Complete |
 | Shareable links | ✅ Working |
 | Analytics tracking | ✅ Active |
+| Privacy & Terms | ✅ Complete |
 | Social posts drafted | ✅ In LAUNCH-CONTENT.md |
 | Video script | ✅ In LAUNCH-CONTENT.md |
 | Test shared link | ✅ Created |
