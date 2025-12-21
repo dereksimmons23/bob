@@ -1,129 +1,165 @@
 # Session Handoff — Battle o' Brackets
 
 **Last Updated:** December 20, 2025
-**Last Session:** Dec 20, 2025 (~1 hour)
-**Next Session:** Post-Christmas (testing feedback from family game night)
+**Last Session:** Dec 20, 2025 (extended session)
+**Next Session:** Post-Christmas (Dec 26+)
 
 ---
 
 ## Quick Context
 
-Battle o' Brackets (BOB) is a party game PWA for bracket-style voting tournaments. MVP complete. Christmas Eve debut ready.
+Battle o' Brackets (BOB) is a party game PWA for bracket-style voting tournaments. MVP complete. Christmas Eve debut ready. Shareable links working.
 
 **Live at:** https://bob.claudewill.io
+**Test shared link:** https://bob.claudewill.io/b/f03e4201-5fdb-4dd0-a921-e606d8028846
 
 ---
 
-## What Was Done Today (Dec 20)
+## What Was Done Today (Dec 20 — Extended Session)
+
+### Features Built
 
 1. **In-App Feedback System**
-   - Created Supabase project `bob` (us-east-1)
-   - Feedback table with RLS policies (anyone can submit, anyone can read/delete for admin)
-   - Submit feedback modal accessible via Settings → Send Feedback
-   - Admin panel accessible via Settings → View Feedback
-   - Delete capability for managing feedback
+   - Supabase project `bob` (us-east-1)
+   - Feedback modal + admin panel in Settings
 
-2. **Documentation Updates**
-   - Updated README.md with feedback feature
-   - Updated FEATURE-ROADMAP.md (marked feedback complete)
-   - Updated SESSION-HANDOFF.md (this file)
+2. **About Modal & First-Visit Experience**
+   - "How It Works" section
+   - BOB origin story (Uncle Robert Jake + famous Bobs)
+   - Auto-shows on first visit
 
-**Key files changed:**
-- `/public/index.html` — Added Supabase client, FeedbackModal, FeedbackAdmin, SettingsPanel updates
+3. **UI/UX Polish**
+   - Fixed doubled icons (🏆 THE CHAMPIONSHIP, etc.)
+   - "← Home" buttons for clarity
+   - Styled ConfirmModal (replaced browser confirm())
+   - Increased touch targets (44px min)
+   - Keyboard navigation (← → arrows, Enter to lock in)
 
-**Supabase Details:**
-- Project: `bob` (ID: vvroarbpvfsoiznkbfvt)
-- Region: us-east-1
-- Dashboard: https://supabase.com/dashboard/project/vvroarbpvfsoiznkbfvt
-- Table: `feedback` (id, message, category, created_at)
+4. **Dev Mode**
+   - Add `?dev=true` to URL for testing tools
+   - Reset First Visit, Reset Vault, Clear All options
 
----
+5. **Supabase Analytics**
+   - `games` table — tracks completed brackets
+   - `custom_categories` table — tracks user creations
 
-## What's Left for MVP
+6. **Vault Carousel Redesign**
+   - One-card-per-screen hero display
+   - Navigation counter ("1 of 13 champions")
+   - Keyboard nav + sticky footer
 
-| Task | Priority | Status |
-|------|----------|--------|
-| Test feedback system locally | High | Ready to test |
-| Family game night test (Dec 24) | High | Scheduled |
-| LinkedIn announcement | Medium | Draft ready |
+7. **Shareable Bracket Links (Banners & Banter Phase 1)**
+   - "Get Shareable Link" on Share modal
+   - `shared_brackets` table in Supabase
+   - Public view at `/b/[id]`
+   - View count tracking
+   - CTA to create own bracket
 
----
+### Documentation Created
 
-## User's Key Decisions/Preferences
-
-1. **December 20 MVP target** — COMPLETE
-2. **Christmas Eve 2025 debut** — Family gathering showcase
-3. **Late summer/early fall 2026** — Broader release target
-4. **In-app feedback** — Chosen over Netlify Forms for Supabase integration
-5. **LinkedIn post timing** — Decided to wait until after family test for authentic story
-
----
-
-## Credentials
-
-**Supabase (bob project):**
-- URL: https://vvroarbpvfsoiznkbfvt.supabase.co
-- Anon key: In index.html (public, safe for client-side)
+- **LAUNCH-PLAN.md** — Full launch strategy (Dec 24-31)
+- **LAUNCH-CONTENT.md** — Ready-to-use social posts, video script
+- Updated FEATURE-ROADMAP.md, README.md, BANNERS-AND-BANTER-SOCIAL.md
 
 ---
 
-## Architecture Quick Reference
+## Supabase Tables
+
+| Table | Purpose |
+|-------|---------|
+| `feedback` | User feedback submissions |
+| `games` | Completed bracket analytics |
+| `custom_categories` | User-created category tracking |
+| `shared_brackets` | Shareable bracket links |
+
+**Project:** `bob` (ID: vvroarbpvfsoiznkbfvt)
+**Dashboard:** https://supabase.com/dashboard/project/vvroarbpvfsoiznkbfvt
+
+---
+
+## Launch Checklist Status
+
+| Task | Status |
+|------|--------|
+| All v2.5 features | ✅ Complete |
+| Shareable links | ✅ Working |
+| Analytics tracking | ✅ Active |
+| Social posts drafted | ✅ In LAUNCH-CONTENT.md |
+| Video script | ✅ In LAUNCH-CONTENT.md |
+| Test shared link | ✅ Created |
+| Record demo video | ⏳ User to do |
+| Final device testing | ⏳ User to do |
+
+---
+
+## Post-Christmas Focus (Dec 26+)
+
+1. **Review analytics** — Check games played, categories used
+2. **Check feedback** — Settings → View Feedback
+3. **Review shared brackets** — See what people are sharing
+4. **Bug fixes** — Address any issues from family testing
+5. **LinkedIn/social posts** — Post with real family results
+6. **Broader launch** — Reddit, Product Hunt (consider Jan timing)
+
+---
+
+## Key Files
 
 ```
 bob/
 ├── public/
-│   ├── index.html      # THE ENTIRE APP (~3200 lines)
+│   ├── index.html      # THE ENTIRE APP (~4200 lines now)
 │   └── manifest.json   # PWA manifest
-├── docs/               # Documentation
+├── docs/
 │   ├── FEATURE-ROADMAP.md
-│   ├── SESSION-HANDOFF.md
+│   ├── LAUNCH-PLAN.md        # NEW - launch strategy
+│   ├── LAUNCH-CONTENT.md     # NEW - social posts, video script
+│   ├── SESSION-HANDOFF.md    # This file
+│   ├── BANNERS-AND-BANTER-SOCIAL.md
 │   ├── BOB-CHARACTER-BIBLE.md
 │   └── ...
-├── netlify.toml        # Netlify config
+├── netlify.toml        # Redirects for /b/* routes
 └── README.md
 ```
 
 **localStorage keys:**
 - `bob-vault-v2` — Champion history
 - `bob-custom-categories` — User-created categories
-
-**Supabase tables:**
-- `feedback` — User feedback submissions
+- `bob-has-visited` — First-visit tracking
 
 ---
 
-## Git Workflow
+## URLs to Remember
 
-- Branch naming: `claude/{feature}-{id}`
-- Push to claude/ branches only (main requires PR)
-- User merges via GitHub
-
----
-
-## Post-Christmas Suggested Focus
-
-1. **Review feedback** — Check Supabase dashboard or in-app admin
-2. **LinkedIn post** — Share results from family game night
-3. **Bug fixes** — Address any issues from testing
-4. **Voice integration** — If time permits (stretch goal)
+- **Live app:** https://bob.claudewill.io
+- **Dev mode:** https://bob.claudewill.io?dev=true
+- **Test shared link:** https://bob.claudewill.io/b/f03e4201-5fdb-4dd0-a921-e606d8028846
+- **Supabase dashboard:** https://supabase.com/dashboard/project/vvroarbpvfsoiznkbfvt
 
 ---
 
 ## Sprint Status
 
-**Original estimate:** 10 hours
-**Time used:** ~5 hours total
-**Status:** MVP COMPLETE
+**Status:** MVP COMPLETE + LAUNCH READY
+**Shareable links:** ✅ Banners & Banter Phase 1 complete
 
-All features for Christmas Eve debut are complete. Ready for family testing.
+All features for Christmas Eve debut are complete. Social content ready. Just needs family testing and video recording.
 
 ---
 
 ## Family Game Night Plan (Dec 24)
 
 1. Open app on TV/shared device
-2. Let family play 2-3 brackets
-3. Collect verbal feedback
-4. Check in-app feedback submissions after
+2. Play 2-3 brackets
+3. Use "Get Shareable Link" to create links
+4. Capture reactions (video/photos)
 5. Note any bugs or UX issues
-6. Use experience for LinkedIn post
+6. Use experience for social posts Dec 25
+
+---
+
+## Git Status
+
+On branch: `main`
+Last commit: `8edd393` — Add launch content: social posts, video script, test link
+All changes pushed.
