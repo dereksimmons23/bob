@@ -47,11 +47,13 @@ BOB is your AI game show host. Dry wit. Deadpan delivery. Strong opinions on foo
 BOB provides context-aware commentary for every moment—category openers, matchup commentary, result reactions, championship crownings. He's inspired by Uncle Bob (family member), Bob Barker, Bob Newhart, and Alex Trebek.
 
 ### Additional Features
-- **The Vault** — Champion history preserved in localStorage
+- **The Vault** — Champion history carousel with edit/delete
 - **Quick Start** — 2 taps to gameplay with preset categories
 - **Custom Categories** — Create and save your own brackets
-- **Share Results** — Download champion cards or copy shareable text
+- **Share Results** — Download champion cards, copy text, or get shareable links
+- **Shareable Links** — Public bracket view at `bob.claudewill.io/b/[id]`
 - **Sound Effects** — Optional audio feedback (toggle in settings)
+- **Keyboard Navigation** — Arrow keys for voting, Enter to lock in
 - **In-App Feedback** — Send feedback directly from settings (Supabase backend)
 - **PWA Support** — Install to home screen, works offline
 
@@ -151,23 +153,29 @@ bob/
 - ✅ The Vault (history)
 - ✅ Custom category builder
 
-### v2.5 (Pre-Christmas Polish — Complete)
+### v2.5 (Pre-Christmas Polish — Complete Dec 20, 2025)
 - ✅ Expanded dialogue (bobAdvice, deadpan, impatience wired up)
 - ✅ Battle animations (VS clash, winner/loser effects, vote pop)
 - ✅ New sounds (advance, roundComplete, dramatic)
-- ✅ UI polish (button hover, pulsing Lock In)
+- ✅ UI polish (button hover, pulsing Lock In, keyboard nav)
 - ✅ Vote correction/undo (5-second window)
 - ✅ Compact bracket visualization (March Madness naming)
 - ✅ Mobile UX improvements (sticky footer, first-time hints)
 - ✅ BOB comments in The Vault
 - ✅ Pre-populated Vault with family winners
 - ✅ In-app feedback system (Supabase backend + admin view)
-- 🔲 Voice integration (ElevenLabs) — stretch goal
+- ✅ About modal with first-visit experience
+- ✅ Vault carousel redesign (one card per screen)
+- ✅ Shareable bracket links (`/b/[id]` public view)
+- ✅ Dev mode for testing (`?dev=true`)
+- ✅ Supabase analytics (games + custom categories)
 
-### v3 (Future)
-- 🔲 Banners & Banter (social layer)
+### v3 (Post-Launch 2026)
+- ✅ Banners & Banter Phase 1 — Shareable links (Complete)
+- 🔲 Banners & Banter Phase 2 — Public feed + reactions
+- 🔲 Banners & Banter Phase 3 — Community features
+- 🔲 Voice integration (ElevenLabs) — stretch goal
 - 🔲 Multi-language support
-- 🔲 Export/import categories
 
 ### v4 (If Commercial)
 - 🔲 Real-time multiplayer

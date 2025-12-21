@@ -284,25 +284,28 @@ NOT shared:
 
 ## MVP Scope (v3.0)
 
-**Phase 1: Share Link Only**
-- Generate unique URL for completed bracket
-- Anyone with link can view
-- No accounts required
-- No feed / discovery
+**Phase 1: Share Link Only** ✅ COMPLETE (Dec 20, 2025)
+- ✅ Generate unique URL for completed bracket (`/b/[id]`)
+- ✅ Anyone with link can view (public, no auth)
+- ✅ No accounts required
+- ✅ View count tracking
+- ✅ "Get Shareable Link" button on Share modal
+- ✅ CTA to create own bracket on shared view
+- ✅ Supabase `shared_brackets` table with RLS policies
 
-**Phase 2: Public Feed**
-- User accounts
+**Phase 2: Public Feed** 🔲 Not Started
+- User accounts (optional, OAuth)
 - Public feed of recent brackets
-- Basic reactions (upvote)
+- Basic reactions (🏆 Crown It, 🗑️ Trash Take)
 - Profile pages
 
-**Phase 3: Community**
+**Phase 3: Community** 🔲 Not Started
 - Following system
 - Comments
 - Category leaderboards
 - Notifications
 
-**Phase 4: Premium**
+**Phase 4: Premium** 🔲 Not Started
 - Paid tier
 - Custom designs
 - Analytics
@@ -366,13 +369,25 @@ BOB becomes the "voice" of Banners & Banter:
 
 ## Next Steps
 
-1. **Validate demand** — Do users actually want to share? Survey after Christmas debut.
+1. ✅ **Build share link MVP** — COMPLETE (Dec 20, 2025)
+   - Shareable URLs at `bob.claudewill.io/b/[id]`
+   - Public view page
+   - View count tracking
 
-2. **Design mockups** — Create full UI designs for feed, profiles, banner cards.
+2. **Validate demand** — Do users actually want to share?
+   - Track shared brackets in Supabase (Dec 24+)
+   - Monitor view counts
+   - Check if shared links get engagement
 
-3. **Choose backend** — Supabase? Firebase? Custom API?
+3. **Phase 2: Public Feed** — If demand validated (Jan 2026)
+   - Design feed UI mockups
+   - Add optional user accounts
+   - Build public browse experience
 
-4. **Build share link MVP** — Simplest possible version: generate URL, view bracket.
+4. **Phase 3: Community** — Based on Phase 2 traction
+   - Reactions system
+   - Comments
+   - Category leaderboards
 
 5. **Iterate based on usage** — Add social features based on what people actually do.
 

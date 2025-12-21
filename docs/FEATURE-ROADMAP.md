@@ -158,6 +158,59 @@ Already integrated in category library.
 - Admin panel to view/delete feedback
 - Accessible via Settings → View Feedback
 
+### ✅ About Modal & First-Visit Experience (Shipped Dec 20, 2025)
+**Status:** Complete
+
+- Expanded About modal with "How It Works" section
+- BOB origin story (Uncle Robert Jake + famous Bobs)
+- Creator credit (Derek Simmons + Claude)
+- Auto-shows on first visit
+
+### ✅ UI/UX Polish (Shipped Dec 20, 2025)
+**Status:** Complete
+
+- Fixed doubled icons (🏆 THE CHAMPIONSHIP, etc.)
+- Changed "Back" buttons to "← Home" for clarity
+- Styled ConfirmModal (replaced browser confirm())
+- Increased touch targets on vote buttons (44px min)
+- Shortened progress labels for mobile
+- Keyboard navigation (← → arrows for voting, Enter to lock in)
+
+### ✅ Dev Mode (Shipped Dec 20, 2025)
+**Status:** Complete
+
+- Add `?dev=true` to URL for builder/tester tools
+- Dev Tools modal with:
+  - Reset First Visit
+  - Reset Vault to Seed Data
+  - Clear All localStorage
+
+### ✅ Supabase Analytics (Shipped Dec 20, 2025)
+**Status:** Complete
+
+- `games` table tracks completed brackets (category, champion, runner-up, player count)
+- `custom_categories` table tracks user-created categories
+- Anonymous tracking (no user identification)
+
+### ✅ Vault Carousel Redesign (Shipped Dec 20, 2025)
+**Status:** Complete
+
+- One-card-per-screen hero display
+- Navigation counter ("1 of 13 champions")
+- Keyboard navigation (← → arrows)
+- Sticky footer with controls always visible
+- Edit/Delete on each card
+
+### ✅ Shareable Bracket Links — Banners & Banter Phase 1 (Shipped Dec 20, 2025)
+**Status:** Complete
+
+- "Get Shareable Link" button on Share modal
+- `shared_brackets` table in Supabase
+- Public view page at `/b/[id]`
+- Shows category, champion, runner-up, BOB comment
+- Tracks view count
+- CTA to create your own bracket
+
 ### 🔲 Voice Integration (ElevenLabs)
 **Status:** Stretch goal — not critical for MVP
 
@@ -169,15 +222,29 @@ Already integrated in category library.
 
 ## v3 Features (Post-Christmas / Q1 2026)
 
-### 🔲 Banners & Banter Social
-**Status:** Concept only
+### ✅ Banners & Banter Phase 1 — Shareable Links (Shipped Dec 20, 2025)
+**Status:** Complete
 
-Full social layer for sharing and viewing brackets:
-- Public gallery of completed brackets
-- Shareable bracket URLs
-- View others' champions and banter
-- Reaction/voting on others' results
-- Leaderboards (most brackets, streaks)
+- Shareable bracket URLs (`bob.claudewill.io/b/[id]`)
+- Public view page (read-only)
+- No accounts required
+- View count tracking
+
+### 🔲 Banners & Banter Phase 2 — Public Feed
+**Status:** Not started
+
+- User accounts (optional)
+- Public feed of recent brackets
+- Basic reactions (🏆 Crown It, 🗑️ Trash Take)
+- Profile pages
+
+### 🔲 Banners & Banter Phase 3 — Community
+**Status:** Not started
+
+- Following system
+- Comments
+- Category leaderboards (aggregated results)
+- Notifications
 
 See: `BANNERS-AND-BANTER-SOCIAL.md` for full concept
 
@@ -364,11 +431,52 @@ Yes, PWAs can handle payments:
 - [x] BOB comments in Vault
 - [x] Pre-populated Vault
 - [x] In-app feedback system
+- [x] About modal with first-visit experience
+- [x] Keyboard navigation
+- [x] Shareable bracket links (Banners & Banter Phase 1)
+- [x] Vault carousel redesign
+- [x] Dev mode for testing
+- [x] Supabase analytics
 
 **Deferred to v3:**
 - [ ] Voice integration (ElevenLabs)
+- [ ] Public feed / Banners & Banter Phase 2
+- [ ] User accounts
 
 **Not needed for debut:**
-- Social features
 - Multi-language
 - Corporate version
+
+---
+
+## Launch Plan — December 24-26, 2025
+
+### Launch Day (Dec 24)
+- **Christmas Eve debut** with family
+- Create first shared brackets from family play
+- Capture reactions, memorable moments
+
+### Soft Launch (Dec 25-26)
+- Share results on personal social:
+  - LinkedIn (professional angle: "Built with AI")
+  - Twitter/X (quick demo or GIF)
+  - Substack (if applicable)
+- Text/email direct links to friends and family
+
+### Broader Announcement (Dec 27-31)
+- Reddit: r/SideProject, r/webdev
+- Product Hunt (consider timing — holiday week is quiet)
+- Indie Hackers
+- Hacker News (Show HN)
+
+### Content Ideas
+- Short video walkthrough (30-60 sec screen recording)
+- "How I built a party game with AI in a week" blog post
+- BOB origin story (Uncle Bob + Claude)
+- Screenshots of family playing
+
+### Success Metrics (First Week)
+- 100+ brackets played (via Supabase analytics)
+- 50+ shared bracket links created
+- 10+ custom categories saved
+- Feedback submissions from non-family users
