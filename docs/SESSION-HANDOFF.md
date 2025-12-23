@@ -37,7 +37,21 @@ Got a gathering this week? Try it out.
 bob.claudewill.io
 ```
 
-Video and longer Substack post planned for post-Christmas.
+### Substack Draft Created
+
+**File:** `docs/SUBSTACK-DRAFT.md`
+
+Chapters ready:
+1. The Problem (family debates need structure)
+2. Meet BOB (Uncle Bob + famous Bobs origin)
+3. Building with Claude (pair programming, one-file architecture)
+
+Chapters pending (post-Christmas):
+4. Christmas Eve (video, chaos)
+5. What the Kids Taught Me (UX feedback)
+6. What's Next (roadmap)
+
+**Plan:** Record kids using the app on Christmas Eve for experiential video. They'll also provide UX feedback.
 
 ---
 
@@ -127,7 +141,8 @@ Video and longer Substack post planned for post-Christmas.
 | Video script | ✅ In LAUNCH-CONTENT.md |
 | Test shared link | ✅ Created |
 | Dec 23 teaser posted | ✅ All channels |
-| Record demo video | ⏳ Dec 24 |
+| Substack draft | ✅ Chapters 1-3 ready |
+| Record demo video | ⏳ Dec 24 (kids using app) |
 | Final device testing | ⏳ Dec 24 |
 
 ---
@@ -138,8 +153,9 @@ Video and longer Substack post planned for post-Christmas.
 2. **Check feedback** — Settings → View Feedback
 3. **Review shared brackets** — See what people are sharing
 4. **Bug fixes** — Address any issues from family testing
-5. **LinkedIn/social posts** — Post with real family results
-6. **Broader launch** — Reddit, Product Hunt (consider Jan timing)
+5. **Finish Substack post** — Add chapters 4-6 with video/kid feedback
+6. **LinkedIn/social posts** — Post with real family results
+7. **Broader launch** — Reddit, Product Hunt (consider Jan timing)
 
 ---
 
@@ -152,8 +168,9 @@ bob/
 │   └── manifest.json   # PWA manifest
 ├── docs/
 │   ├── FEATURE-ROADMAP.md
-│   ├── LAUNCH-PLAN.md        # NEW - launch strategy
-│   ├── LAUNCH-CONTENT.md     # NEW - social posts, video script
+│   ├── LAUNCH-PLAN.md        # Launch strategy
+│   ├── LAUNCH-CONTENT.md     # Social posts, video script
+│   ├── SUBSTACK-DRAFT.md     # "Built with AI" post (ch 1-3 ready)
 │   ├── SESSION-HANDOFF.md    # This file
 │   ├── BANNERS-AND-BANTER-SOCIAL.md
 │   ├── BOB-CHARACTER-BIBLE.md
