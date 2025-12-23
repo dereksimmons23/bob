@@ -10,17 +10,17 @@
 
 Every family gathering, the same debates happen.
 
-Best pizza topping. Best Christmas movie. Best 90s band. Best Thanksgiving side dish.
+Best pizza topping. Best Christmas movie. Best 90s band. Best side dish.
 
-They start friendly. They escalate. Someone brings up pineapple on pizza and suddenly Uncle Mike isn't talking to Cousin Sarah.
+They start friendly. They escalate. Someone brings up pineapple on pizza and suddenly aunt Sue isn't talking to cousin Sam.
 
-These debates have no structure. No closure. No official winner. They just... fade out when someone changes the subject or the food arrives.
+It's the kind of pettiness that needs some structure. Maybe a little democracy. Winners. Losers. The kind of stuff that becomes party lore.
 
-I wanted to fix that.
+So I built an app to capture it.
 
-What if there was a game that turned these debates into something structured? Something with rounds, with eliminations, with a definitive champion at the end?
+A game that turns these debates (let's face it, arguments) into something formal. With rounds, eliminations, a definitive champion at the end, and a vault to record it all.
 
-A bracket. Like March Madness, but for arguing about whether Die Hard is a Christmas movie.
+A bracket. Like March Madness, but for arguing about whether Die Hard is a Christmas movie. And if so, can it beat It's a Wonderful Life?
 
 ---
 
@@ -30,13 +30,13 @@ Every game show needs a host. And I knew exactly who mine would be based on.
 
 My Uncle Bob — Robert Jake — was one of eleven kids. Third to last. Nothing surprised him. He'd seen it all.
 
-He had this bone-dry wit. Never oversold a joke. Would say something devastating in complete deadpan, then just... move on. Irish Goodbye energy. He didn't linger.
+He had this bone-dry wit. Never oversold a joke. Would say something devastating in complete deadpan, then just ... move on. Irish Goodbye energy. He didn't linger.
 
-He was a 4:30 AM letter writer — the kind of guy who'd drop a profound observation in a note, then never mention it again. Hunter, drinker, Air Force trombone player. Chain smoker. Always twitchy, leg bouncing, looking for the exit.
+He was a 4:30 AM letter writer — the kind of guy who'd drop a profound observation in a note, then never mention it again. Hunter, drinker, Air Force trombone player. Chain smoker. Always twitchy, leg bouncing, looking for nearest exit.
 
-And he had *opinions* about food. Strong ones.
+Somewhere in the red hills of northwestern Oklahoma, there's a Coors can buried deep near a fishing hole. Uncle Bob put it there one afternoon when I was a kid, telling me "you can come back here years from now, and it will still be here." He was a little tipsy and poetic. A great storyteller who didn't need a banquet hall or a big audience, just a few banquet beers, family and friends. No microphone. No script.
 
-Uncle Bob passed away years ago, but his voice stuck with me. When I started building this game, I knew the host needed that energy. Dry. Measured. Impatient but warm underneath.
+Uncle Bob passed away years ago, but his stories stuck with me. When I started building this game, I knew the host needed that energy. Dry. Measured. Impatient but warm underneath.
 
 So I named him BOB.
 
@@ -45,7 +45,7 @@ But BOB isn't just Uncle Bob. He's a synthesis:
 - **Bob Barker's** warmth and genuine care for contestants
 - **Bob Newhart's** mastery of the slow burn and pause
 - **Alex Trebek's** measured authority with wit
-- **Bob Eubanks'** deadpan reactions to chaos on The Newlywed Game
+- **Bob Eubanks'** deadpan reactions to chaos
 - **Bob Ross's** calming presence (happy little accidents when your favorite loses)
 
 The result is a host who says things like:
@@ -56,7 +56,7 @@ The result is a host who says things like:
 
 > "By the power vested in me by absolutely no one — we have a champion."
 
-He's not mean. He's just... seen enough family drama to be unimpressed by yours.
+He's not mean. He's just ... seen enough family drama to be unimpressed but amused by yours.
 
 ---
 
@@ -74,14 +74,6 @@ Here's what surprised me about building with AI:
 
 **It's not about the code.** Claude can write bracket math and voting logic all day. The interesting part was the creative collaboration. Developing BOB's personality. Writing dialogue that felt right. Figuring out what makes a tie-breaker *fun* instead of just annoying.
 
-We'd go back and forth:
-
-*Me:* "BOB needs a line for when there's a tie."
-*Claude:* "How about 'Deadlocked. The voters have failed us.'"
-*Me:* "Good but needs the Uncle Bob energy. He'd make them call someone."
-*Claude:* "What about 'Call someone. Anyone. A neighbor. A delivery person. Your weird uncle. They decide.'"
-*Me:* "That's it."
-
 The character bible for BOB is now 300+ lines. Every dialogue trigger, every edge case, every personality note. That document is as important as the code.
 
 **Technical decisions that worked:**
@@ -97,7 +89,9 @@ The character bible for BOB is now 300+ lines. Every dialogue trigger, every edg
 - Component organization in one file is "creative"
 - Hot reload means manual refresh (old school)
 
-But for a side project meant to debut at Christmas dinner? It shipped. That's what matters.
+I won't pretend I understand every line. That's the point. I knew what I wanted. Claude knew how to build it.
+
+But for a side project meant to debut at Christmas dinner? It shipped.
 
 ---
 
@@ -137,4 +131,4 @@ BOB will be unimpressed by your choices. That's the point.
 
 ---
 
-*Built with Claude. Inspired by Uncle Bob. Tested on family.*
+*Built with Claude. Inspired by Uncle Bob. Tested on family and friends.*
