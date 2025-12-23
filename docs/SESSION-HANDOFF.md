@@ -1,21 +1,47 @@
 # Session Handoff — Battle o' Brackets
 
-**Last Updated:** December 21, 2025
-**Last Session:** Dec 21, 2025
+**Last Updated:** December 22, 2025
+**Last Session:** Dec 22, 2025
 **Next Session:** Post-Christmas (Dec 26+)
 
 ---
 
 ## Quick Context
 
-Battle o' Brackets (BOB) is a party game PWA for bracket-style voting tournaments. MVP complete. Christmas Eve debut ready. Shareable links working.
+Battle o' Brackets (BOB) is a party game PWA for bracket-style voting tournaments. MVP complete. Christmas Eve debut ready. Shareable links working. **Teaser posts live.**
 
 **Live at:** https://bob.claudewill.io
 **Test shared link:** https://bob.claudewill.io/b/f03e4201-5fdb-4dd0-a921-e606d8028846
 
 ---
 
-## What Was Done Today (Dec 21)
+## What Was Done Today (Dec 22)
+
+### Soft Launch Teaser Posted
+
+Posted Dec 23 teaser content across all channels:
+- **LinkedIn** ✅
+- **X (Twitter)** ✅
+- **Facebook** ✅
+- **Instagram** ✅
+- **Substack note** ✅
+
+**Post used:**
+```
+Tomorrow: a side project debuts at family Christmas Eve.
+
+It settles debates. It crowns champions. It has an AI host who's seen too much.
+
+Got a gathering this week? Try it out.
+
+bob.claudewill.io
+```
+
+Video and longer Substack post planned for post-Christmas.
+
+---
+
+## What Was Done (Dec 21)
 
 ### Features Built
 
@@ -100,8 +126,9 @@ Battle o' Brackets (BOB) is a party game PWA for bracket-style voting tournament
 | Social posts drafted | ✅ In LAUNCH-CONTENT.md |
 | Video script | ✅ In LAUNCH-CONTENT.md |
 | Test shared link | ✅ Created |
-| Record demo video | ⏳ User to do |
-| Final device testing | ⏳ User to do |
+| Dec 23 teaser posted | ✅ All channels |
+| Record demo video | ⏳ Dec 24 |
+| Final device testing | ⏳ Dec 24 |
 
 ---
 

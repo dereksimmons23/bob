@@ -19,11 +19,12 @@
 - [ ] Test shared link flow end-to-end
 
 ### Content Preparation
-- [ ] Record 30-60 second demo video
-- [ ] Prepare LinkedIn post draft
-- [ ] Prepare Twitter/X post draft
+- [ ] Record 30-60 second demo video (Dec 24)
+- [x] Prepare LinkedIn post draft
+- [x] Prepare Twitter/X post draft
 - [ ] Screenshot gallery ready
-- [ ] "Built with AI" story outline
+- [ ] "Built with AI" story outline (Substack post-Christmas)
+- [x] Dec 23 teaser posted (LinkedIn, X, Facebook, Instagram, Substack)
 
 ---
 

@@ -4,6 +4,22 @@ Ready-to-use content for Dec 24-26 launch.
 
 ---
 
+## Dec 23 Teaser (POSTED)
+
+Posted across LinkedIn, X, Facebook, Instagram, Substack:
+
+```
+Tomorrow: a side project debuts at family Christmas Eve.
+
+It settles debates. It crowns champions. It has an AI host who's seen too much.
+
+Got a gathering this week? Try it out.
+
+bob.claudewill.io
+```
+
+---
+
 ## Social Posts
 
 ### LinkedIn (Dec 25)
