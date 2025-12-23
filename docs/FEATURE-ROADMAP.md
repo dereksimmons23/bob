@@ -239,6 +239,40 @@ Already integrated in category library.
 - No accounts required
 - View count tracking
 
+### 🔲 BOB Modes — Classic vs Spicy
+**Status:** Concept only (Dec 23, 2025)
+
+Two personality modes for different audiences:
+
+| Mode | Vibe | Implementation | Audience |
+|------|------|----------------|----------|
+| **Classic BOB** | Dry, deadpan, safe | Static dialogue (current) | All ages — default |
+| **Spicy BOB** | Cards Against Humanity energy | LLM-powered | Adults only — opt-in toggle |
+
+**Classic BOB (Current):**
+- Pre-written dialogue triggered by game events
+- Works offline, zero API costs
+- Fast, consistent, family-safe
+- Limitation: can't react to specific matchups or custom categories intelligently
+
+**Spicy BOB (Future):**
+- LLM-powered with custom system prompt
+- Could react to actual bracket content ("Pineapple vs Pepperoni? Oh, we're going THERE.")
+- Genuine opinions on specific matchups
+- Could remember past brackets ("Didn't Ranch already lose to Ketchup?")
+- Adult humor, edgier takes
+
+**Implementation Notes:**
+- Settings toggle: "BOB Mode: Classic / Spicy (18+)"
+- Spicy mode requires internet (API calls)
+- Warning on toggle: "Spicy BOB says things your grandma wouldn't approve of"
+- Could be gated as premium feature
+
+**Why Hybrid:**
+- Magic of BOB is his *voice*, not intelligence — static lines often land harder
+- LLM shines for custom categories where pre-written content impossible
+- Different audiences need different modes (Timmy & Grandma Jean vs. adult game night)
+
 ### 🔲 Run It Back — Replay Previous Brackets
 **Status:** Concept only
 

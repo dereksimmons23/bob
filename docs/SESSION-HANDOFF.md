@@ -1,7 +1,7 @@
 # Session Handoff — Battle o' Brackets
 
-**Last Updated:** December 22, 2025
-**Last Session:** Dec 22, 2025
+**Last Updated:** December 23, 2025
+**Last Session:** Dec 23, 2025
 **Next Session:** Post-Christmas (Dec 26+)
 
 ---
@@ -15,7 +15,92 @@ Battle o' Brackets (BOB) is a party game PWA for bracket-style voting tournament
 
 ---
 
-## What Was Done Today (Dec 22)
+## What Was Done Today (Dec 23)
+
+### Competitive Analysis
+
+Identified competitor: **First to Worst** (physical card game, ~$25-30, 300 cards)
+
+| Aspect | First to Worst | Bob |
+|--------|----------------|-----|
+| Mechanic | Guess ONE person's ranking | GROUP votes until champion |
+| Format | Physical cards ($25-30) | Free PWA |
+| Participation | Ranker vs. guessers | Everyone votes every round |
+| Replayability | 300 cards (finite) | Unlimited custom categories |
+| Output | Score tracking | Shareable champion cards, "The Vault" |
+| Personality | None (just cards) | BOB - dry wit AI host |
+
+**Key insight:** These are different experiences. First to Worst = guessing game. Bob = tournament/debate game.
+
+**Positioning refined:**
+- Not replacing game night — Bob is the **"spontaneous bracket"** tool
+- "Settle it once and for all... or start arguments that last generations"
+- Bob doesn't end debates. He **creates family lore**.
+
+### BOB Modes Concept (Future Feature)
+
+Explored whether BOB should be LLM-powered. Decision: **Hybrid approach for future.**
+
+| Mode | Vibe | Implementation |
+|------|------|----------------|
+| **Classic BOB** | Dry, deadpan, safe | Static (current) — works offline, no API costs |
+| **Spicy BOB** | Cards Against Humanity energy | LLM-powered, adults-only toggle |
+
+**Rationale:**
+- Current static BOB works great for family audiences (Timmy and Grandma Jean)
+- LLM could shine for custom categories where you can't pre-write content
+- "Spicy BOB" could be opt-in adult mode with different system prompt
+- No changes needed now — concept for v3+
+
+### New Year's Eve Opportunity
+
+Second push timing: Dec 30-31. Natural "best of the year" bracket energy:
+- Best Movie of 2024
+- Best Song of 2024
+- Best Family Moment of 2024
+- Best Meal We Had This Year
+
+### Supabase Dashboard Queries
+
+Quick stats queries for monitoring (run anytime):
+
+```sql
+-- Quick Stats
+SELECT 'Games' as m, COUNT(*) as total,
+  COUNT(CASE WHEN created_at > NOW() - INTERVAL '24h' THEN 1 END) as today
+FROM games
+UNION ALL SELECT 'Shares', COUNT(*), COUNT(CASE WHEN created_at > NOW() - INTERVAL '24h' THEN 1 END) FROM shared_brackets
+UNION ALL SELECT 'Feedback', COUNT(*), COUNT(CASE WHEN created_at > NOW() - INTERVAL '24h' THEN 1 END) FROM feedback;
+
+-- Top 5 Champions
+SELECT champion, COUNT(*) as wins FROM games GROUP BY champion ORDER BY wins DESC LIMIT 5;
+
+-- Most Played Categories
+SELECT category, COUNT(*) FROM games GROUP BY category ORDER BY 2 DESC LIMIT 5;
+
+-- Player Stats
+SELECT
+  ROUND(AVG(player_count), 1) as avg_players,
+  ROUND(AVG(entrant_count), 1) as avg_entrants,
+  MAX(player_count) as max_players
+FROM games;
+```
+
+### Current Analytics Snapshot (Dec 23, 2025)
+
+| Metric | Total | Last 24h |
+|--------|-------|----------|
+| Games Played | 2 | 2 |
+| Shared Brackets | 1 | 0 |
+| Feedback Messages | 3 | 2 |
+| Custom Categories | 0 | 0 |
+| Bracket Views | 0 | - |
+
+**Note:** Mostly testing data. Real metrics start Christmas Eve.
+
+---
+
+## What Was Done (Dec 22)
 
 ### Soft Launch Teaser Posted
 
