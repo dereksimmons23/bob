@@ -293,6 +293,7 @@ Replay brackets from The Vault with original or new voters.
 - Public feed of recent brackets
 - Basic reactions (🏆 Crown It, 🗑️ Trash Take)
 - Profile pages
+- Wordle-style text sharing (emoji grid for Twitter/iMessage)
 
 ### 🔲 Banners & Banter Phase 3 — Community
 **Status:** Not started
@@ -303,6 +304,36 @@ Replay brackets from The Vault with original or new voters.
 - Notifications
 
 See: `BANNERS-AND-BANTER-SOCIAL.md` for full concept
+
+### 🔲 Bracket Visualization & Visual Identity
+**Status:** Concept only (Dec 24, 2025)
+
+Make the bracket structure more visible throughout the app. The *journey* is what makes brackets fun — seeing how the champion got there.
+
+**Post-game bracket reveal:**
+- After champion crowned, show the full tournament tree with all results filled in
+- "Here's how it went down" — animated fill-in of the bracket path
+- Tap to expand, see matchup details
+
+**In-game bracket progress:**
+- Mini bracket diagram in corner during gameplay
+- Winners slide toward center, losers fade out
+- Visual representation of narrowing field
+
+**Share the journey:**
+- Share card shows bracket path, not just champion
+- Full tournament results in a visual format
+- More interesting than "X beat Y"
+
+**Bracket iconography:**
+- Replace 🎯 dartboard in About modal with stylized bracket logo
+- Consider custom bracket-shaped icon/emoji for app identity
+- Consistent visual language: brackets = structure, ⚔️ = battle, 🏆 = victory
+
+**Current emoji usage:**
+- 🎯 About header, Quick Start — dartboard doesn't fit app theme
+- ⚔️ Locked VS badge, Start Battle — works well for combat moments
+- 🏆 Trophy — correct everywhere, keep as-is
 
 ### 🔲 Multi-Language Support
 **Status:** Not built

@@ -298,6 +298,12 @@ NOT shared:
 - Public feed of recent brackets
 - Basic reactions (🏆 Crown It, 🗑️ Trash Take)
 - Profile pages
+- **Wordle-style text sharing** — Copy-pasteable emoji grid showing bracket path to victory
+  - Example: `🏆 Best Pizza Topping 🍕`
+  - `🟩🟩🟩 Pepperoni → 🥈 Sausage`
+  - `Round 1: 🟩 | Semis: 🟩 | Final: 🟩`
+  - Optimized for Twitter/iMessage/group chats
+  - No image download required — pure text
 
 **Phase 3: Community** 🔲 Not Started
 - Following system

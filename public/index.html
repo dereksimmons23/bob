@@ -1748,7 +1748,9 @@
         const link = document.createElement('a');
         link.download = `bracket-champion-${category.replace(/\s+/g, '-').toLowerCase()}.png`;
         link.href = imageUrl;
+        document.body.appendChild(link);
         link.click();
+        document.body.removeChild(link);
       };
 
       const handleCopyText = () => {
@@ -3075,8 +3077,8 @@
           }}>
             {/* Header */}
             <div style={{ textAlign: 'center', marginBottom: '24px' }}>
-              <div style={{ fontFamily: 'var(--font-display)', fontSize: '48px', marginBottom: '8px' }}>
-                🎯
+              <div style={{ fontFamily: 'var(--font-display)', fontSize: '48px', marginBottom: '8px', letterSpacing: '4px', color: 'var(--accent-gold)', fontWeight: 'bold' }}>
+                ]-[
               </div>
               <div style={{
                 fontFamily: 'var(--font-display)',
