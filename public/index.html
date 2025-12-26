@@ -3888,6 +3888,17 @@
       const [canUndo, setCanUndo] = useState(false);
       const [undoState, setUndoState] = useState(null);
 
+      // Year in Review mode
+      const [isYearInReview, setIsYearInReview] = useState(false);
+      const [yirRound, setYirRound] = useState(0); // 1-4, then 5 for MVP
+      const [yirWinners, setYirWinners] = useState([]);
+      const YIR_CATEGORIES = [
+        { name: "Best Month of 2025", entrants: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"] },
+        { name: "Best NYE Resolution", entrants: ["Exercise More", "Eat Healthier", "Save Money", "Learn Something New", "Read More Books", "Travel More", "Quit Bad Habits", "Spend Time with Family", "Get Organized", "Be More Present", "Start a Side Hustle", "Meditate Daily", "Drink More Water", "Sleep Better", "Less Screen Time", "Say Yes More"] },
+        { name: "Best NYE Tradition", entrants: ["Midnight Kiss", "Champagne Toast", "Ball Drop Watch", "Countdown", "Fireworks", "Resolutions", "First Footer", "Noisemakers", "Sparklers", "Eating 12 Grapes", "Wearing White", "Burning Effigies", "Polar Plunge", "Black-Eyed Peas", "Hoppin' John", "Staying Up Till Midnight"] },
+        { name: "Best NYE Drink", entrants: ["Champagne", "Prosecco", "Mimosa", "French 75", "Espresso Martini", "Cosmopolitan", "Manhattan", "Old Fashioned", "Aperol Spritz", "Moscow Mule", "Margarita", "Sparkling Cider", "Hot Toddy", "Mulled Wine", "Mocktail Spritz", "Shirley Temple"] },
+      ];
+
       const [history, setHistory] = useState(() => {
         const saved = localStorage.getItem('bob-vault-v2');
         if (saved) {
@@ -3930,6 +3941,59 @@
       const handleToggleSound = () => {
         const newState = SoundEffects.toggle();
         setSoundEnabled(newState);
+      };
+
+      // Year in Review functions
+      const startYearInReview = () => {
+        setIsYearInReview(true);
+        setYirRound(1);
+        setYirWinners([]);
+        // Start first category
+        const firstCat = YIR_CATEGORIES[0];
+        setCategory(firstCat.name);
+        setCategoryType('nye');
+        setEntrants([...firstCat.entrants]);
+        const { rounds, structure } = generateBracket(firstCat.entrants);
+        setBracket({ rounds, structure, category: firstCat.name });
+        setCurrentRoundIndex(0);
+        setCurrentMatchupIndex(0);
+        setWinners([]);
+        setBobMessage("Year in Review. Four brackets. Four champions. One MVP. Let's find out what 2025 was really about.");
+        setBobMood('normal');
+        setScreen('playing');
+      };
+
+      const advanceYearInReview = (winner) => {
+        const newWinners = [...yirWinners, winner];
+        setYirWinners(newWinners);
+
+        if (yirRound < 4) {
+          // Start next category
+          const nextCat = YIR_CATEGORIES[yirRound]; // yirRound is 1-indexed, array is 0-indexed
+          setYirRound(yirRound + 1);
+          setCategory(nextCat.name);
+          setEntrants([...nextCat.entrants]);
+          const { rounds, structure } = generateBracket(nextCat.entrants);
+          setBracket({ rounds, structure, category: nextCat.name });
+          setCurrentRoundIndex(0);
+          setCurrentMatchupIndex(0);
+          setWinners([]);
+          setBobMessage(`Champion ${yirRound} of 4: ${winner}. ${4 - yirRound} more to crown. Onward.`);
+          setScreen('playing');
+        } else {
+          // All 4 done - create MVP bracket
+          setYirRound(5);
+          const mvpCategory = "MVP of 2025";
+          setCategory(mvpCategory);
+          setEntrants([...newWinners]);
+          const { rounds, structure } = generateBracket(newWinners);
+          setBracket({ rounds, structure, category: mvpCategory });
+          setCurrentRoundIndex(0);
+          setCurrentMatchupIndex(0);
+          setWinners([]);
+          setBobMessage(`Four champions crowned: ${newWinners.join(', ')}. Now they face each other. The MVP of 2025 awaits.`);
+          setScreen('playing');
+        }
       };
 
       const handleSelectFromLibrary = (categoryData, theme) => {
@@ -4060,19 +4124,47 @@
             if (roundWinners.length === 1) {
               const lastMatchup = currentRound.matchups[currentMatchupIndex];
               const loser = lastMatchup.entrantA === winner ? lastMatchup.entrantB : lastMatchup.entrantA;
+
+              // Year in Review: advance to next bracket instead of champion screen
+              if (isYearInReview && yirRound < 5) {
+                // Save this bracket's result to vault
+                const comment = `Year in Review Round ${yirRound} champion`;
+                const newEntry = {
+                  category,
+                  champion: winner,
+                  runnerUp: loser,
+                  date: new Date().toLocaleDateString(),
+                  categoryType: 'nye',
+                  bobComment: comment,
+                };
+                setHistory([newEntry, ...history]);
+                // Advance to next YIR round
+                setTimeout(() => advanceYearInReview(winner), 1500);
+                return;
+              }
+
               setChampion(winner);
               setRunnerUp(loser);
 
               // Generate and capture BOB's championship comment
-              const comment = BOB.random(BOB.champion);
+              const comment = isYearInReview
+                ? "The MVP of 2025. All four champions competed. One prevailed. This is the one that defined your year."
+                : BOB.random(categoryType === 'nye' ? BOB.championNYE : BOB.champion);
               setChampionComment(comment);
+
+              // Reset Year in Review state if we're finishing MVP round
+              if (isYearInReview) {
+                setIsYearInReview(false);
+                setYirRound(0);
+                setYirWinners([]);
+              }
 
               const newEntry = {
                 category,
                 champion: winner,
                 runnerUp: loser,
                 date: new Date().toLocaleDateString(),
-                categoryType,
+                categoryType: isYearInReview ? 'nye' : categoryType,
                 bobComment: comment,
               };
               setHistory([newEntry, ...history]);
@@ -4173,6 +4265,10 @@
         setChampionComment('');
         setBobMessage('');
         setBobMood('normal');
+        // Reset Year in Review state
+        setIsYearInReview(false);
+        setYirRound(0);
+        setYirWinners([]);
         setScreen('home');
       };
 
@@ -4251,7 +4347,40 @@
                 🏆 The Vault{history.length > 0 ? ` (${history.length})` : ''}
               </Button>
             </div>
-            
+
+            {/* Year in Review - special NYE mode */}
+            <div style={{ marginTop: '16px' }}>
+              <button
+                onClick={startYearInReview}
+                style={{
+                  background: 'linear-gradient(135deg, #f59e0b 0%, #fbbf24 50%, #f59e0b 100%)',
+                  border: 'none',
+                  borderRadius: '12px',
+                  padding: '14px 28px',
+                  cursor: 'pointer',
+                  fontSize: '16px',
+                  fontFamily: 'var(--font-display)',
+                  color: '#1a1a2e',
+                  letterSpacing: '2px',
+                  boxShadow: '0 4px 15px rgba(245, 158, 11, 0.4)',
+                  transition: 'transform 0.2s, box-shadow 0.2s',
+                }}
+                onMouseOver={e => {
+                  e.currentTarget.style.transform = 'scale(1.05)';
+                  e.currentTarget.style.boxShadow = '0 6px 20px rgba(245, 158, 11, 0.6)';
+                }}
+                onMouseOut={e => {
+                  e.currentTarget.style.transform = 'scale(1)';
+                  e.currentTarget.style.boxShadow = '0 4px 15px rgba(245, 158, 11, 0.4)';
+                }}
+              >
+                🥂 YEAR IN REVIEW 2025
+              </button>
+              <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '8px', textAlign: 'center' }}>
+                4 brackets → 1 MVP
+              </div>
+            </div>
+
             <button
               onClick={() => setShowSettings(!showSettings)}
               style={{
@@ -4577,6 +4706,37 @@
             }} />
             
             <div style={{ textAlign: 'center', marginBottom: '16px' }}>
+              {/* Year in Review progress indicator */}
+              {isYearInReview && (
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  marginBottom: '12px',
+                }}>
+                  {[1, 2, 3, 4, 5].map(round => (
+                    <div key={round} style={{
+                      width: round === 5 ? '40px' : '32px',
+                      height: '8px',
+                      borderRadius: '4px',
+                      background: round < yirRound ? '#ffd700'
+                        : round === yirRound ? '#f59e0b'
+                        : 'var(--bg-card-hover)',
+                      transition: 'background 0.3s',
+                    }} title={round === 5 ? 'MVP Final' : `Round ${round}`} />
+                  ))}
+                </div>
+              )}
+              {isYearInReview && (
+                <div style={{
+                  fontSize: '12px',
+                  color: '#f59e0b',
+                  letterSpacing: '2px',
+                  marginBottom: '8px',
+                }}>
+                  {yirRound === 5 ? '🏆 MVP FINAL' : `YEAR IN REVIEW • ${yirRound} OF 4`}
+                </div>
+              )}
               <div style={{
                 fontFamily: 'var(--font-display)',
                 fontSize: '20px',
