@@ -1,0 +1,32 @@
+{
+  "name": "bob",
+  "version": "2.6.0",
+  "description": "Battle o' Brackets - The party game where democracy gets dumb. Hosted by BOB.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dereksimmons23/bob.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dereksimmons23/bob/issues"
+  },
+  "homepage": "https://github.com/dereksimmons23/bob#readme",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.89.0",
+    "canvas-confetti": "^1.9.4",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^5.1.2",
+    "vite": "^7.3.0"
+  }
+}

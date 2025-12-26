@@ -6,6 +6,8 @@
 |---------|------|---------|
 | v1 | Dec 2-3, 2025 | MVP: Bracket engine, voting, Vault, BOB basics |
 | v2 | Dec 4, 2025 | Category library, Quick Start, BOB personality, Share, Sound, Custom saves |
+| v2.5 | Dec 20, 2025 | Pre-Christmas polish: animations, undo, shareable links, feedback system |
+| v2.6 | Dec 25-26, 2025 | NYE mode, Year in Review, vote tracking, Vite architecture overhaul |
 
 ---
 
@@ -735,6 +737,37 @@ This might be the missing ingredient.
 - Shows category, champion, runner-up, BOB comment, date for each
 - View count tracking
 - CTA to "Build Your Own Vault"
+
+### ✅ Vite Architecture Overhaul (Shipped Dec 26, 2025)
+**Status:** Complete
+
+Major restructure from single-file to modular Vite + React architecture:
+
+**Build System:**
+- Vite 7.3.0 with React plugin
+- Hot module replacement for development
+- Production builds to `/dist` directory
+- 106 modules, 494KB bundle (145KB gzipped)
+
+**File Structure:**
+- `src/components/` — UI atoms (Button, Input, Logo, EntrantChip, etc.)
+- `src/components/` — Features (BobSays, MatchupCard, ShareCard, etc.)
+- `src/screens/` — Page components (Home, Setup, Playing, Champion, Vault, Library)
+- `src/modals/` — Modal dialogs (Settings, Feedback, About, Legal, DevTools)
+- `src/hooks/` — Custom hooks (useBracket, useVault, useSound, useBob)
+- `src/context/` — React Context (AppContext, GameContext)
+- `src/lib/` — Utilities (bracket, sound, storage, supabase)
+- `src/data/` — Constants (categories, bob, seedVault)
+
+**State Management:**
+- React Context for global state (AppProvider, GameProvider)
+- Custom hooks for encapsulated logic
+- Local component state for UI-only concerns
+
+**Deployment:**
+- Netlify CLI deployment
+- Live at battle-of-brackets.netlify.app
+- Original single-file preserved in `/public-legacy/`
 
 ### Comparison: What Made Other Games Hit
 

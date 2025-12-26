@@ -1,0 +1,17 @@
+:root {
+  --bg-deep: #0a0e1a;
+  --bg-card: #141a2e;
+  --bg-card-hover: #1c2440;
+  --accent-gold: #ffd700;
+  --accent-red: #ff3b5c;
+  --accent-green: #00e676;
+  --accent-blue: #00b4ff;
+  --accent-purple: #b388ff;
+  --accent-orange: #ff9100;
+  --accent-pink: #ff4081;
+  --text-primary: #ffffff;
+  --text-secondary: #8892b0;
+  --text-muted: #4a5578;
+  --font-display: 'Bangers', cursive;
+  --font-body: 'Outfit', sans-serif;
+}

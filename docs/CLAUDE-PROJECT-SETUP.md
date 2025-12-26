@@ -1,6 +1,7 @@
 ---
 Created: December 5, 2025
-Version: v1
+Updated: December 26, 2025
+Version: v2
 Project: Battle o' Brackets
 Context: Claude Project setup guide
 Status: Instructions
@@ -82,37 +83,46 @@ You're ready! Each day:
 
 ---
 
-## Project Structure for Reference
+## Project Structure for Reference (v2.6+)
 
 ```
-/Users/dereksimmons/Desktop/BoB/
-├── index.html (production v2.5 — will be updated)
-├── manifest.json (PWA manifest)
+/Users/dereksimmons/Desktop/bob/
+├── src/
+│   ├── main.jsx              # React DOM entry
+│   ├── App.jsx               # Main router + state
+│   ├── components/           # UI components
+│   │   ├── ui/               # Atoms (Button, Input, Logo, etc.)
+│   │   └── *.jsx             # Features (BobSays, MatchupCard, etc.)
+│   ├── screens/              # Page components
+│   ├── modals/               # Modal dialogs
+│   ├── hooks/                # Custom hooks
+│   ├── context/              # React Context
+│   ├── lib/                  # Utilities
+│   ├── data/                 # Constants
+│   └── styles/               # CSS
 │
-├── PROJECT-README.md (overview)
-├── PROJECT-CUSTOM-INSTRUCTIONS.md (Claude project instructions)
-├── PROJECT-INSTRUCTIONS.md (note: older, keep for reference)
+├── dist/                     # Production build
+├── public-legacy/            # Original single-file version
 │
-├── BOB-CHARACTER-BIBLE.md ← KB
-├── CATEGORY-LIBRARY.md ← KB
-├── FEATURE-ROADMAP.md ← KB
-├── MULTIMEDIA-STRATEGY.md ← KB
-├── VOICE-STRATEGY.md ← KB
-├── V2.5-SPRINT-PLAN.md ← KB
-├── GAME-SHOW-HOST-RESEARCH.md ← KB
+├── docs/                     # Documentation
+│   ├── BOB-CHARACTER-BIBLE.md
+│   ├── CATEGORY-LIBRARY.md
+│   ├── FEATURE-ROADMAP.md
+│   ├── PROJECT-README.md
+│   └── ...
 │
-├── OLYMPICS-DATA.md (TBD — created during sprint)
-├── EXPANDED-DIALOGUE.md (TBD — created during sprint)
-├── USER-CATEGORY-TEMPLATES.md (TBD — created during sprint)
-├── SOUND-DESIGN-STRATEGY.md (TBD — created during sprint)
-├── BRACKET-VISUALIZATION-SPEC.md (TBD — created during sprint)
-│
-└── archive/
-    ├── index-v1-archive.html
-    ├── index-v2.html
-    ├── battle-of-brackets-v2.html
-    ├── manifest-v1.json
-    └── (old versions)
+├── index.html                # Vite entry point
+├── vite.config.js            # Vite config
+├── netlify.toml              # Netlify config
+└── package.json
+```
+
+**Commands:**
+```bash
+npm install              # Install dependencies
+npm run dev              # Dev server (localhost:5173)
+npm run build            # Production build
+npx netlify-cli deploy --prod  # Deploy to Netlify
 ```
 
 ---

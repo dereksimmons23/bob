@@ -4,7 +4,7 @@
 
 **Battle o' Brackets** is a tournament-style voting game for family gatherings, parties, and anywhere opinions clash. Vote head-to-head until a champion is crowned. Ties? Phone a friend. Chaos? That's the feature.
 
-🏆 **Target Debut:** Christmas Eve 2025
+🏆 **Live:** [battle-of-brackets.netlify.app](https://battle-of-brackets.netlify.app)
 
 ---
 
@@ -61,19 +61,28 @@ BOB provides context-aware commentary for every moment—category openers, match
 
 ## Quick Start
 
-### Option 1: Open the HTML file
-Just open `index.html` in any modern browser. That's it.
-
-### Option 2: Serve locally
+### Development
 ```bash
-# Python
-python -m http.server 8000
+# Install dependencies
+npm install
 
-# Node
-npx serve .
+# Start dev server
+npm run dev
 ```
 
-Then visit `http://localhost:8000`
+Then visit `http://localhost:5173`
+
+### Production Build
+```bash
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
+
+# Deploy to Netlify
+npx netlify-cli deploy --prod
+```
 
 ---
 
@@ -91,18 +100,31 @@ Then visit `http://localhost:8000`
 ## Technical Details
 
 ### Stack
-- **Single-file React PWA** — No build process required
-- **CDN dependencies:** React 18, Babel standalone, canvas-confetti, Supabase JS
-- **localStorage** for game persistence
-- **Supabase** for feedback collection (project: `bob`)
-- **Web Audio API** for sound effects
-- **Canvas API** for share image generation
+- **Vite + React 18** — Modern build tooling with hot module replacement
+- **Modular architecture** — 40+ files across components, screens, hooks, and context
+- **Supabase** — Backend for feedback, analytics, and shared brackets
+- **Web Audio API** — Sound effects
+- **Canvas API** — Share image generation
+- **localStorage** — Game persistence
+
+### Key Dependencies
+```json
+{
+  "react": "^18.3.1",
+  "react-dom": "^18.3.1",
+  "@supabase/supabase-js": "^2.49.4",
+  "vite": "^7.3.0"
+}
+```
 
 ### localStorage Keys
 | Key | Purpose |
 |-----|---------|
 | `bob-vault-v2` | Champion history |
 | `bob-custom-categories` | User-created categories |
+| `bob-player-count` | Default voter count |
+| `bob-sound-enabled` | Sound preference |
+| `bob-has-visited` | First-visit tracking |
 
 ### Browser Support
 - Chrome/Edge (desktop & mobile)
@@ -115,30 +137,49 @@ Then visit `http://localhost:8000`
 
 ```
 bob/
-├── public/                 # Deployed to Netlify
-│   ├── index.html          # The entire app (single-file PWA)
-│   └── manifest.json       # PWA manifest for home screen install
-├── docs/                   # Documentation (not deployed)
-│   ├── BOB-CHARACTER-BIBLE.md
-│   ├── CATEGORY-LIBRARY.md
-│   ├── FEATURE-ROADMAP.md
-│   ├── V2.5-SPRINT-PLAN.md
-│   ├── OLYMPICS-DATA.md
-│   ├── VOICE-STRATEGY.md
-│   ├── BRACKET-VISUALIZATION-SPEC.md
-│   ├── EXPANDED-DIALOGUE.md
-│   ├── BANNERS-AND-BANTER-SOCIAL.md
-│   ├── GAME-SHOW-HOST-RESEARCH.md
-│   ├── MULTIMEDIA-STRATEGY.md
-│   ├── PROJECT-README.md
-│   ├── PROJECT-CUSTOM-INSTRUCTIONS.md
-│   ├── CLAUDE-PROJECT-SETUP.md
-│   └── bob-ip-analysis.md
-├── README.md               # You are here
-└── LICENSE                 # MIT License
+├── src/
+│   ├── main.jsx              # React DOM entry point
+│   ├── App.jsx               # Main app router + state
+│   │
+│   ├── components/
+│   │   ├── ui/               # Atomic components
+│   │   │   ├── Button.jsx
+│   │   │   ├── Input.jsx
+│   │   │   ├── Logo.jsx
+│   │   │   ├── EntrantChip.jsx
+│   │   │   ├── CategoryCard.jsx
+│   │   │   └── ThemePill.jsx
+│   │   ├── BobSays.jsx       # BOB commentary bubble
+│   │   ├── MatchupCard.jsx   # Voting interface
+│   │   ├── ShareCard.jsx     # Share modal
+│   │   └── ...
+│   │
+│   ├── screens/
+│   │   ├── HomeScreen.jsx
+│   │   ├── SetupScreen.jsx
+│   │   ├── PlayingScreen.jsx
+│   │   ├── ChampionScreen.jsx
+│   │   ├── VaultScreen.jsx
+│   │   ├── CategoryLibrary.jsx
+│   │   └── Shared*View.jsx   # Public share views
+│   │
+│   ├── modals/               # Modal dialogs
+│   ├── hooks/                # Custom React hooks
+│   ├── context/              # React Context providers
+│   ├── lib/                  # Utilities (bracket, sound, storage)
+│   ├── data/                 # Constants (categories, BOB, seedVault)
+│   └── styles/               # CSS files
+│
+├── dist/                     # Production build output
+├── public-legacy/            # Original single-file version
+├── docs/                     # Documentation
+├── index.html                # Vite entry point
+├── vite.config.js            # Vite configuration
+├── netlify.toml              # Netlify deployment config
+└── package.json
 ```
 
-**Netlify:** Set publish directory to `public/`
+**Netlify:** Builds to `dist/` directory automatically
 
 ---
 
@@ -153,7 +194,7 @@ bob/
 - ✅ The Vault (history)
 - ✅ Custom category builder
 
-### v2.5 (Pre-Christmas Polish — Complete Dec 20, 2025)
+### v2.5 (Pre-Christmas Polish — Dec 20, 2025)
 - ✅ Expanded dialogue (bobAdvice, deadpan, impatience wired up)
 - ✅ Battle animations (VS clash, winner/loser effects, vote pop)
 - ✅ New sounds (advance, roundComplete, dramatic)
@@ -164,11 +205,19 @@ bob/
 - ✅ BOB comments in The Vault
 - ✅ Pre-populated Vault with family winners
 - ✅ In-app feedback system (Supabase backend + admin view)
-- ✅ About modal with first-visit experience
-- ✅ Vault carousel redesign (one card per screen)
 - ✅ Shareable bracket links (`/b/[id]` public view)
 - ✅ Dev mode for testing (`?dev=true`)
 - ✅ Supabase analytics (games + custom categories)
+
+### v2.6 (Architecture Overhaul — Dec 26, 2025)
+- ✅ Vite + React build system (replaced single-file architecture)
+- ✅ Modular file structure (40+ files)
+- ✅ React Context for state management
+- ✅ Custom hooks (useBracket, useVault, useSound, useBob)
+- ✅ Component extraction (screens, modals, UI atoms)
+- ✅ Year in Review mode (4 brackets → 1 MVP)
+- ✅ NYE special effects (gold confetti + champion lines)
+- ✅ Vote margin tracking throughout bracket
 
 ### v3 (Post-Launch 2026)
 - ✅ Banners & Banter Phase 1 — Shareable links (Complete)
@@ -186,12 +235,14 @@ bob/
 
 ## Development Guidelines
 
-1. **Maintain BOB's personality** — Dry, deadpan, measured. Never oversells.
-2. **Single-file architecture** — No build process, runs in browser.
-3. **Preserve localStorage keys** — Don't break existing user data.
-4. **Mobile-first design** — Touch-friendly, responsive.
-5. **Sound effects optional** — Fail silently on audio errors.
-6. **Categories need full lists** — 8-16 entrants minimum.
+1. **Maintain BOB's personality** — Dry, deadpan, measured. Never oversells. See `src/data/bob.js`
+2. **Modular architecture** — Components in `src/components/`, screens in `src/screens/`
+3. **Use hooks for logic** — Game logic in `src/hooks/`, shared state in `src/context/`
+4. **Preserve localStorage keys** — Don't break existing user data. See `src/lib/storage.js`
+5. **Mobile-first design** — Touch-friendly, responsive. Inline styles preferred.
+6. **Sound effects optional** — Fail silently on audio errors. See `src/lib/sound.js`
+7. **Categories need full lists** — 8-16 entrants minimum. See `src/data/categories.js`
+8. **Run build before deploy** — `npm run build` must succeed
 
 ---
 

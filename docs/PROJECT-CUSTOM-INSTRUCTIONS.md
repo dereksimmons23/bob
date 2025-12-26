@@ -1,12 +1,13 @@
 ---
 Created: December 5, 2025
-Version: v1
+Updated: December 26, 2025
+Version: v2
 Project: Battle o' Brackets
 Context: Claude Project custom instructions
 Status: Active
 Confidentiality: Internal
 Related: All project files
-Target Location: /Users/dereksimmons/Desktop/BoB/ (reference copy)
+Target Location: /Users/dereksimmons/Desktop/bob/
 Format Rationale: Instructions for consistent Claude Project collaboration
 ---
 
@@ -31,29 +32,49 @@ Format Rationale: Instructions for consistent Claude Project collaboration
 
 ## Code Guidelines
 
-### Architecture
-- **Single-file PWA** — No build process, runs directly in browser
-- **React 18 + Babel standalone** — CDN dependencies only
-- **localStorage persistence** — No backend, offline-first
-- **Canvas API** — Share image generation (confetti, champion display)
-- **Web Audio API** — Sound effects (browser-native, no samples)
+### Architecture (v2.6+)
+- **Vite + React 18** — Modern build tooling with HMR
+- **Modular structure** — 40+ files across components, screens, hooks, context
+- **React Context** — State management (AppContext, GameContext)
+- **Custom hooks** — Logic encapsulation (useBracket, useVault, useSound, useBob)
+- **Supabase** — Backend for feedback, analytics, shared brackets
+- **localStorage** — Offline-first persistence
+- **Canvas API** — Share image generation
+- **Web Audio API** — Sound effects
 
 ### File Structure
-- **Production:** `/Users/dereksimmons/Desktop/BoB/index.html`
-- **Manifest:** `/Users/dereksimmons/Desktop/BoB/manifest.json`
-- **Documentation:** Markdown files in `/Users/dereksimmons/Desktop/BoB/`
-- **Archive:** Previous versions in `/Users/dereksimmons/Desktop/BoB/archive/`
+```
+/Users/dereksimmons/Desktop/bob/
+├── src/
+│   ├── main.jsx          # Entry point
+│   ├── App.jsx           # Main router + state
+│   ├── components/       # UI components
+│   ├── screens/          # Page components
+│   ├── modals/           # Modal dialogs
+│   ├── hooks/            # Custom hooks
+│   ├── context/          # React Context
+│   ├── lib/              # Utilities
+│   ├── data/             # Constants
+│   └── styles/           # CSS
+├── dist/                 # Production build
+├── public-legacy/        # Original single-file version
+└── docs/                 # Documentation
+```
 
-### Bundle Size Limits
-- Target: Keep under 150 KB
-- Voice API calls are external (no impact)
-- Emojis are zero-cost
-- Images should be avoided (too large)
+### Commands
+```bash
+npm install              # Install dependencies
+npm run dev              # Dev server (localhost:5173)
+npm run build            # Production build
+npx netlify-cli deploy --prod  # Deploy
+```
 
 ### localStorage Keys
 - `bob-vault-v2` — Champion history
 - `bob-custom-categories` — User-saved categories
-- `bob-voice-enabled` — Voice on/off toggle (v2.5)
+- `bob-player-count` — Player count persistence
+- `bob-sound-enabled` — Sound preference
+- `bob-has-visited` — First-visit flag
 
 ---
 

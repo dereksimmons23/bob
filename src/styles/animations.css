@@ -1,0 +1,133 @@
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px) rotate(-1deg); }
+  75% { transform: translateX(5px) rotate(1deg); }
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(255, 215, 0, 0.6), 0 0 60px rgba(255, 215, 0, 0.3); }
+}
+
+.animate-float { animation: float 3s ease-in-out infinite; }
+.animate-pulse { animation: pulse 2s ease-in-out infinite; }
+.animate-shake { animation: shake 0.5s ease-in-out; }
+.animate-slideUp { animation: slideUp 0.5s ease-out forwards; }
+.animate-slideIn { animation: slideIn 0.5s ease-out forwards; }
+.animate-scaleIn { animation: scaleIn 0.4s ease-out forwards; }
+.animate-glow { animation: glow 2s ease-in-out infinite; }
+
+/* Bracket Path View */
+@keyframes pathPulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.6; }
+}
+@keyframes bracketGlow {
+  0%, 100% { filter: drop-shadow(0 0 8px var(--accent-gold)); }
+  50% { filter: drop-shadow(0 0 20px var(--accent-gold)); }
+}
+@keyframes trophyFloat {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-8px) scale(1.05); }
+}
+@keyframes advanceUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.bracket-path-container {
+  perspective: 800px;
+  perspective-origin: center bottom;
+}
+.bracket-path-track {
+  transform-style: preserve-3d;
+  transform: rotateX(15deg);
+}
+.path-node {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.path-node:hover {
+  transform: scale(1.05);
+}
+.path-connector {
+  animation: pathPulse 2s ease-in-out infinite;
+}
+.trophy-destination {
+  animation: trophyFloat 3s ease-in-out infinite, bracketGlow 2s ease-in-out infinite;
+}
+
+/* Battle Animations */
+@keyframes vsClash {
+  0%, 100% { transform: scale(1); }
+  25% { transform: scale(1.2) rotate(-5deg); }
+  50% { transform: scale(0.9); }
+  75% { transform: scale(1.15) rotate(5deg); }
+}
+@keyframes vsPulse {
+  0%, 100% { text-shadow: 0 0 10px var(--accent-red), 0 0 20px var(--accent-red); }
+  50% { text-shadow: 0 0 20px var(--accent-gold), 0 0 40px var(--accent-gold), 0 0 60px var(--accent-orange); }
+}
+@keyframes winnerCelebrate {
+  0% { transform: scale(1); }
+  25% { transform: scale(1.1) rotate(-2deg); }
+  50% { transform: scale(1.15); }
+  75% { transform: scale(1.1) rotate(2deg); }
+  100% { transform: scale(1.1); }
+}
+@keyframes loserFade {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0.4; transform: scale(0.95); }
+}
+@keyframes entrantEnter {
+  from { opacity: 0; transform: translateY(20px) scale(0.9); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes votePopIn {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+
+.vs-badge {
+  animation: vsClash 2s ease-in-out infinite, vsPulse 1.5s ease-in-out infinite;
+}
+.entrant-card {
+  animation: entrantEnter 0.5s ease-out forwards;
+}
+.entrant-winner {
+  animation: winnerCelebrate 0.6s ease-out forwards;
+}
+.entrant-loser {
+  animation: loserFade 0.5s ease-out forwards;
+}
+.vote-pop {
+  animation: votePopIn 0.2s ease-out;
+}
+
+/* Lock In button pulse */
+@keyframes lockPulse {
+  0%, 100% { box-shadow: 0 4px 15px rgba(0, 230, 118, 0.3); }
+  50% { box-shadow: 0 4px 25px rgba(0, 230, 118, 0.5), 0 0 40px rgba(0, 230, 118, 0.2); }
+}
+.lock-in-btn {
+  animation: lockPulse 2s ease-in-out infinite;
+}

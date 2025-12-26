@@ -1,21 +1,68 @@
 # Session Handoff — Battle o' Brackets
 
-**Last Updated:** December 23, 2025
-**Last Session:** Dec 23, 2025
-**Next Session:** Post-Christmas (Dec 26+)
+**Last Updated:** December 26, 2025
+**Last Session:** Dec 26, 2025
+**Next Session:** TBD
 
 ---
 
 ## Quick Context
 
-Battle o' Brackets (BOB) is a party game PWA for bracket-style voting tournaments. MVP complete. Christmas Eve debut ready. Shareable links working. **Teaser posts live.**
+Battle o' Brackets (BOB) is a party game PWA for bracket-style voting tournaments. **v2.6 complete with major architecture overhaul.** Vite + React modular structure. Year in Review mode. Vote tracking.
 
-**Live at:** https://bob.claudewill.io
-**Test shared link:** https://bob.claudewill.io/b/f03e4201-5fdb-4dd0-a921-e606d8028846
+**Live at:** https://battle-of-brackets.netlify.app
+**Test shared link:** https://battle-of-brackets.netlify.app/b/f03e4201-5fdb-4dd0-a921-e606d8028846
 
 ---
 
-## What Was Done Today (Dec 23)
+## What Was Done Today (Dec 26)
+
+### Major Architecture Overhaul — v2.6
+
+Converted 5,400-line monolithic `index.html` into proper Vite + React modular project:
+
+**Build System:**
+- Vite 7.3.0 with React plugin
+- Hot module replacement for development
+- 106 modules, 494KB bundle (145KB gzipped)
+- Deployed to battle-of-brackets.netlify.app
+
+**New File Structure:**
+```
+src/
+├── main.jsx, App.jsx       # Entry + router
+├── components/ui/          # Atoms (Button, Input, Logo, etc.)
+├── components/             # Features (BobSays, MatchupCard, etc.)
+├── screens/                # Home, Setup, Playing, Champion, Vault, Library
+├── modals/                 # Settings, Feedback, About, Legal, DevTools
+├── hooks/                  # useBracket, useVault, useSound, useBob
+├── context/                # AppContext, GameContext
+├── lib/                    # bracket, sound, storage, supabase
+├── data/                   # categories, bob, seedVault
+└── styles/                 # CSS
+```
+
+**Custom Hooks Created:**
+- `useBracket` — Bracket generation and game flow
+- `useVault` — History CRUD and localStorage sync
+- `useSound` — Audio control
+- `useBob` — Commentary selection
+
+**State Management:**
+- React Context (AppProvider wraps app)
+- Local state for game-specific concerns
+
+**Documentation Updated:**
+- README.md — New architecture, commands, structure
+- PROJECT-README.md — Updated for v2.6
+- PROJECT-CUSTOM-INSTRUCTIONS.md — Updated guidelines
+- CLAUDE-PROJECT-SETUP.md — New structure
+- FEATURE-ROADMAP.md — Added v2.6 section
+- SESSION-HANDOFF.md — This update
+
+---
+
+## What Was Done (Dec 23)
 
 ### Competitive Analysis
 
@@ -244,48 +291,67 @@ Chapters pending (post-Christmas):
 
 ---
 
-## Key Files
+## Key Files (v2.6+)
 
 ```
 bob/
-├── public/
-│   ├── index.html      # THE ENTIRE APP (~4200 lines now)
-│   └── manifest.json   # PWA manifest
+├── src/
+│   ├── main.jsx              # React DOM entry
+│   ├── App.jsx               # Main router + state (~580 lines)
+│   ├── components/           # UI components
+│   ├── screens/              # Page components
+│   ├── modals/               # Modal dialogs
+│   ├── hooks/                # Custom hooks
+│   ├── context/              # React Context
+│   ├── lib/                  # Utilities
+│   ├── data/                 # Constants
+│   └── styles/               # CSS
+├── dist/                     # Production build
+├── public-legacy/            # Original single-file version
 ├── docs/
 │   ├── FEATURE-ROADMAP.md
-│   ├── LAUNCH-PLAN.md        # Launch strategy
-│   ├── LAUNCH-CONTENT.md     # Social posts, video script
-│   ├── SUBSTACK-DRAFT.md     # "Built with AI" post (ch 1-3 ready)
 │   ├── SESSION-HANDOFF.md    # This file
-│   ├── BANNERS-AND-BANTER-SOCIAL.md
-│   ├── BOB-CHARACTER-BIBLE.md
 │   └── ...
-├── netlify.toml        # Redirects for /b/* routes
-└── README.md
+├── index.html                # Vite entry
+├── vite.config.js            # Vite config
+├── netlify.toml              # Netlify config
+└── package.json
+```
+
+**Commands:**
+```bash
+npm run dev      # Dev server (localhost:5173)
+npm run build    # Production build
+npx netlify-cli deploy --prod  # Deploy
 ```
 
 **localStorage keys:**
 - `bob-vault-v2` — Champion history
 - `bob-custom-categories` — User-created categories
+- `bob-player-count` — Player count
+- `bob-sound-enabled` — Sound preference
 - `bob-has-visited` — First-visit tracking
 
 ---
 
 ## URLs to Remember
 
-- **Live app:** https://bob.claudewill.io
-- **Dev mode:** https://bob.claudewill.io?dev=true
-- **Test shared link:** https://bob.claudewill.io/b/f03e4201-5fdb-4dd0-a921-e606d8028846
+- **Live app:** https://battle-of-brackets.netlify.app
+- **Dev mode:** https://battle-of-brackets.netlify.app?dev=true
+- **Test shared link:** https://battle-of-brackets.netlify.app/b/f03e4201-5fdb-4dd0-a921-e606d8028846
 - **Supabase dashboard:** https://supabase.com/dashboard/project/vvroarbpvfsoiznkbfvt
+- **Netlify dashboard:** https://app.netlify.com/projects/battle-of-brackets
 
 ---
 
 ## Sprint Status
 
-**Status:** MVP COMPLETE + LAUNCH READY
+**Status:** v2.6 COMPLETE — Architecture overhaul shipped
+**Architecture:** Vite + React modular (40+ files)
 **Shareable links:** ✅ Banners & Banter Phase 1 complete
+**Build:** 106 modules, 494KB (145KB gzipped)
 
-All features for Christmas Eve debut are complete. Social content ready. Just needs family testing and video recording.
+Christmas Eve debut complete. v2.6 architecture overhaul deployed Dec 26.
 
 ---
 
