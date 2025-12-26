@@ -1781,7 +1781,7 @@
     }
 
     // Share Card Generator
-    function ShareCard({ champion, category, runnerUp, entrants, playerCount, bobComment, existingShareLink, onClose }) {
+    function ShareCard({ champion, category, runnerUp, entrants, playerCount, bobComment, existingShareLink, matchupResults = [], closestCall, biggestBlowout, onClose }) {
       const canvasRef = useRef(null);
       const [imageUrl, setImageUrl] = useState(null);
       const [shareLink, setShareLink] = useState(existingShareLink || null);
@@ -1845,7 +1845,21 @@
       };
 
       const handleCopyText = () => {
-        const text = `🏆 ${champion.toUpperCase()}\nCrowned champion of "${category}" in Battle o' Brackets!\n\ndefeated ${runnerUp} in the final\n\n${shareLink || 'bob.claudewill.io'}\n\n#BattleOBrackets`;
+        let text = `🏆 ${champion.toUpperCase()}\nCrowned champion of "${category}" in Battle o' Brackets!\n\ndefeated ${runnerUp} in the final`;
+
+        // Add dramatic moments if available
+        const drama = [];
+        if (closestCall && closestCall.margin <= 1) {
+          drama.push(`🔥 Closest call: ${closestCall.winner} def. ${closestCall.loser} (${closestCall.votesA}-${closestCall.votesB})`);
+        }
+        if (biggestBlowout && biggestBlowout.margin >= 4) {
+          drama.push(`💀 Biggest blowout: ${biggestBlowout.winner} crushed ${biggestBlowout.loser} (${biggestBlowout.votesA}-${biggestBlowout.votesB})`);
+        }
+        if (drama.length > 0) {
+          text += `\n\n${drama.join('\n')}`;
+        }
+
+        text += `\n\n${shareLink || 'bob.claudewill.io'}\n\n#BattleOBrackets`;
         navigator.clipboard.writeText(text);
         alert('Copied to clipboard!');
       };
@@ -1963,13 +1977,24 @@
     }
 
     // Champion Screen
-    function ChampionScreen({ champion, category, runnerUp, categoryType, bobComment, entrants, playerCount, onNewGame, onViewVault }) {
+    function ChampionScreen({ champion, category, runnerUp, categoryType, bobComment, entrants, playerCount, matchupResults = [], onNewGame, onViewVault }) {
       const [showShare, setShowShare] = useState(false);
       const [shareLink, setShareLink] = useState(null);
       const [shareCopied, setShareCopied] = useState(false);
+      const [showRecap, setShowRecap] = useState(false);
       // Use passed bobComment or fall back to random (NYE gets special lines)
       const displayComment = bobComment || BOB.random(categoryType === 'nye' ? BOB.championNYE : BOB.champion);
       const isNYE = categoryType === 'nye';
+
+      // Compute dramatic moments from matchup results
+      const closestCall = matchupResults.length > 0
+        ? matchupResults.reduce((closest, m) => (!closest || m.margin < closest.margin) ? m : closest, null)
+        : null;
+      const biggestBlowout = matchupResults.length > 0
+        ? matchupResults.reduce((biggest, m) => (!biggest || m.margin > biggest.margin) ? m : biggest, null)
+        : null;
+      const tieBreakers = matchupResults.filter(m => m.wasTieBreaker);
+      const totalVotes = matchupResults.reduce((sum, m) => sum + m.votesA + m.votesB, 0);
 
       // Auto-generate share link on mount (eager creation)
       useEffect(() => {
@@ -2055,6 +2080,93 @@
 
           <BobSays message={displayComment} mood="victory" />
 
+          {/* Bracket Recap */}
+          {matchupResults.length > 0 && (
+            <div style={{ marginTop: '24px', width: '100%', maxWidth: '400px' }}>
+              <button
+                onClick={() => setShowRecap(!showRecap)}
+                style={{
+                  background: 'var(--bg-card)',
+                  border: '1px solid var(--text-muted)',
+                  borderRadius: '8px',
+                  padding: '12px 20px',
+                  cursor: 'pointer',
+                  color: 'var(--text-secondary)',
+                  fontSize: '14px',
+                  width: '100%',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}
+              >
+                <span>📊 Bracket Recap</span>
+                <span style={{ fontSize: '12px' }}>{showRecap ? '▲' : '▼'}</span>
+              </button>
+              {showRecap && (
+                <div style={{
+                  background: 'var(--bg-card)',
+                  border: '1px solid var(--text-muted)',
+                  borderTop: 'none',
+                  borderRadius: '0 0 8px 8px',
+                  padding: '16px',
+                  textAlign: 'left',
+                }}>
+                  <div style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '12px' }}>
+                    {matchupResults.length} matchups • {totalVotes} total votes
+                  </div>
+
+                  {closestCall && closestCall.margin <= 1 && (
+                    <div style={{ marginBottom: '12px', padding: '10px', background: 'var(--bg-card-hover)', borderRadius: '6px' }}>
+                      <div style={{ fontSize: '11px', color: 'var(--accent-gold)', letterSpacing: '1px', marginBottom: '4px' }}>🔥 CLOSEST CALL</div>
+                      <div style={{ color: 'var(--text-primary)', fontSize: '14px' }}>
+                        {closestCall.winner} def. {closestCall.loser}
+                        <span style={{ color: 'var(--text-muted)', marginLeft: '8px' }}>
+                          ({closestCall.votesA}-{closestCall.votesB})
+                        </span>
+                      </div>
+                    </div>
+                  )}
+
+                  {biggestBlowout && biggestBlowout.margin >= 4 && (
+                    <div style={{ marginBottom: '12px', padding: '10px', background: 'var(--bg-card-hover)', borderRadius: '6px' }}>
+                      <div style={{ fontSize: '11px', color: 'var(--accent-pink)', letterSpacing: '1px', marginBottom: '4px' }}>💀 BIGGEST BLOWOUT</div>
+                      <div style={{ color: 'var(--text-primary)', fontSize: '14px' }}>
+                        {biggestBlowout.winner} crushed {biggestBlowout.loser}
+                        <span style={{ color: 'var(--text-muted)', marginLeft: '8px' }}>
+                          ({biggestBlowout.votesA}-{biggestBlowout.votesB})
+                        </span>
+                      </div>
+                    </div>
+                  )}
+
+                  {tieBreakers.length > 0 && (
+                    <div style={{ marginBottom: '12px', padding: '10px', background: 'var(--bg-card-hover)', borderRadius: '6px' }}>
+                      <div style={{ fontSize: '11px', color: 'var(--accent-blue)', letterSpacing: '1px', marginBottom: '4px' }}>📞 TIE-BREAKER{tieBreakers.length > 1 ? 'S' : ''}</div>
+                      {tieBreakers.map((t, i) => (
+                        <div key={i} style={{ color: 'var(--text-primary)', fontSize: '14px' }}>
+                          {t.winner} survived vs {t.loser}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Championship result */}
+                  {matchupResults.find(m => m.isChampionship) && (
+                    <div style={{ padding: '10px', background: 'linear-gradient(135deg, #ffd70022, #ffed4a22)', borderRadius: '6px', border: '1px solid #ffd70044' }}>
+                      <div style={{ fontSize: '11px', color: 'var(--accent-gold)', letterSpacing: '1px', marginBottom: '4px' }}>🏆 THE FINAL</div>
+                      <div style={{ color: 'var(--text-primary)', fontSize: '14px' }}>
+                        {champion} def. {runnerUp}
+                        <span style={{ color: 'var(--text-muted)', marginLeft: '8px' }}>
+                          ({matchupResults.find(m => m.isChampionship).votesA}-{matchupResults.find(m => m.isChampionship).votesB})
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+
           <div style={{ display: 'flex', gap: '16px', marginTop: '24px', flexWrap: 'wrap', justifyContent: 'center' }}>
             <Button variant="primary" size="large" onClick={onNewGame}>New Bracket</Button>
             <Button
@@ -2104,6 +2216,9 @@
               playerCount={playerCount}
               bobComment={displayComment}
               existingShareLink={shareLink}
+              matchupResults={matchupResults}
+              closestCall={closestCall}
+              biggestBlowout={biggestBlowout}
               onClose={() => setShowShare(false)}
             />
           )}
@@ -2564,6 +2679,45 @@
                   }}>
                     Crowned {entry.date}
                   </div>
+
+                  {/* Vote history if available */}
+                  {entry.matchupResults && entry.matchupResults.length > 0 && (() => {
+                    const results = entry.matchupResults;
+                    const closest = results.reduce((c, m) => (!c || m.margin < c.margin) ? m : c, null);
+                    const biggest = results.reduce((b, m) => (!b || m.margin > b.margin) ? m : b, null);
+                    const final = results.find(m => m.isChampionship);
+                    const totalVotes = results.reduce((sum, m) => sum + m.votesA + m.votesB, 0);
+
+                    return (
+                      <div style={{
+                        background: 'var(--bg-deep)',
+                        borderRadius: '8px',
+                        padding: '12px',
+                        marginBottom: '16px',
+                        textAlign: 'left',
+                        fontSize: '12px',
+                      }}>
+                        <div style={{ color: 'var(--text-muted)', marginBottom: '8px' }}>
+                          {results.length} matchups • {totalVotes} votes
+                        </div>
+                        {final && (
+                          <div style={{ color: 'var(--text-secondary)', marginBottom: '4px' }}>
+                            🏆 Final: {final.votesA}-{final.votesB}
+                          </div>
+                        )}
+                        {closest && closest.margin <= 1 && (
+                          <div style={{ color: 'var(--accent-gold)', marginBottom: '4px' }}>
+                            🔥 Closest: {closest.winner} def. {closest.loser} ({closest.votesA}-{closest.votesB})
+                          </div>
+                        )}
+                        {biggest && biggest.margin >= 4 && (
+                          <div style={{ color: 'var(--accent-pink)' }}>
+                            💀 Blowout: {biggest.winner} ({biggest.votesA}-{biggest.votesB})
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })()}
 
                   {/* Edit/Delete buttons */}
                   <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
@@ -3872,6 +4026,8 @@
       const [currentRoundIndex, setCurrentRoundIndex] = useState(0);
       const [currentMatchupIndex, setCurrentMatchupIndex] = useState(0);
       const [winners, setWinners] = useState([]);
+      const [matchupResults, setMatchupResults] = useState([]); // Track all matchup votes for recap
+      const [finalBracketResults, setFinalBracketResults] = useState([]); // Complete results for champion screen
       const [champion, setChampion] = useState(null);
       const [runnerUp, setRunnerUp] = useState(null);
       const [championComment, setChampionComment] = useState('');
@@ -3958,6 +4114,7 @@
         setCurrentRoundIndex(0);
         setCurrentMatchupIndex(0);
         setWinners([]);
+        setMatchupResults([]);
         setBobMessage("Year in Review. Four brackets. Four champions. One MVP. Let's find out what 2025 was really about.");
         setBobMood('normal');
         setScreen('playing');
@@ -3978,6 +4135,7 @@
           setCurrentRoundIndex(0);
           setCurrentMatchupIndex(0);
           setWinners([]);
+          setMatchupResults([]);
           setBobMessage(`Champion ${yirRound} of 4: ${winner}. ${4 - yirRound} more to crown. Onward.`);
           setScreen('playing');
         } else {
@@ -3991,6 +4149,7 @@
           setCurrentRoundIndex(0);
           setCurrentMatchupIndex(0);
           setWinners([]);
+          setMatchupResults([]);
           setBobMessage(`Four champions crowned: ${newWinners.join(', ')}. Now they face each other. The MVP of 2025 awaits.`);
           setScreen('playing');
         }
@@ -4048,7 +4207,8 @@
         setCurrentRoundIndex(0);
         setCurrentMatchupIndex(0);
         setWinners([]);
-        
+        setMatchupResults([]);
+
         // Category-aware opener
         const opener = BOB.getCategoryComment(categoryType, 'categoryOpeners');
         setBobMessage(opener);
@@ -4063,10 +4223,25 @@
           currentMatchupIndex,
           currentRoundIndex,
           bracket: JSON.parse(JSON.stringify(bracket)),
+          matchupResults: [...matchupResults],
         });
 
         const newWinners = [...winners, winner];
         setWinners(newWinners);
+
+        // Record this matchup result for recap
+        const currentRound = bracket.rounds[currentRoundIndex];
+        const matchup = currentRound.matchups[currentMatchupIndex];
+        setMatchupResults(prev => [...prev, {
+          winner,
+          loser,
+          votesA,
+          votesB,
+          margin,
+          wasTieBreaker,
+          round: currentRound.name || `Round ${currentRoundIndex + 1}`,
+          isChampionship: currentRound.name === 'Championship',
+        }]);
 
         let reaction;
 
@@ -4159,6 +4334,19 @@
                 setYirWinners([]);
               }
 
+              // Include the final matchup in results
+              const finalResults = [...matchupResults, {
+                winner,
+                loser,
+                votesA: votesA,
+                votesB: votesB,
+                margin: Math.abs(votesA - votesB),
+                wasTieBreaker: false,
+                round: 'Championship',
+                isChampionship: true,
+              }];
+              setFinalBracketResults(finalResults);
+
               const newEntry = {
                 category,
                 champion: winner,
@@ -4166,6 +4354,7 @@
                 date: new Date().toLocaleDateString(),
                 categoryType: isYearInReview ? 'nye' : categoryType,
                 bobComment: comment,
+                matchupResults: finalResults,
               };
               setHistory([newEntry, ...history]);
 
@@ -4177,6 +4366,7 @@
                 runner_up: loser,
                 player_count: playerCount,
                 entrant_count: entrants.length,
+                matchup_results: JSON.stringify(finalResults),
               }).then(() => {}).catch(() => {});
 
               setScreen('champion');
@@ -4242,6 +4432,7 @@
 
         // Restore previous state
         setWinners(undoState.winners);
+        setMatchupResults(undoState.matchupResults || []);
         setCurrentMatchupIndex(undoState.currentMatchupIndex);
         setCurrentRoundIndex(undoState.currentRoundIndex);
         setBracket(undoState.bracket);
@@ -4260,6 +4451,8 @@
         setCurrentRoundIndex(0);
         setCurrentMatchupIndex(0);
         setWinners([]);
+        setMatchupResults([]);
+        setFinalBracketResults([]);
         setChampion(null);
         setRunnerUp(null);
         setChampionComment('');
@@ -4832,6 +5025,7 @@
               bobComment={championComment}
               entrants={entrants}
               playerCount={playerCount}
+              matchupResults={finalBracketResults}
               onNewGame={() => setScreen('library')}
               onViewVault={() => setScreen('vault')}
             />
