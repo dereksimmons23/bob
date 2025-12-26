@@ -725,6 +725,20 @@
         "Your champion. Controversial? Maybe. Final? Absolutely.",
       ],
 
+      // NYE champion crowned
+      championNYE: [
+        "And so we welcome 2026 with a champion.",
+        "The last champion of 2025. Or the first of 2026. Either way: legendary.",
+        "Champagne worthy. Champion crowned.",
+        "Ring in the new year with a winner.",
+        "2025's final verdict. 2026's first champion.",
+        "The ball has dropped. The champion has risen.",
+        "New year. New champion. Same voters.",
+        "Midnight approaches. Champion decided.",
+        "Start 2026 right. With a champion.",
+        "Auld lang syne. New champion. Cheers.",
+      ],
+
       // Vault empty
       vaultEmpty: [
         "The Vault is empty. No champions yet. Get to work.",
@@ -1953,8 +1967,9 @@
       const [showShare, setShowShare] = useState(false);
       const [shareLink, setShareLink] = useState(null);
       const [shareCopied, setShareCopied] = useState(false);
-      // Use passed bobComment or fall back to random
-      const displayComment = bobComment || BOB.random(BOB.champion);
+      // Use passed bobComment or fall back to random (NYE gets special lines)
+      const displayComment = bobComment || BOB.random(categoryType === 'nye' ? BOB.championNYE : BOB.champion);
+      const isNYE = categoryType === 'nye';
 
       // Auto-generate share link on mount (eager creation)
       useEffect(() => {
@@ -1987,9 +2002,13 @@
         SoundEffects.play('champion');
         const duration = 4000;
         const end = Date.now() + duration;
+        // NYE gets champagne gold confetti
+        const colors = isNYE
+          ? ['#ffd700', '#ffed4a', '#fff8dc', '#f5deb3', '#fffacd']
+          : ['#ffd700', '#ffed4a', '#ff6b6b', '#4ecdc4', '#45b7d1'];
         const frame = () => {
-          confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#ffd700', '#ffed4a', '#ff6b6b', '#4ecdc4', '#45b7d1'] });
-          confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#ffd700', '#ffed4a', '#ff6b6b', '#4ecdc4', '#45b7d1'] });
+          confetti({ particleCount: isNYE ? 5 : 3, angle: 60, spread: 55, origin: { x: 0 }, colors });
+          confetti({ particleCount: isNYE ? 5 : 3, angle: 120, spread: 55, origin: { x: 1 }, colors });
           if (Date.now() < end) requestAnimationFrame(frame);
         };
         frame();
