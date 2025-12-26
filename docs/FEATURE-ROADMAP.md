@@ -354,10 +354,24 @@ Make the bracket structure more visible throughout the app. The *journey* is wha
 - Import from file
 - Share category packs
 
-### 🔲 Mount Rushmore Edition
-**Status:** Concept only (Dec 24, 2025)
+### 🔲 Mount Rushmore Mode
+**Status:** Concept refined (Dec 26, 2025)
 
-Special 4-person bracket mode: "Who are your Final Four?" The constrained format forces tough cuts and guarantees arguments.
+Full bracket (16+ entrants) where the **Final Four become your Mount Rushmore**. Play through the entire tournament — the semifinalists are your top 4, and you still crown a champion.
+
+**How it works:**
+- Normal bracket with 16+ entrants
+- Standard voting through all rounds
+- **Final Four = your Mount Rushmore** (the 4 semifinalists)
+- Championship still played to determine #1
+- **Track 1st, 2nd, 3rd, 4th place** (currently only track champion + runner-up)
+- 3rd/4th = semifinal losers
+
+**Display differences:**
+- Champion screen shows all 4 "carved into the mountain"
+- Champion at #1, runner-up at #2, semifinal losers at #3/#4
+- Vault entry displays the full Mount Rushmore, not just champion
+- Share card shows all 4 faces
 
 **Category Ideas:**
 - Greatest Male Athletes (all sports)
@@ -374,12 +388,14 @@ Special 4-person bracket mode: "Who are your Final Four?" The constrained format
 - Movie Villains
 - Pizza Toppings (chaos mode)
 
-**Implementation Options:**
-- Special "Mount Rushmore" mode toggle (always 4 entrants)
-- Dedicated category pack with pre-seeded debates
-- Could combine with Spicy BOB for hot takes
+**Implementation:**
+- Mode toggle when starting bracket: "Standard" vs "Mount Rushmore"
+- Track both semifinal losers (new data: `thirdPlace`, `fourthPlace`)
+- New `MountRushmoreChampionScreen` component
+- New vault card style for Mount Rushmore entries
+- Could combine with Salty BOB for hot takes
 
-**Why it works:** Everyone has a take. "You left off WHO?!" is the whole game.
+**Why it works:** "You left off WHO?!" is the whole game. Everyone has a take on who belongs on the mountain.
 
 ### 🔲 Snub List
 **Status:** Concept only
@@ -705,6 +721,20 @@ This might be the missing ingredient.
 - "Tip BOB a Coffee" button in Settings
 - Links to ko-fi.com/derekclaude
 - Warm gradient styling
+
+### ✅ Vault Sharing (Shipped Dec 26, 2025)
+**Status:** Complete
+
+- **Share individual vault entries** — Share button on each champion card in The Vault
+- Uses existing `/b/[id]` shared bracket system
+- Native share sheet on mobile, clipboard fallback on desktop
+- **Share entire vault** — "Share Vault" button in vault footer
+- Creates shareable link at `/v/[id]`
+- New `shared_vaults` Supabase table with RLS policies
+- `SharedVaultView` component displays all champions in responsive grid
+- Shows category, champion, runner-up, BOB comment, date for each
+- View count tracking
+- CTA to "Build Your Own Vault"
 
 ### Comparison: What Made Other Games Hit
 
