@@ -17,6 +17,7 @@
 | `index.html` | Production build (single-file React PWA with Olympics) |
 | `manifest.json` | PWA manifest for home screen install |
 | `BOB-CHARACTER-BIBLE.md` | Full personality guide and dialogue system |
+| `STYLE-GUIDE.md` | Visual identity: fonts, colors, voice (v1 — revisit for v2) |
 | `CATEGORY-LIBRARY.md` | All 60+ preset categories with entrants |
 | `FEATURE-ROADMAP.md` | What's built, what's planned |
 | `BANNERS-AND-BANTER-SOCIAL.md` | Future social feature concept |
@@ -70,22 +71,28 @@ BOB is the AI game show host. His personality is a synthesis of:
 - Canvas API for share image generation
 
 **localStorage Keys:**
-- `bob-vault-v2` — Champion history
+- `bob-vault-v2` — Champion history (now includes matchupResults)
 - `bob-custom-categories` — User-saved categories
+- `bob-player-count` — Player count persistence
+- `bob-has-visited` — First-visit flag for About modal
 
 ---
 
-## Features (v2 — Current)
+## Features (v2.6 — Current)
 
 ✅ Bracket math engine (any entrant count 4+, auto play-ins/byes)
 ✅ Voting system (+1/-1, lock-in, tie-breaker flow)
-✅ The Vault (champion history)
-✅ Category Library (60+ presets, 7 themes)
+✅ The Vault (champion history with vote tracking)
+✅ Category Library (70+ presets, 8 themes including NYE 2026)
 ✅ Quick Start Mode (2-tap gameplay)
 ✅ Uncle BOB Personality (context-aware commentary)
-✅ Share Champion (canvas image + copy text)
+✅ Share Champion (canvas image + copy text + dramatic moments)
 ✅ Sound Effects Toggle
 ✅ Custom Category Builder
+✅ Year in Review Mode (4 brackets → 1 MVP)
+✅ Vote Tracking & Bracket Recap
+✅ Native Share Sheet (mobile)
+✅ Ko-fi Tip Jar
 
 ---
 
@@ -136,6 +143,7 @@ When working on Battle o' Brackets:
 | Games & Gaming | Blue | 🎮 |
 | Random & Absurd | Pink | 🎲 |
 | Holidays & Seasons | Gold | 🎄 |
+| NYE 2026 | Gold | 🥂 |
 | Olympics | White/Blue | 🏅 |
 | Custom | Pink | 💾 |
 
@@ -151,13 +159,17 @@ When working on Battle o' Brackets:
 | localStorage over backend | Offline-first, no server costs | Dec 2025 |
 | "Banners & Banter" for history | Captures championships + trash talk | Dec 2025 |
 | Canvas image generation | Native sharing, no external APIs | Dec 2025 |
+| Style guide v1 | Document fonts/colors, flag ]-[ logo for v2 | Dec 2025 |
 
 ---
 
 ## Quick Reference
 
 **Start new bracket:** Home → Quick Start → Pick category → Play
-**Custom bracket:** Home → New Bracket → Enter details → Play
-**View history:** Home → Banners & Banter
-**Share result:** Champion screen → Share button → Download/Copy
+**Custom bracket:** Home → Custom Bracket → Enter details → Play
+**Year in Review:** Home → 🥂 YEAR IN REVIEW 2025 button
+**View history:** Home → The Vault
+**Share result:** Champion screen → Share button (native share on mobile)
+**View bracket recap:** Champion screen → 📊 Bracket Recap
 **Toggle sound:** Settings gear (⚙️) → Sound toggle
+**Tip BOB:** Settings → Tip BOB a Coffee

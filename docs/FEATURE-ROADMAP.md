@@ -353,6 +353,33 @@ Make the bracket structure more visible throughout the app. The *journey* is wha
 - Import from file
 - Share category packs
 
+### 🔲 Mount Rushmore Edition
+**Status:** Concept only (Dec 24, 2025)
+
+Special 4-person bracket mode: "Who are your Final Four?" The constrained format forces tough cuts and guarantees arguments.
+
+**Category Ideas:**
+- Greatest Male Athletes (all sports)
+- Greatest Female Athletes
+- Greatest Athletes (combined)
+- NBA Players
+- NFL Quarterbacks
+- Olympians
+- Rock Bands
+- Hip-Hop Artists
+- Movie Directors
+- SNL Cast Members
+- Presidents
+- Movie Villains
+- Pizza Toppings (chaos mode)
+
+**Implementation Options:**
+- Special "Mount Rushmore" mode toggle (always 4 entrants)
+- Dedicated category pack with pre-seeded debates
+- Could combine with Spicy BOB for hot takes
+
+**Why it works:** Everyone has a take. "You left off WHO?!" is the whole game.
+
 ### 🔲 Snub List
 **Status:** Concept only
 
@@ -568,3 +595,124 @@ Yes, PWAs can handle payments:
 - 50+ shared bracket links created
 - 10+ custom categories saved
 - Feedback submissions from non-family users
+
+---
+
+## Christmas Eve Playtest Learnings (Dec 24, 2025)
+
+**The verdict:** Fine, not a hit. Lost to Herd Mentality and Hitster.
+
+### What Worked
+- [x] UX was intuitive — Jackson drove from iPhone with no friction
+- [x] BOB's comments got laughs — personality is landing
+- [x] Bobsled made the finals — BOB should have cheered for his namesake
+
+### What Didn't Work
+- [ ] **Topic selection is everything** — Winter Olympics and Pizza Toppings lacked controversy. Smells was better.
+- [ ] **Consensus kills energy** — Pepperoni steamrolled. Everyone agreed. No debate.
+- [ ] **Matchups weren't competitive** — Pineapple vs Spinach isn't a fair fight. Seeding problem.
+- [ ] **No physical/sensory engagement** — Hitster has music, tasting games have food. BOB is all cognitive.
+- [ ] **Sharing is broken** — Nobody shared (or couldn't). Need to investigate.
+
+### Key Insight: Player Submission = Personal Stakes
+The rock band bracket worked because everyone picked 4 bands. When YOUR pick is in the bracket, you're not just voting — you're defending your taste. When it gets knocked out, it stings.
+
+**AI-generated brackets = passive judging**
+**Player-submitted brackets = personal advocacy**
+
+This might be the missing ingredient.
+
+### Punch List
+
+**Bugs:**
+- [x] Fix sharing — was UX friction, not bug. Added native share sheet + auto-generate link
+- [x] Player count captured wrong (4 instead of 10) — fixed with localStorage persistence
+
+**Quick Wins:**
+- [x] Add "Pizza Styles" bracket (NY, Chicago, Detroit, Neapolitan, etc.) — way better than toppings
+- [x] BOB self-awareness — cheers for bobsled, bacon, bob-adjacent items
+- [x] Curate "certified banger" topics — added Hot Takes section with featured categories
+- [x] Lean Mode — "Trim to 8" and "Trim to 16" buttons for fewer entrants
+
+**Medium Lift:**
+- [ ] Smarter seeding — rank items by expected popularity, pair #1 vs #16
+- [x] Capture vote margins in database — now tracks all matchup results with votes
+
+**Bigger Rethink:**
+- [ ] **Player-submitted brackets** — everyone submits 2-3 picks, BOB builds the bracket
+- [ ] **BOB as activity companion** — pizza styles while eating pizza, beer bracket at a tasting
+- [ ] Physical voting option — stand on sides of room, raise hands
+
+---
+
+## v2.6 Features (NYE Update — Shipped Dec 25, 2025)
+
+### ✅ NYE 2026 Party Pack
+**Status:** Complete
+
+- Dedicated NYE 2026 theme with 10 categories
+- Best NYE Song, Best NYE Tradition, Best Resolution
+- Best Month/Movie/Song of 2025
+- Best NYE Drink, Best NYE Food
+- Gold theme color (#f59e0b)
+
+### ✅ Year in Review Mode
+**Status:** Complete
+
+- Special multi-bracket experience: 4 brackets → 1 MVP
+- Runs: Best Month → Best Resolution → Best Tradition → Best Drink
+- Collects champions from each bracket
+- Final 4-way MVP showdown
+- Progress indicator shows rounds 1-4 + MVP Final
+- Gold gradient button on home screen
+
+### ✅ NYE Special Effects
+**Status:** Complete
+
+- Gold/champagne confetti for NYE bracket wins
+- More confetti particles (5 vs 3)
+- 10 NYE-specific champion announcements
+- NYE categoryOpeners and matchupCommentary for BOB
+
+### ✅ Vote Tracking & Bracket Recap
+**Status:** Complete
+
+- Every matchup result stored: winner, loser, votesA, votesB, margin
+- Saved to localStorage (Vault) and Supabase (games table)
+- Champion screen: collapsible "Bracket Recap" section
+- Shows: closest calls, biggest blowouts, tie-breakers, final score
+- Share card includes dramatic moments in copy text
+- Vault displays vote history on each champion card
+
+### ✅ Share Flow Improvements
+**Status:** Complete
+
+- Auto-generate share link on champion screen mount
+- Native share sheet on mobile (navigator.share)
+- Clipboard fallback on desktop
+- Reduced friction from Christmas Eve playtest
+
+### ✅ Player Count Persistence
+**Status:** Complete
+
+- Player count saved to localStorage (`bob-player-count`)
+- Survives page reloads
+
+### ✅ Ko-fi Tip Jar
+**Status:** Complete
+
+- "Tip BOB a Coffee" button in Settings
+- Links to ko-fi.com/derekclaude
+- Warm gradient styling
+
+### Comparison: What Made Other Games Hit
+
+| Game | Why It Worked |
+|------|---------------|
+| **Herd Mentality** | Instant gratification. Answer → reveal → laugh. Zero waiting. Everyone engaged. |
+| **Hitster** | Music does the heavy lifting. Nostalgia. Natural conversation starters. |
+| **Rock Band Bracket** | Personal stakes. YOUR bands in the bracket. Defending your taste. |
+
+BOB's current gap: Too much reading, not enough feeling. Brackets need controversy, stakes, or sensory hooks.
+
+---
