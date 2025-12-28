@@ -103,7 +103,7 @@ export const CATEGORY_LIBRARY = {
     ]
   },
   nye: {
-    name: "NYE 2026",
+    name: "NYE 2025",
     icon: "🥂",
     color: "#f59e0b",
     categories: [

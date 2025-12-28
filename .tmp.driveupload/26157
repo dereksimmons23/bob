@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Battle o' Brackets | BOB</title>
+  <meta name="description" content="The party game where democracy gets dumb. Hosted by BOB." />
+  <meta name="theme-color" content="#0a0e1a" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Battle o' Brackets | BOB" />
+  <meta property="og:description" content="The party game where democracy gets dumb. Crown champions through bracket-style voting. Hosted by BOB." />
+  <meta property="og:url" content="https://bob.claudewill.io" />
+  <meta property="og:image" content="https://bob.claudewill.io/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Battle o' Brackets | BOB" />
+  <meta name="twitter:description" content="The party game where democracy gets dumb. Crown champions through bracket-style voting." />
+  <meta name="twitter:image" content="https://bob.claudewill.io/og-image.png" />
+
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="apple-touch-icon" href="/bob.png" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script type="module" crossorigin src="/assets/index-DkwnTNVw.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-CTlymMcQ.css">
+</head>
+<body>
+  <div id="root"></div>
+</body>
+</html>
