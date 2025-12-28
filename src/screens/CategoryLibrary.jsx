@@ -8,22 +8,14 @@ export function CategoryLibrary({ onSelect, onCustom, onBack, customCategories }
   const currentThemeData = CATEGORY_LIBRARY[activeTheme]
 
   const handleSurpriseMe = () => {
-    try {
-      alert('Step 1: handleSurpriseMe called')
-      const allCategories = []
-      Object.entries(CATEGORY_LIBRARY).forEach(([theme, data]) => {
-        data.categories.forEach(cat => {
-          allCategories.push({ ...cat, theme })
-        })
+    const allCategories = []
+    Object.entries(CATEGORY_LIBRARY).forEach(([theme, data]) => {
+      data.categories.forEach(cat => {
+        allCategories.push({ ...cat, theme })
       })
-      alert(`Step 2: Found ${allCategories.length} categories`)
-      const random = allCategories[Math.floor(Math.random() * allCategories.length)]
-      alert(`Step 3: Selected ${random?.name || 'undefined'}`)
-      onSelect(random, random.theme)
-      alert('Step 4: onSelect completed')
-    } catch (e) {
-      alert(`Error: ${e.message}`)
-    }
+    })
+    const random = allCategories[Math.floor(Math.random() * allCategories.length)]
+    onSelect(random, random.theme)
   }
 
   // Get featured categories

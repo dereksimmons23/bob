@@ -484,6 +484,7 @@ export const BOB = {
 
   // Get random line
   random(arr) {
+    if (!arr || !arr.length) return ''
     return arr[Math.floor(Math.random() * arr.length)]
   },
 
