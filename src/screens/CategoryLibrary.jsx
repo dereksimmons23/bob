@@ -8,6 +8,8 @@ export function CategoryLibrary({ onSelect, onCustom, onBack, customCategories }
   const currentThemeData = CATEGORY_LIBRARY[activeTheme]
 
   const handleSurpriseMe = () => {
+    // DEBUG: Remove after fixing
+    alert('Surprise Me clicked!')
     const allCategories = []
     Object.entries(CATEGORY_LIBRARY).forEach(([theme, data]) => {
       data.categories.forEach(cat => {

@@ -127,6 +127,13 @@ function AppContent() {
 
   // Handle category selection from library
   const handleSelectFromLibrary = useCallback((cat, theme) => {
+    // DEBUG: Remove after fixing
+    alert(`Selected: ${cat?.name || 'undefined'}`)
+    console.log('handleSelectFromLibrary called:', cat?.name, theme)
+    if (!cat || !cat.name || !cat.entrants) {
+      console.error('Invalid category:', cat)
+      return
+    }
     setCategory(cat.name)
     setCategoryType(theme || cat.type || 'library')
     setEntrants([...cat.entrants])
