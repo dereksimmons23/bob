@@ -24,11 +24,16 @@ export function SetupScreen({
   onLogoClick,
 }) {
   const [newEntrant, setNewEntrant] = useState('')
-  const [showFullEditor, setShowFullEditor] = useState(categoryType === 'custom')
+  const [showFullEditor, setShowFullEditor] = useState(false)
 
   const structure = calculateBracketStructure(entrants.length)
   const canStart = category.trim() && entrants.length >= 4
+
+  // Library pick = anything that's not 'custom' (food, music, rushmore, etc.)
   const isLibraryPick = categoryType !== 'custom'
+
+  // For library picks, start in compact mode. For custom, always show full editor.
+  const showCompact = isLibraryPick && !showFullEditor
 
   const addEntrant = () => {
     const trimmed = newEntrant.trim()
@@ -43,7 +48,7 @@ export function SetupScreen({
   }
 
   // Compact view for library picks - everything visible without scrolling
-  if (isLibraryPick && !showFullEditor) {
+  if (showCompact) {
     return (
       <div style={{
         minHeight: '100vh',
