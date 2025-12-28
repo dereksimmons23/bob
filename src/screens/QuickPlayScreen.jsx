@@ -1,7 +1,41 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { CATEGORY_LIBRARY } from '../data/categories'
 import { BOB } from '../data/bob'
 import { Logo } from '../components/ui'
+
+// Helper: Generate bracket from entrants
+function createBracket(entrants) {
+  const shuffled = [...entrants].sort(() => Math.random() - 0.5)
+
+  let bracketSize = 8
+  if (shuffled.length >= 16) bracketSize = 16
+  else if (shuffled.length < 8) bracketSize = Math.pow(2, Math.ceil(Math.log2(shuffled.length)))
+
+  const participants = shuffled.slice(0, bracketSize)
+
+  const firstRound = []
+  for (let i = 0; i < participants.length; i += 2) {
+    firstRound.push({
+      id: `r0-${i/2}`,
+      a: participants[i],
+      b: participants[i + 1],
+      winner: null,
+    })
+  }
+
+  return [firstRound]
+}
+
+// Helper: Pick random category
+function pickRandom() {
+  const allCategories = []
+  Object.entries(CATEGORY_LIBRARY).forEach(([themeKey, data]) => {
+    data.categories.forEach(cat => {
+      allCategories.push({ ...cat, theme: themeKey, color: data.color })
+    })
+  })
+  return allCategories[Math.floor(Math.random() * allCategories.length)]
+}
 
 /**
  * QuickPlayScreen - Single-screen bracket experience
@@ -13,70 +47,35 @@ import { Logo } from '../components/ui'
  * - Ridiculously easy for ages 10-80
  */
 export function QuickPlayScreen({ onExit, onSaveToVault }) {
-  // Game state
-  const [category, setCategory] = useState(null)
-  const [theme, setTheme] = useState(null)
-  const [bracket, setBracket] = useState([]) // Array of rounds, each round is array of matchups
+  // Initialize with random category immediately
+  const [category, setCategory] = useState(() => pickRandom())
+  const [bracket, setBracket] = useState(() => createBracket(pickRandom().entrants))
   const [currentRound, setCurrentRound] = useState(0)
   const [currentMatchup, setCurrentMatchup] = useState(0)
   const [champion, setChampion] = useState(null)
-  const [bobMessage, setBobMessage] = useState('')
+  const [bobMessage, setBobMessage] = useState(() => BOB.random(BOB.welcome))
   const [isAnimating, setIsAnimating] = useState(false)
   const [matchupResults, setMatchupResults] = useState([])
 
-  // Pick random category on mount
+  // Proper initialization on mount
   useEffect(() => {
-    pickRandomCategory()
+    const picked = pickRandom()
+    setCategory(picked)
+    setBracket(createBracket(picked.entrants))
+    setBobMessage(BOB.random(BOB.welcome))
   }, [])
 
-  const pickRandomCategory = useCallback(() => {
-    // Gather all categories
-    const allCategories = []
-    Object.entries(CATEGORY_LIBRARY).forEach(([themeKey, data]) => {
-      data.categories.forEach(cat => {
-        allCategories.push({ ...cat, theme: themeKey, color: data.color })
-      })
-    })
-
-    // Pick random
-    const picked = allCategories[Math.floor(Math.random() * allCategories.length)]
+  const pickRandomCategory = () => {
+    const picked = pickRandom()
     setCategory(picked)
-    setTheme(picked.theme)
+    setBracket(createBracket(picked.entrants))
     setBobMessage(BOB.random(BOB.welcome))
-
-    // Generate bracket
-    generateBracket(picked.entrants)
     setChampion(null)
     setCurrentRound(0)
     setCurrentMatchup(0)
     setMatchupResults([])
-  }, [])
-
-  const generateBracket = (entrants) => {
-    // Shuffle entrants
-    const shuffled = [...entrants].sort(() => Math.random() - 0.5)
-
-    // For simplicity, take first 8 entrants for clean bracket
-    // (or 16 if available)
-    let bracketSize = 8
-    if (shuffled.length >= 16) bracketSize = 16
-    else if (shuffled.length < 8) bracketSize = Math.pow(2, Math.ceil(Math.log2(shuffled.length)))
-
-    const participants = shuffled.slice(0, bracketSize)
-
-    // Create first round matchups
-    const firstRound = []
-    for (let i = 0; i < participants.length; i += 2) {
-      firstRound.push({
-        id: `r0-${i/2}`,
-        a: participants[i],
-        b: participants[i + 1],
-        winner: null,
-      })
-    }
-
-    setBracket([firstRound])
   }
+
 
   const vote = (winner, loser) => {
     if (isAnimating || champion) return
