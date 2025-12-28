@@ -29,7 +29,7 @@ A PWA (Progressive Web App) that runs bracket-style voting tournaments. Pick a c
 - **Champion celebration** — Confetti, fanfare, shareable results
 
 ### Category Library
-- **100+ preset categories** across 8 themes:
+- **100+ preset categories** across 10 themes:
   - 🍕 Food & Drink
   - 🎵 Music
   - 🎬 Movies & TV
@@ -37,7 +37,9 @@ A PWA (Progressive Web App) that runs bracket-style voting tournaments. Pick a c
   - 🎮 Games & Gaming
   - 🎲 Random & Absurd
   - 🎄 Holidays & Seasons
+  - 🥂 NYE 2025
   - 🏅 Olympics
+  - 🗻 Mount Rushmore (GOAT debates — tracks 1st-4th place)
 
 ### Meet BOB
 BOB is your AI game show host. Dry wit. Deadpan delivery. Strong opinions on food brackets.
@@ -221,6 +223,15 @@ bob/
 - ✅ Year in Review mode (4 brackets → 1 MVP)
 - ✅ NYE special effects (gold confetti + champion lines)
 - ✅ Vote margin tracking throughout bracket
+
+### v2.7 (NYE 2025 Release — Dec 27, 2025)
+- ✅ Mount Rushmore mode — GOAT debates where Final Four = your Mount Rushmore (1st-4th place)
+- ✅ 12 Mount Rushmore categories (athletes, directors, musicians, etc.)
+- ✅ OG meta tags for social sharing (static + dynamic via Edge Functions)
+- ✅ Dynamic OG tags for shared brackets (`/b/[id]`) and vaults (`/v/[id]`)
+- ✅ NYE 2025 category theme
+- ✅ Mobile touch fixes (CategoryCard now uses button element)
+- ✅ Critical bug fix: Context API function name mismatch
 
 ### v3 (Post-Launch 2026)
 - ✅ Banners & Banter Phase 1 — Shareable links (Complete)

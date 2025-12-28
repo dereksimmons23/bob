@@ -29,10 +29,10 @@ import { supabase } from './lib/supabase'
 function AppContent() {
   const {
     history,
-    addEntry,
-    deleteEntry,
-    editEntry,
-    clearHistory,
+    addToVault,
+    deleteFromVault,
+    editVaultEntry,
+    clearVault,
     resetVault,
     customCategories,
     addCustomCategory,
@@ -219,7 +219,7 @@ function AppContent() {
             bobComment: comment,
             matchupResults: finalResults,
           }
-          addEntry(newEntry)
+          addToVault(newEntry)
 
           // Track in Supabase
           supabase.from('games').insert({
@@ -281,7 +281,7 @@ function AppContent() {
       setCanUndo(true)
       setTimeout(() => setCanUndo(false), 5000)
     }, 1500)
-  }, [bracket, currentRoundIndex, currentMatchupIndex, winners, matchupResults, category, categoryType, playerCount, entrants, isYearInReview, addEntry])
+  }, [bracket, currentRoundIndex, currentMatchupIndex, winners, matchupResults, category, categoryType, playerCount, entrants, isYearInReview, addToVault])
 
   // Handle undo
   const handleUndo = useCallback(() => {
@@ -324,11 +324,11 @@ function AppContent() {
       message: `Delete "${entry.champion}" from ${entry.category}?`,
       confirmText: 'Delete',
       onConfirm: () => {
-        deleteEntry(index)
+        deleteFromVault(index)
         setConfirmModal(null)
       },
     })
-  }, [deleteEntry])
+  }, [deleteFromVault])
 
   // Modal renderers
   const renderModals = () => (
@@ -446,13 +446,13 @@ function AppContent() {
               message: 'Clear all champions from The Vault? This cannot be undone.',
               confirmText: 'Clear All',
               onConfirm: () => {
-                clearHistory()
+                clearVault()
                 setConfirmModal(null)
               },
             })
           }}
-          onDeleteEntry={deleteEntry}
-          onEditEntry={editEntry}
+          onDeleteEntry={deleteFromVault}
+          onEditEntry={editVaultEntry}
           onConfirmDelete={handleConfirmDelete}
         />
         {renderModals()}

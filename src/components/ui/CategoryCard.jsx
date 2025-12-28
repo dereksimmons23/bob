@@ -1,6 +1,6 @@
 export function CategoryCard({ category, onSelect, color }) {
   return (
-    <div
+    <button
       onClick={() => onSelect(category)}
       className="animate-scaleIn"
       style={{
@@ -10,14 +10,8 @@ export function CategoryCard({ category, onSelect, color }) {
         padding: '20px',
         cursor: 'pointer',
         transition: 'all 0.2s ease',
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.borderColor = color
-        e.currentTarget.style.transform = 'translateY(-2px)'
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.borderColor = `${color}33`
-        e.currentTarget.style.transform = 'translateY(0)'
+        width: '100%',
+        textAlign: 'left',
       }}
     >
       <div style={{
@@ -35,6 +29,6 @@ export function CategoryCard({ category, onSelect, color }) {
       }}>
         {category.entrants.length} entrants
       </div>
-    </div>
+    </button>
   )
 }
