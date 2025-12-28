@@ -105,7 +105,7 @@ export const CATEGORY_LIBRARY = {
   nye: {
     name: "NYE 2025",
     icon: "🥂",
-    color: "#f59e0b",
+    color: "#E8D4B8",
     categories: [
       { name: "Best NYE Song", featured: true, entrants: ["Auld Lang Syne", "1999 (Prince)", "New Year's Day (U2)", "Celebration (Kool & The Gang)", "Let's Go Crazy", "I Gotta Feeling", "Party in the USA", "Raise Your Glass", "Year 3000", "It's the End of the World", "Closing Time", "New Year's Eve (Snoop)", "Happy (Pharrell)", "Good Riddance (Green Day)", "What a Wonderful World", "Here Comes the Sun"] },
       { name: "Best NYE Tradition", featured: true, entrants: ["Midnight Kiss", "Champagne Toast", "Ball Drop Watch", "Countdown", "Fireworks", "Resolutions", "First Footer", "Noisemakers", "Sparklers", "Eating 12 Grapes", "Wearing White", "Burning Effigies", "Polar Plunge", "Black-Eyed Peas", "Hoppin' John", "Staying Up Till Midnight"] },
@@ -132,7 +132,7 @@ export const CATEGORY_LIBRARY = {
   rushmore: {
     name: "Mount Rushmore",
     icon: "🗻",
-    color: "#78716c",
+    color: "#CD7F32",
     description: "GOAT debates where the Final Four matters",
     categories: [
       { name: "Greatest Male Athletes", featured: true, mountRushmore: true, entrants: ["Michael Jordan", "Muhammad Ali", "Tom Brady", "Wayne Gretzky", "Babe Ruth", "LeBron James", "Usain Bolt", "Michael Phelps", "Lionel Messi", "Tiger Woods", "Jim Brown", "Bo Jackson", "Jim Thorpe", "Pelé", "Cristiano Ronaldo", "Kobe Bryant"] },

@@ -126,9 +126,9 @@ function AppContent() {
   }, [])
 
   // Handle category selection from library
-  const handleSelectFromLibrary = useCallback((cat) => {
+  const handleSelectFromLibrary = useCallback((cat, theme) => {
     setCategory(cat.name)
-    setCategoryType(cat.type || 'custom')
+    setCategoryType(theme || cat.type || 'library')
     setEntrants([...cat.entrants])
     setIsMountRushmore(cat.mountRushmore || false)
     setBobMessage(BOB.getCategoryComment(cat.name) || BOB.random(BOB.reaction))
