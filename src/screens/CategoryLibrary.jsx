@@ -61,8 +61,8 @@ export function CategoryLibrary({ onSelect, onCustom, onBack, customCategories }
         <div style={{ width: '100%', textAlign: 'center', marginBottom: '8px' }}>
           <span style={{ color: 'var(--text-muted)', fontSize: '13px' }}>Quick start:</span>
         </div>
-        <Button variant="primary" size="large" onClick={handleSurpriseMe}>Surprise Me!</Button>
         <Button variant="secondary" onClick={onCustom}>Create Custom</Button>
+        <Button variant="primary" size="large" onClick={() => { alert('inline click!'); handleSurpriseMe(); }}>Surprise Me!</Button>
       </div>
 
       {/* Featured Categories */}
