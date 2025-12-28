@@ -8,16 +8,22 @@ export function CategoryLibrary({ onSelect, onCustom, onBack, customCategories }
   const currentThemeData = CATEGORY_LIBRARY[activeTheme]
 
   const handleSurpriseMe = () => {
-    // DEBUG: Remove after fixing
-    alert('Surprise Me clicked!')
-    const allCategories = []
-    Object.entries(CATEGORY_LIBRARY).forEach(([theme, data]) => {
-      data.categories.forEach(cat => {
-        allCategories.push({ ...cat, theme })
+    try {
+      alert('Step 1: handleSurpriseMe called')
+      const allCategories = []
+      Object.entries(CATEGORY_LIBRARY).forEach(([theme, data]) => {
+        data.categories.forEach(cat => {
+          allCategories.push({ ...cat, theme })
+        })
       })
-    })
-    const random = allCategories[Math.floor(Math.random() * allCategories.length)]
-    onSelect(random, random.theme)
+      alert(`Step 2: Found ${allCategories.length} categories`)
+      const random = allCategories[Math.floor(Math.random() * allCategories.length)]
+      alert(`Step 3: Selected ${random?.name || 'undefined'}`)
+      onSelect(random, random.theme)
+      alert('Step 4: onSelect completed')
+    } catch (e) {
+      alert(`Error: ${e.message}`)
+    }
   }
 
   // Get featured categories
@@ -62,8 +68,7 @@ export function CategoryLibrary({ onSelect, onCustom, onBack, customCategories }
           <span style={{ color: 'var(--text-muted)', fontSize: '13px' }}>Quick start:</span>
         </div>
         <Button variant="secondary" onClick={onCustom}>Create Custom</Button>
-        <Button variant="primary" size="large" onClick={() => alert('TEST LARGE')}>TEST LARGE</Button>
-        <Button variant="primary" onClick={() => alert('SURPRISE')}>Surprise Me!</Button>
+        <Button variant="primary" onClick={handleSurpriseMe}>Surprise Me!</Button>
       </div>
 
       {/* Featured Categories */}
