@@ -248,6 +248,50 @@ git push            # Auto-deploys to Vercel
 
 ---
 
+## Vision: BOB v4 — Voice-First AI Host
+
+> Captured: December 28, 2025
+
+**The insight:** BOB shouldn't be decoration on a traditional UI. BOB should BE the interface.
+
+**Current state (v2.x):**
+- Text comments on the side
+- User navigates with buttons and taps
+- BOB is flavor, not function
+
+**North star (v4):**
+```
+You: "Hey BOB, pizza bracket"
+BOB: "Pizza. Classic. I've got 16 toppings loaded. Want the usual or mix it up?"
+You: "Mix it up"
+BOB: "Adding anchovies. Don't blame me. First up: Pepperoni versus Mushrooms."
+You: "Pepperoni"
+BOB: "Pepperoni advances. Shocking absolutely no one. Next..."
+[...]
+BOB: "That was decisive. You should post this to Banners & Banter —
+      the pineapple upset alone is worth documenting."
+You: "Do it"
+BOB: "Done. Shared with the caption 'Pineapple truthers unite.'"
+```
+
+**What this requires:**
+- Voice synthesis (ElevenLabs — already explored)
+- Voice recognition (Web Speech API or Whisper)
+- AI orchestration (BOB understands intent, not keywords)
+- Proactive helpfulness (BOB notices, suggests, acts)
+- Memory (BOB remembers past games, preferences, group dynamics)
+
+**BOB as:**
+- Tour guide (helps you play)
+- Emcee (builds moments, knows when to be quiet)
+- Memory keeper (callbacks to past games)
+- Provocateur (stirs conversation)
+- Assistant (handles sharing, saving, setup)
+
+**The shift:** The game doesn't have buttons AND BOB. The game IS BOB.
+
+---
+
 ## Questions for Next Session
 
 - What specifically is clunky about QuickPlay?
