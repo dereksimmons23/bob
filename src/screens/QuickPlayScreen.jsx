@@ -48,8 +48,8 @@ function pickRandom() {
  */
 export function QuickPlayScreen({ onExit, onSaveToVault }) {
   // Initialize with random category immediately
-  const [category, setCategory] = useState(() => pickRandom())
-  const [bracket, setBracket] = useState(() => createBracket(pickRandom().entrants))
+  const [category, setCategory] = useState(null)
+  const [bracket, setBracket] = useState([])
   const [currentRound, setCurrentRound] = useState(0)
   const [currentMatchup, setCurrentMatchup] = useState(0)
   const [champion, setChampion] = useState(null)
@@ -199,7 +199,7 @@ export function QuickPlayScreen({ onExit, onSaveToVault }) {
         alignItems: 'center',
         marginBottom: '12px',
       }}>
-        <Logo size="tiny" onClick={onExit} />
+        <Logo size="small" onClick={onExit} />
         <div style={{
           fontSize: '11px',
           color: 'var(--text-muted)',
