@@ -4,7 +4,7 @@
 
 **Battle o' Brackets** is a tournament-style voting game for family gatherings, parties, and anywhere opinions clash. Vote head-to-head until a champion is crowned. Ties? Phone a friend. Chaos? That's the feature.
 
-🏆 **Live:** [battle-of-brackets.netlify.app](https://battle-of-brackets.netlify.app)
+🏆 **Live:** [bob.claudewill.io](https://bob.claudewill.io)
 
 ---
 
@@ -102,7 +102,7 @@ npx netlify-cli deploy --prod
 ## Technical Details
 
 ### Stack
-- **Vite + React 18** — Modern build tooling with hot module replacement
+- **Vite 7 + React 19** — Modern build tooling with hot module replacement
 - **Modular architecture** — 40+ files across components, screens, hooks, and context
 - **Supabase** — Backend for feedback, analytics, and shared brackets
 - **Web Audio API** — Sound effects
@@ -112,8 +112,8 @@ npx netlify-cli deploy --prod
 ### Key Dependencies
 ```json
 {
-  "react": "^18.3.1",
-  "react-dom": "^18.3.1",
+  "react": "^19.0.0",
+  "react-dom": "^19.0.0",
   "@supabase/supabase-js": "^2.49.4",
   "vite": "^7.3.0"
 }
@@ -232,6 +232,15 @@ bob/
 - ✅ NYE 2025 category theme
 - ✅ Mobile touch fixes (CategoryCard now uses button element)
 - ✅ Critical bug fix: Context API function name mismatch
+
+### v2.8 (Post-Vite Stabilization — Dec 28, 2025)
+- ✅ iOS Safari safe-area padding for fixed footers
+- ✅ Compact setup view for library picks (no scroll required)
+- ✅ Fixed category selection bug (`BOB.reaction` undefined)
+- ✅ Added defensive checks to `BOB.random()`
+- ✅ Mount Rushmore theme color → bronze (#CD7F32)
+- ✅ NYE theme color → champagne (#E8D4B8)
+- ✅ Removed debug code from production
 
 ### v3 (Post-Launch 2026)
 - ✅ Banners & Banter Phase 1 — Shareable links (Complete)
