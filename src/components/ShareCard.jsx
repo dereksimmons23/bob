@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { Button } from './ui'
 import { supabase } from '../lib/supabase'
 
-export function ShareCard({ champion, category, runnerUp, entrants, playerCount, bobComment, existingShareLink, matchupResults = [], closestCall, biggestBlowout, onClose }) {
+export function ShareCard({ champion, category, runnerUp, entrants, playerCount, bobComment, existingShareLink, matchupResults = [], closestCall, biggestBlowout, isMountRushmore = false, rushmore = null, onClose }) {
   const canvasRef = useRef(null)
   const [imageUrl, setImageUrl] = useState(null)
   const [shareLink, setShareLink] = useState(existingShareLink || null)
@@ -23,38 +23,90 @@ export function ShareCard({ champion, category, runnerUp, entrants, playerCount,
     gradient.addColorStop(0.5, '#ffed4a')
     gradient.addColorStop(1, '#ffd700')
 
-    // Title
-    ctx.font = 'bold 36px Bangers, sans-serif'
-    ctx.fillStyle = gradient
-    ctx.textAlign = 'center'
-    ctx.fillText("BATTLE o' BRACKETS", 300, 60)
+    if (isMountRushmore && rushmore) {
+      // Mount Rushmore layout
+      ctx.font = 'bold 32px Bangers, sans-serif'
+      ctx.fillStyle = gradient
+      ctx.textAlign = 'center'
+      ctx.fillText("MOUNT RUSHMORE", 300, 45)
 
-    // Trophy
-    ctx.font = '80px serif'
-    ctx.fillText('🏆', 300, 160)
+      ctx.font = '18px Outfit, sans-serif'
+      ctx.fillStyle = '#8892b0'
+      ctx.fillText(category.toUpperCase(), 300, 75)
 
-    // Category
-    ctx.font = '18px Outfit, sans-serif'
-    ctx.fillStyle = '#8892b0'
-    ctx.fillText(category.toUpperCase(), 300, 210)
+      // Mountain emoji
+      ctx.font = '50px serif'
+      ctx.fillText('🗻', 300, 130)
 
-    // Champion
-    ctx.font = 'bold 42px Bangers, sans-serif'
-    ctx.fillStyle = '#ffd700'
-    ctx.fillText(champion.toUpperCase(), 300, 270)
+      // Four faces in 2x2 grid
+      const positions = [
+        { x: 150, y: 180, label: '1st', name: rushmore.first, color: '#ffd700' },
+        { x: 450, y: 180, label: '2nd', name: rushmore.second, color: '#c0c0c0' },
+        { x: 150, y: 290, label: '3rd', name: rushmore.third, color: '#cd7f32' },
+        { x: 450, y: 290, label: '4th', name: rushmore.fourth, color: '#6b7280' },
+      ]
 
-    // Runner up
-    ctx.font = '16px Outfit, sans-serif'
-    ctx.fillStyle = '#8892b0'
-    ctx.fillText(`defeated ${runnerUp}`, 300, 310)
+      positions.forEach(pos => {
+        // Medal circle
+        ctx.beginPath()
+        ctx.arc(pos.x, pos.y, 45, 0, Math.PI * 2)
+        ctx.fillStyle = '#1a1f2e'
+        ctx.fill()
+        ctx.strokeStyle = pos.color
+        ctx.lineWidth = 3
+        ctx.stroke()
 
-    // Footer
-    ctx.font = '14px Outfit, sans-serif'
-    ctx.fillStyle = '#4a5578'
-    ctx.fillText('bob.claudewill.io', 300, 370)
+        // Name (truncated if needed)
+        const name = pos.name?.toUpperCase() || 'TBD'
+        const displayName = name.length > 12 ? name.substring(0, 11) + '…' : name
+        ctx.font = 'bold 14px Bangers, sans-serif'
+        ctx.fillStyle = pos.color
+        ctx.fillText(displayName, pos.x, pos.y + 5)
+
+        // Place label
+        ctx.font = '10px Outfit, sans-serif'
+        ctx.fillStyle = '#6b7280'
+        ctx.fillText(pos.label, pos.x, pos.y + 22)
+      })
+
+      // Footer
+      ctx.font = '14px Outfit, sans-serif'
+      ctx.fillStyle = '#4a5578'
+      ctx.fillText('bob.claudewill.io', 300, 375)
+    } else {
+      // Standard champion layout
+      ctx.font = 'bold 36px Bangers, sans-serif'
+      ctx.fillStyle = gradient
+      ctx.textAlign = 'center'
+      ctx.fillText("BATTLE o' BRACKETS", 300, 60)
+
+      // Trophy
+      ctx.font = '80px serif'
+      ctx.fillText('🏆', 300, 160)
+
+      // Category
+      ctx.font = '18px Outfit, sans-serif'
+      ctx.fillStyle = '#8892b0'
+      ctx.fillText(category.toUpperCase(), 300, 210)
+
+      // Champion
+      ctx.font = 'bold 42px Bangers, sans-serif'
+      ctx.fillStyle = '#ffd700'
+      ctx.fillText(champion.toUpperCase(), 300, 270)
+
+      // Runner up
+      ctx.font = '16px Outfit, sans-serif'
+      ctx.fillStyle = '#8892b0'
+      ctx.fillText(`defeated ${runnerUp}`, 300, 310)
+
+      // Footer
+      ctx.font = '14px Outfit, sans-serif'
+      ctx.fillStyle = '#4a5578'
+      ctx.fillText('bob.claudewill.io', 300, 370)
+    }
 
     setImageUrl(canvas.toDataURL('image/png'))
-  }, [champion, category, runnerUp])
+  }, [champion, category, runnerUp, isMountRushmore, rushmore])
 
   const handleDownload = () => {
     const link = document.createElement('a')
@@ -66,18 +118,29 @@ export function ShareCard({ champion, category, runnerUp, entrants, playerCount,
   }
 
   const handleCopyText = () => {
-    let text = `🏆 ${champion.toUpperCase()}\nCrowned champion of "${category}" in Battle o' Brackets!\n\ndefeated ${runnerUp} in the final`
+    let text
 
-    // Add dramatic moments if available
-    const drama = []
-    if (closestCall && closestCall.margin <= 1) {
-      drama.push(`🔥 Closest call: ${closestCall.winner} def. ${closestCall.loser} (${closestCall.votesA}-${closestCall.votesB})`)
-    }
-    if (biggestBlowout && biggestBlowout.margin >= 4) {
-      drama.push(`💀 Biggest blowout: ${biggestBlowout.winner} crushed ${biggestBlowout.loser} (${biggestBlowout.votesA}-${biggestBlowout.votesB})`)
-    }
-    if (drama.length > 0) {
-      text += `\n\n${drama.join('\n')}`
+    if (isMountRushmore && rushmore) {
+      text = `🗻 MOUNT RUSHMORE: ${category.toUpperCase()}\n\n`
+      text += `🥇 ${rushmore.first?.toUpperCase()}\n`
+      text += `🥈 ${rushmore.second?.toUpperCase()}\n`
+      text += `🥉 ${rushmore.third?.toUpperCase()}\n`
+      text += `4️⃣ ${rushmore.fourth?.toUpperCase()}\n`
+      text += `\nCarved in stone via Battle o' Brackets`
+    } else {
+      text = `🏆 ${champion.toUpperCase()}\nCrowned champion of "${category}" in Battle o' Brackets!\n\ndefeated ${runnerUp} in the final`
+
+      // Add dramatic moments if available
+      const drama = []
+      if (closestCall && closestCall.margin <= 1) {
+        drama.push(`🔥 Closest call: ${closestCall.winner} def. ${closestCall.loser} (${closestCall.votesA}-${closestCall.votesB})`)
+      }
+      if (biggestBlowout && biggestBlowout.margin >= 4) {
+        drama.push(`💀 Biggest blowout: ${biggestBlowout.winner} crushed ${biggestBlowout.loser} (${biggestBlowout.votesA}-${biggestBlowout.votesB})`)
+      }
+      if (drama.length > 0) {
+        text += `\n\n${drama.join('\n')}`
+      }
     }
 
     text += `\n\n${shareLink || 'bob.claudewill.io'}\n\n#BattleOBrackets`
@@ -150,7 +213,7 @@ export function ShareCard({ champion, category, runnerUp, entrants, playerCount,
           marginBottom: '24px',
           letterSpacing: '2px',
         }}>
-          SHARE YOUR CHAMPION
+          {isMountRushmore ? 'SHARE YOUR MOUNT RUSHMORE' : 'SHARE YOUR CHAMPION'}
         </div>
 
         <canvas

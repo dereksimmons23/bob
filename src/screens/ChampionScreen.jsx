@@ -7,7 +7,7 @@ import { BOB } from '../data/bob'
 import { SoundEffects } from '../lib/sound'
 import { supabase } from '../lib/supabase'
 
-export function ChampionScreen({ champion, category, runnerUp, categoryType, bobComment, entrants, playerCount, matchupResults = [], onNewGame, onViewVault }) {
+export function ChampionScreen({ champion, category, runnerUp, categoryType, bobComment, entrants, playerCount, matchupResults = [], isMountRushmore = false, onNewGame, onViewVault }) {
   const [showShare, setShowShare] = useState(false)
   const [shareLink, setShareLink] = useState(null)
   const [shareCopied, setShareCopied] = useState(false)
@@ -16,6 +16,27 @@ export function ChampionScreen({ champion, category, runnerUp, categoryType, bob
   // Use passed bobComment or fall back to random
   const displayComment = bobComment || BOB.random(categoryType === 'nye' ? BOB.championNYE : BOB.champion)
   const isNYE = categoryType === 'nye'
+
+  // Extract Mount Rushmore (Final Four) from matchup results
+  const getMountRushmore = () => {
+    if (!isMountRushmore || matchupResults.length === 0) return null
+
+    // Get Final Four losers (semifinal losers = 3rd/4th place)
+    const finalFourMatches = matchupResults.filter(m => m.round === 'Final Four')
+    if (finalFourMatches.length !== 2) return null
+
+    // Sort by margin - closer match = 3rd place (fought harder)
+    const sorted = [...finalFourMatches].sort((a, b) => a.margin - b.margin)
+
+    return {
+      first: champion,
+      second: runnerUp,
+      third: sorted[0]?.loser,  // Closer semifinal loser = 3rd
+      fourth: sorted[1]?.loser, // Bigger blowout loser = 4th
+    }
+  }
+
+  const rushmore = getMountRushmore()
 
   // Compute dramatic moments
   const closestCall = matchupResults.length > 0
@@ -96,6 +117,119 @@ export function ChampionScreen({ champion, category, runnerUp, categoryType, bob
     }
   }
 
+  // Mount Rushmore display
+  if (rushmore) {
+    return (
+      <div style={{
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '24px',
+        textAlign: 'center',
+      }}>
+        <div className="animate-scaleIn" style={{
+          fontFamily: 'var(--font-display)',
+          fontSize: '20px',
+          color: 'var(--text-secondary)',
+          letterSpacing: '6px',
+          marginBottom: '8px',
+        }}>
+          YOUR MOUNT RUSHMORE OF
+        </div>
+
+        <div className="animate-scaleIn" style={{
+          fontFamily: 'var(--font-display)',
+          fontSize: '28px',
+          color: 'var(--accent-gold)',
+          letterSpacing: '4px',
+          marginBottom: '24px',
+        }}>
+          {category.toUpperCase()}
+        </div>
+
+        <div className="animate-float" style={{ fontSize: '60px', marginBottom: '24px' }}>🗻</div>
+
+        {/* Mount Rushmore Grid */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(2, 1fr)',
+          gap: '16px',
+          maxWidth: '500px',
+          width: '100%',
+          marginBottom: '24px',
+        }}>
+          {[
+            { place: '1st', name: rushmore.first, color: 'var(--accent-gold)', icon: '🥇' },
+            { place: '2nd', name: rushmore.second, color: '#c0c0c0', icon: '🥈' },
+            { place: '3rd', name: rushmore.third, color: '#cd7f32', icon: '🥉' },
+            { place: '4th', name: rushmore.fourth, color: 'var(--text-muted)', icon: '4️⃣' },
+          ].map((spot, i) => (
+            <div
+              key={i}
+              className="animate-scaleIn"
+              style={{
+                background: 'var(--bg-card)',
+                border: `2px solid ${spot.color}`,
+                borderRadius: '16px',
+                padding: '20px 16px',
+                animationDelay: `${0.1 * (i + 1)}s`,
+              }}
+            >
+              <div style={{ fontSize: '32px', marginBottom: '8px' }}>{spot.icon}</div>
+              <div style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: '18px',
+                color: spot.color,
+                letterSpacing: '1px',
+                lineHeight: '1.2',
+              }}>
+                {spot.name?.toUpperCase() || 'TBD'}
+              </div>
+              <div style={{
+                fontSize: '12px',
+                color: 'var(--text-muted)',
+                marginTop: '4px',
+              }}>
+                {spot.place} Place
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <BobSays message="Four legends. One mountain. Carved in stone forever." mood="victory" />
+
+        <div style={{ display: 'flex', gap: '16px', marginTop: '24px', flexWrap: 'wrap', justifyContent: 'center' }}>
+          <Button variant="primary" size="large" onClick={onNewGame}>New Bracket</Button>
+          <Button variant="secondary" size="large" onClick={handleShare}>
+            {shareCopied ? '✓ Copied!' : 'Share'}
+          </Button>
+          <Button variant="ghost" size="large" onClick={onViewVault}>The Vault</Button>
+        </div>
+
+        {showShare && (
+          <ShareCard
+            champion={champion}
+            category={category}
+            runnerUp={runnerUp}
+            entrants={entrants}
+            playerCount={playerCount}
+            bobComment={displayComment}
+            existingShareLink={shareLink}
+            matchupResults={matchupResults}
+            closestCall={closestCall}
+            biggestBlowout={biggestBlowout}
+            isMountRushmore={true}
+            rushmore={rushmore}
+            onClose={() => setShowShare(false)}
+          />
+        )}
+      </div>
+    )
+  }
+
+  // Standard champion display
   return (
     <div style={{
       minHeight: '100vh',

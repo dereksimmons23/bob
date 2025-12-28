@@ -129,4 +129,24 @@ export const CATEGORY_LIBRARY = {
       { name: "All Olympics Events", entrants: ["Figure Skating", "Alpine Skiing", "Snowboarding", "Ice Hockey", "Speed Skating", "Bobsled", "Ski Jumping", "Curling", "Luge", "Track & Field", "Swimming", "Gymnastics", "Basketball", "Soccer", "Tennis", "Diving", "Beach Volleyball", "Rowing", "Wrestling", "Boxing", "Cycling", "Volleyball", "Water Polo", "Archery", "Fencing", "Surfing", "Skateboarding", "Breaking", "Biathlon", "Freestyle Skiing", "Triathlon", "Sailing"] },
     ]
   },
+  rushmore: {
+    name: "Mount Rushmore",
+    icon: "🗻",
+    color: "#78716c",
+    description: "GOAT debates where the Final Four matters",
+    categories: [
+      { name: "Greatest Male Athletes", featured: true, mountRushmore: true, entrants: ["Michael Jordan", "Muhammad Ali", "Tom Brady", "Wayne Gretzky", "Babe Ruth", "LeBron James", "Usain Bolt", "Michael Phelps", "Lionel Messi", "Tiger Woods", "Jim Brown", "Bo Jackson", "Jim Thorpe", "Pelé", "Cristiano Ronaldo", "Kobe Bryant"] },
+      { name: "Greatest Female Athletes", featured: true, mountRushmore: true, entrants: ["Serena Williams", "Simone Biles", "Mia Hamm", "Jackie Joyner-Kersee", "Billie Jean King", "Martina Navratilova", "Florence Griffith Joyner", "Babe Didrikson", "Diana Taurasi", "Megan Rapinoe", "Lindsey Vonn", "Danica Patrick", "Ronda Rousey", "Alex Morgan", "Katie Ledecky", "Venus Williams"] },
+      { name: "Greatest NFL Quarterbacks", featured: true, mountRushmore: true, entrants: ["Tom Brady", "Joe Montana", "Peyton Manning", "Johnny Unitas", "John Elway", "Dan Marino", "Brett Favre", "Aaron Rodgers", "Drew Brees", "Patrick Mahomes", "Terry Bradshaw", "Roger Staubach", "Steve Young", "Troy Aikman", "Russell Wilson", "Eli Manning"] },
+      { name: "Greatest NBA Players", featured: true, mountRushmore: true, entrants: ["Michael Jordan", "LeBron James", "Kareem Abdul-Jabbar", "Magic Johnson", "Larry Bird", "Kobe Bryant", "Shaquille O'Neal", "Tim Duncan", "Bill Russell", "Wilt Chamberlain", "Hakeem Olajuwon", "Oscar Robertson", "Stephen Curry", "Kevin Durant", "Julius Erving", "Karl Malone"] },
+      { name: "Greatest MLB Players", mountRushmore: true, entrants: ["Babe Ruth", "Willie Mays", "Hank Aaron", "Ted Williams", "Lou Gehrig", "Mickey Mantle", "Jackie Robinson", "Ty Cobb", "Barry Bonds", "Ken Griffey Jr.", "Derek Jeter", "Mike Trout", "Shohei Ohtani", "Roberto Clemente", "Honus Wagner", "Stan Musial"] },
+      { name: "Greatest Soccer Players", mountRushmore: true, entrants: ["Pelé", "Diego Maradona", "Lionel Messi", "Cristiano Ronaldo", "Johan Cruyff", "Zinedine Zidane", "Ronaldo Nazário", "Franz Beckenbauer", "Michel Platini", "Alfredo Di Stéfano", "George Best", "Ronaldinho", "Thierry Henry", "Gerd Müller", "Marco van Basten", "Kylian Mbappé"] },
+      { name: "Greatest Boxers", mountRushmore: true, entrants: ["Muhammad Ali", "Sugar Ray Robinson", "Mike Tyson", "Floyd Mayweather Jr.", "Joe Louis", "Sugar Ray Leonard", "Manny Pacquiao", "Rocky Marciano", "Lennox Lewis", "George Foreman", "Oscar De La Hoya", "Evander Holyfield", "Jack Dempsey", "Marvin Hagler", "Roberto Durán", "Roy Jones Jr."] },
+      { name: "Greatest Film Directors", mountRushmore: true, entrants: ["Steven Spielberg", "Martin Scorsese", "Stanley Kubrick", "Alfred Hitchcock", "Quentin Tarantino", "Francis Ford Coppola", "Christopher Nolan", "Ridley Scott", "James Cameron", "David Fincher", "Coen Brothers", "Wes Anderson", "Denis Villeneuve", "Guillermo del Toro", "Spike Lee", "Kathryn Bigelow"] },
+      { name: "Greatest Actors", mountRushmore: true, entrants: ["Marlon Brando", "Robert De Niro", "Al Pacino", "Daniel Day-Lewis", "Denzel Washington", "Tom Hanks", "Jack Nicholson", "Leonardo DiCaprio", "Meryl Streep", "Anthony Hopkins", "Morgan Freeman", "Joaquin Phoenix", "Cate Blanchett", "Viola Davis", "Frances McDormand", "Christian Bale"] },
+      { name: "Greatest Rock Bands", mountRushmore: true, entrants: ["The Beatles", "Led Zeppelin", "The Rolling Stones", "Pink Floyd", "Queen", "The Who", "AC/DC", "Nirvana", "Guns N' Roses", "U2", "Aerosmith", "Van Halen", "Metallica", "The Doors", "Fleetwood Mac", "Pearl Jam"] },
+      { name: "Greatest Rappers", mountRushmore: true, entrants: ["Tupac Shakur", "The Notorious B.I.G.", "Jay-Z", "Nas", "Eminem", "Kendrick Lamar", "André 3000", "Rakim", "Lil Wayne", "Kanye West", "Ice Cube", "Snoop Dogg", "Drake", "J. Cole", "Lauryn Hill", "Missy Elliott"] },
+      { name: "Greatest Comedians", mountRushmore: true, entrants: ["Richard Pryor", "George Carlin", "Eddie Murphy", "Dave Chappelle", "Robin Williams", "Jerry Seinfeld", "Chris Rock", "Steve Martin", "Bill Murray", "Tina Fey", "Amy Poehler", "Kevin Hart", "Jim Carrey", "Louis C.K.", "Ellen DeGeneres", "Wanda Sykes"] },
+    ]
+  },
 }

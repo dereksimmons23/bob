@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>OG Image Generator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Outfit:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; padding: 20px; background: #333; display: flex; flex-direction: column; align-items: center; gap: 20px; }
+    .og-image {
+      width: 1200px;
+      height: 630px;
+      background: linear-gradient(135deg, #0a0e1a 0%, #1a1f2e 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Outfit', sans-serif;
+      position: relative;
+      overflow: hidden;
+    }
+    .bg-pattern {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image:
+        radial-gradient(circle at 20% 80%, rgba(255,215,0,0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255,215,0,0.1) 0%, transparent 50%);
+    }
+    .content { position: relative; z-index: 1; text-align: center; }
+    .trophy { font-size: 120px; margin-bottom: 20px; }
+    .title {
+      font-family: 'Bangers', cursive;
+      font-size: 72px;
+      background: linear-gradient(135deg, #ffd700 0%, #ffed4a 50%, #ffd700 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 4px;
+      margin-bottom: 16px;
+    }
+    .tagline {
+      font-size: 28px;
+      color: #8892b0;
+      margin-bottom: 24px;
+    }
+    .host {
+      font-size: 20px;
+      color: #4a5578;
+    }
+    .host span {
+      color: #ffd700;
+      font-weight: 600;
+    }
+    .url {
+      position: absolute;
+      bottom: 30px;
+      font-size: 24px;
+      color: #4a5578;
+    }
+    .instructions {
+      color: white;
+      font-family: system-ui;
+      text-align: center;
+      max-width: 600px;
+    }
+    .instructions h2 { color: #ffd700; }
+    .instructions code { background: #1a1f2e; padding: 2px 8px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <div class="og-image" id="og">
+    <div class="bg-pattern"></div>
+    <div class="content">
+      <div class="trophy">🏆</div>
+      <div class="title">BATTLE o' BRACKETS</div>
+      <div class="tagline">The party game where democracy gets dumb.</div>
+      <div class="host">Hosted by <span>BOB</span></div>
+    </div>
+    <div class="url">bob.claudewill.io</div>
+  </div>
+
+  <div class="instructions">
+    <h2>How to save as og-image.png:</h2>
+    <ol>
+      <li>Open this file in Chrome</li>
+      <li>Right-click the image above → Inspect</li>
+      <li>Right-click the <code>&lt;div class="og-image"&gt;</code> → Capture node screenshot</li>
+      <li>Save as <code>public/og-image.png</code></li>
+    </ol>
+    <p>Or use a screenshot tool to capture exactly 1200x630 pixels.</p>
+  </div>
+</body>
+</html>

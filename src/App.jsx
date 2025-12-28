@@ -65,6 +65,9 @@ function AppContent() {
   const [yirRound, setYirRound] = useState(0)
   const [yirWinners, setYirWinners] = useState([])
 
+  // Mount Rushmore state
+  const [isMountRushmore, setIsMountRushmore] = useState(false)
+
   // Undo state
   const [canUndo, setCanUndo] = useState(false)
   const [undoState, setUndoState] = useState(null)
@@ -90,46 +93,14 @@ function AppContent() {
     const path = window.location.pathname
     if (path.startsWith('/b/')) {
       const shareId = path.substring(3)
-      loadSharedBracket(shareId)
+      setSharedData({ type: 'bracket', id: shareId })
+      setScreen('shared-bracket')
     } else if (path.startsWith('/v/')) {
       const shareId = path.substring(3)
-      loadSharedVault(shareId)
+      setSharedData({ type: 'vault', id: shareId })
+      setScreen('shared-vault')
     }
   }, [])
-
-  const loadSharedBracket = async (shareId) => {
-    try {
-      const { data, error } = await supabase
-        .from('shared_brackets')
-        .select('*')
-        .eq('share_id', shareId)
-        .single()
-
-      if (error) throw error
-      setSharedData(data)
-      setScreen('shared-bracket')
-    } catch (err) {
-      console.error('Failed to load shared bracket:', err)
-      setScreen('home')
-    }
-  }
-
-  const loadSharedVault = async (shareId) => {
-    try {
-      const { data, error } = await supabase
-        .from('shared_vaults')
-        .select('*')
-        .eq('share_id', shareId)
-        .single()
-
-      if (error) throw error
-      setSharedData(data)
-      setScreen('shared-vault')
-    } catch (err) {
-      console.error('Failed to load shared vault:', err)
-      setScreen('home')
-    }
-  }
 
   // Reset game
   const resetGame = useCallback(() => {
@@ -150,6 +121,7 @@ function AppContent() {
     setIsYearInReview(false)
     setYirRound(0)
     setYirWinners([])
+    setIsMountRushmore(false)
     setScreen('home')
   }, [])
 
@@ -158,6 +130,7 @@ function AppContent() {
     setCategory(cat.name)
     setCategoryType(cat.type || 'custom')
     setEntrants([...cat.entrants])
+    setIsMountRushmore(cat.mountRushmore || false)
     setBobMessage(BOB.getCategoryComment(cat.name) || BOB.random(BOB.reaction))
     setBobMood('normal')
     setScreen('setup')
@@ -398,10 +371,10 @@ function AppContent() {
   )
 
   // Shared views
-  if (screen === 'shared-bracket' && sharedData) {
+  if (screen === 'shared-bracket' && sharedData?.id) {
     return (
       <SharedBracketView
-        data={sharedData}
+        bracketId={sharedData.id}
         onHome={() => {
           window.history.pushState({}, '', '/')
           setScreen('home')
@@ -410,10 +383,10 @@ function AppContent() {
     )
   }
 
-  if (screen === 'shared-vault' && sharedData) {
+  if (screen === 'shared-vault' && sharedData?.id) {
     return (
       <SharedVaultView
-        data={sharedData}
+        vaultId={sharedData.id}
         onHome={() => {
           window.history.pushState({}, '', '/')
           setScreen('home')
@@ -562,6 +535,7 @@ function AppContent() {
           entrants={entrants}
           playerCount={playerCount}
           matchupResults={finalBracketResults}
+          isMountRushmore={isMountRushmore}
           onNewGame={() => setScreen('library')}
           onViewVault={() => setScreen('vault')}
         />

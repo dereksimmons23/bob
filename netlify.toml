@@ -2,6 +2,15 @@
   publish = "dist"
   command = "npm run build"
 
+# Edge function for dynamic OG tags on shared content
+[[edge_functions]]
+  function = "og-tags"
+  path = "/b/*"
+
+[[edge_functions]]
+  function = "og-tags"
+  path = "/v/*"
+
 [[redirects]]
   from = "/*"
   to = "/index.html"

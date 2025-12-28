@@ -117,6 +117,9 @@ npx netlify-cli deploy --prod
 }
 ```
 
+### Security Notes
+The Supabase **anon key** in `src/lib/supabase.js` is intentionally public. This is by design—anon keys are meant for client-side use and security is enforced via Row Level Security (RLS) policies in the database. The **service_role key** (which bypasses RLS) is never exposed in the codebase.
+
 ### localStorage Keys
 | Key | Purpose |
 |-----|---------|
