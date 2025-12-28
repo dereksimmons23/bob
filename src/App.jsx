@@ -9,6 +9,7 @@ import {
   CategoryLibrary,
   SharedBracketView,
   SharedVaultView,
+  QuickPlayScreen,
 } from './screens'
 import {
   SettingsPanel,
@@ -399,12 +400,25 @@ function AppContent() {
     )
   }
 
+  // Quick Play screen (single-screen mode)
+  if (screen === 'quickplay') {
+    return (
+      <QuickPlayScreen
+        onExit={() => setScreen('home')}
+        onSaveToVault={(entry) => {
+          setHistory(prev => [entry, ...prev])
+        }}
+      />
+    )
+  }
+
   // Home screen
   if (screen === 'home') {
     return (
       <>
         <HomeScreen
           historyCount={history.length}
+          onQuickPlay={() => setScreen('quickplay')}
           onQuickStart={() => setScreen('library')}
           onCustomBracket={() => {
             setCategoryType('custom')
