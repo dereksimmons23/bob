@@ -1,7 +1,8 @@
 # CLAUDE.md — Technical Handoff for BOB
 
-> Last updated: December 28, 2025
+> Last updated: December 28, 2025 (end of session)
 > Current version: v2.8
+> Next session: December 29, 2025 — NYE polish
 
 ## Current State
 
@@ -180,13 +181,16 @@ All tables use Row Level Security. The anon key in code is intentional and safe.
 - OG meta tags for social sharing
 - NYE 2025 category theme
 
-### v2.8 (Dec 28, 2025) — Stabilization
+### v2.8 (Dec 28, 2025) — Stabilization + Exploration
 - Fixed iOS Safari safe-area issues
 - Fixed `BOB.reaction` bug (was undefined)
 - Added compact SetupScreen for library picks
 - Changed Mount Rushmore color → bronze
 - Changed NYE color → champagne
-- Created QuickPlayScreen prototype
+- Created QuickPlayScreen prototype (hidden for NYE, needs iteration)
+- Added CLAUDE.md technical handoff document
+- Documented v4 vision: voice-first BOB as interface
+- Archived 5 inactive GitHub repos
 
 ---
 
@@ -292,9 +296,20 @@ BOB: "Done. Shared with the caption 'Pineapple truthers unite.'"
 
 ---
 
-## Questions for Next Session
+## Next Session: December 29, 2025
 
-- What specifically is clunky about QuickPlay?
-- Should QuickPlay become the default, or stay as an option?
-- Is the bracket progress visualization helpful or confusing?
-- Do we need sound effects in QuickPlay mode?
+**Focus:** NYE polish — ship solid, not half-baked
+
+**Priority tasks:**
+- Test full game flow on mobile end-to-end
+- Consider featuring NYE categories more prominently
+- Any visual polish needed?
+- Confirm everything works for party use case
+
+**Parked for v3:**
+- QuickPlayScreen iteration (hidden for now)
+- Voice-first BOB vision
+- Banners & Banter Phase 2
+
+**Success criteria for NYE:**
+When someone plays BOB at a party, it works smoothly and they have fun.
