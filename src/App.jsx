@@ -158,7 +158,8 @@ function AppContent() {
   }, [category, entrants])
 
   // Handle vote result
-  const handleVoteResult = useCallback((winner, loser, votesA, votesB, wasTieBreaker) => {
+  // Signature: (winner, votesA, votesB, margin, wasTieBreaker, loser)
+  const handleVoteResult = useCallback((winner, votesA, votesB, margin, wasTieBreaker, loser) => {
     // Save undo state
     setUndoState({
       winners: [...winners],
@@ -169,8 +170,6 @@ function AppContent() {
     })
 
     const currentRound = bracket.rounds[currentRoundIndex]
-    const currentMatchup = currentRound.matchups[currentMatchupIndex]
-    const margin = Math.abs(votesA - votesB)
 
     // Record result
     const result = {
