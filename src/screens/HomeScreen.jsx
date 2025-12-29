@@ -8,7 +8,6 @@ import { BOB } from '../data/bob'
  */
 export function HomeScreen({
   historyCount,
-  onQuickPlay,
   onQuickStart,
   onCustomBracket,
   onViewVault,
@@ -29,45 +28,12 @@ export function HomeScreen({
       <Logo size="large" />
       <BobSays message={welcomeMessage} mood="normal" />
 
-      {/* Primary action - Quick Play */}
-      <button
-        onClick={onQuickPlay}
-        style={{
-          background: 'linear-gradient(135deg, var(--accent-gold) 0%, #fbbf24 100%)',
-          border: 'none',
-          borderRadius: '16px',
-          padding: '20px 48px',
-          cursor: 'pointer',
-          fontSize: '20px',
-          fontFamily: 'var(--font-display)',
-          color: 'var(--bg-deep)',
-          letterSpacing: '2px',
-          boxShadow: '0 4px 20px rgba(255, 215, 0, 0.4)',
-          marginBottom: '24px',
-          transition: 'transform 0.2s, box-shadow 0.2s',
-        }}
-        onMouseOver={e => {
-          e.currentTarget.style.transform = 'scale(1.05)'
-          e.currentTarget.style.boxShadow = '0 6px 25px rgba(255, 215, 0, 0.6)'
-        }}
-        onMouseOut={e => {
-          e.currentTarget.style.transform = 'scale(1)'
-          e.currentTarget.style.boxShadow = '0 4px 20px rgba(255, 215, 0, 0.4)'
-        }}
-      >
-        ▶ PLAY
-      </button>
-      <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '24px' }}>
-        Tap and go — no setup needed
-      </div>
-
-      {/* Secondary actions */}
-      <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', justifyContent: 'center' }}>
-        <Button variant="secondary" onClick={onQuickStart}>
-          Browse Categories
+      <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', justifyContent: 'center' }}>
+        <Button variant="primary" size="huge" onClick={onQuickStart}>
+          🎯 Pick a Category
         </Button>
-        <Button variant="secondary" onClick={onCustomBracket}>
-          Custom Bracket
+        <Button variant="secondary" size="huge" onClick={onCustomBracket}>
+          ✏️ Custom Bracket
         </Button>
       </div>
 
