@@ -1,7 +1,7 @@
 # CLAUDE.md — Technical Handoff for BOB
 
-> Last updated: December 29, 2025
-> Current version: v2.8 (NYE Edition shipping Dec 30)
+> Last updated: December 29, 2025 (end of session)
+> Current version: v2.9 — NYE Edition
 > Next milestone: v3.0 — Party Mode (January 2026)
 
 ## Current State
@@ -23,7 +23,11 @@
   - Goal: Open → Tap → Play (no setup required)
 
 **What's broken:**
-- Nothing critical as of v2.8
+- Nothing critical as of v2.9
+
+**Known cosmetic issues:**
+- `public/og-image.png` has gray box behind "BRACKETS" text — needs manual fix in image editor
+- Social share previews show static og-image, not dynamic champion card (expected; would need server-side image generation)
 
 ---
 
@@ -143,6 +147,17 @@ BOB.random(BOB.tie)      // Tie situations
 ### iOS Safari
 - Always use `viewport-fit=cover` in index.html
 - Fixed footers need: `padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px))`
+
+### Vote Result Handler Signature
+```javascript
+// App.jsx handleVoteResult expects this exact signature:
+// (winner, votesA, votesB, margin, wasTieBreaker, loser)
+//
+// MatchupCard.jsx calls it like:
+onVote(winner, votesA, votesB, margin, false, loser)
+//
+// If you change one, update the other!
+```
 
 ### State Initialization
 ```javascript
@@ -321,22 +336,30 @@ BOB: "Done. Shared with the caption 'Pineapple truthers unite.'"
 
 ---
 
-## Current Session: December 29, 2025
+## Next Session: December 30, 2025
 
-**Focus:** NYE Edition — ship improvements by EOD Dec 30
+**Focus:** Final NYE polish before shipping EOD
 
-**What we're shipping (realistic for 24 hours):**
-- [ ] Feature NYE categories more prominently on HomeScreen
-- [ ] Add 3-2-1 countdown animation before vote lock-in
-- [ ] Improve voting UX for group play (bigger buttons, clearer feedback)
-- [ ] Test full game flow on mobile
-- [ ] Any quick visual polish
+**What's ready:**
+- [x] NYE theme is default in Category Library
+- [x] NYE Party Pack banner at top of library
+- [x] 3-2-1 countdown before vote reveal
+- [x] Bigger +1 vote buttons for mobile
+- [x] BracketPathView hidden (was broken)
+- [x] Version workflow in src/lib/constants.js
+- [x] "defeated X" share text bug fixed
+
+**What's left:**
+- [ ] Fix og-image.png gray box (manual image edit)
+- [ ] Final mobile testing
+- [ ] Any last-minute polish
 
 **What we're NOT shipping (save for v3):**
 - Full Challenge/Block system (needs more design)
 - Halftime Speech mechanic (needs UI work)
 - Multi-device voting
 - QuickPlayScreen (still clunky)
+- Dynamic share preview images (needs server-side generation)
 
 **Success criteria for NYE:**
 - Game feels faster and more engaging for groups
@@ -347,8 +370,17 @@ BOB: "Done. Shared with the caption 'Pineapple truthers unite.'"
 
 ## Changelog
 
-### v2.9 (Dec 30, 2025) — NYE Edition
-- TBD based on today's work
+### v2.9 (Dec 29, 2025) — NYE Edition
+- NYE theme now default in Category Library
+- NYE Party Pack banner with featured categories
+- 3-2-1 countdown animation before vote reveal (party mode energy)
+- Bigger +1 vote buttons for mobile/party play
+- Hidden broken BracketPathView (fix in v3)
+- Version workflow: centralized in `src/lib/constants.js`
+- AboutModal now shows dynamic version
+- Fixed "defeated 1" share text bug (parameter mismatch in App.jsx)
+- Created `docs/V3-PARTY-MODE-SPEC.md` with full party mode design
+- Updated CLAUDE.md with Christmas learnings
 
 ### v2.8 (Dec 28, 2025) — Stabilization
 - Fixed iOS Safari safe-area issues
