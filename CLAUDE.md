@@ -15,11 +15,11 @@
 - iOS Safari safe-area handling
 - Supabase analytics + feedback system
 
-**What's experimental:**
-- `QuickPlayScreen` — New single-screen mode prototype (Dec 28, 2025)
-  - Works but "clunky as shit" — needs UX iteration
+**What's experimental (hidden for NYE):**
+- `QuickPlayScreen` — Single-screen mode prototype (Dec 28, 2025)
+  - Works but clunky — needs UX iteration
+  - Hidden from UI, code preserved for v3
   - Goal: Open → Tap → Play (no setup required)
-  - Single voter mode only (no tallying)
 
 **What's broken:**
 - Nothing critical as of v2.8
