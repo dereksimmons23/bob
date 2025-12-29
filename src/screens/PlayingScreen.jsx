@@ -97,11 +97,12 @@ export function PlayingScreen({
         </div>
       </div>
 
-      <BracketPathView
+      {/* BracketPathView hidden for NYE - bracket lines look broken, fix in v3 */}
+      {/* <BracketPathView
         rounds={bracket.rounds}
         currentRoundIndex={currentRoundIndex}
         categoryColor={CATEGORY_LIBRARY[categoryType]?.color}
-      />
+      /> */}
 
       <BobSays message={bobMessage} mood={bobMood} />
 

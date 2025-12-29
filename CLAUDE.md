@@ -1,8 +1,8 @@
 # CLAUDE.md — Technical Handoff for BOB
 
-> Last updated: December 28, 2025 (end of session)
-> Current version: v2.8
-> Next session: December 29, 2025 — NYE polish
+> Last updated: December 29, 2025
+> Current version: v2.8 (NYE Edition shipping Dec 30)
+> Next milestone: v3.0 — Party Mode (January 2026)
 
 ## Current State
 
@@ -24,6 +24,30 @@
 
 **What's broken:**
 - Nothing critical as of v2.8
+
+---
+
+## Christmas Eve 2025 Learnings
+
+> "We played better games tho." — The most valuable feedback
+
+**What happened:** BOB v2.8 shipped successfully. Technically flawless. But the family played Hitster and Herd Mentality more.
+
+**Why those games won:**
+- **Instant engagement** — No setup, just play
+- **Simultaneous participation** — Everyone engaged every round
+- **Memory triggers** — Nostalgia, not abstract preferences
+- **Fast loops** — 30-60 seconds per round
+- **Social tension** — "Am I thinking what everyone's thinking?"
+
+**What BOB lacked:**
+- Too much setup friction
+- Sequential voting (one person at a time)
+- Facilitator role removes them from play
+- Abstract preferences vs visceral memories
+- Delayed payoff (15+ matchups before champion)
+
+**The insight:** BOB works great solo but needs a Party Mode for groups. See `docs/V3-PARTY-MODE-SPEC.md` for full design.
 
 ---
 
@@ -169,31 +193,6 @@ All tables use Row Level Security. The anon key in code is intentional and safe.
 
 ---
 
-## Recent Changes (v2.6 → v2.8)
-
-### v2.6 (Dec 26, 2025) — Architecture Overhaul
-- Migrated from single HTML file to Vite + React
-- 40+ modular files
-- Added Year in Review mode
-
-### v2.7 (Dec 27, 2025) — NYE Release
-- Mount Rushmore mode
-- OG meta tags for social sharing
-- NYE 2025 category theme
-
-### v2.8 (Dec 28, 2025) — Stabilization + Exploration
-- Fixed iOS Safari safe-area issues
-- Fixed `BOB.reaction` bug (was undefined)
-- Added compact SetupScreen for library picks
-- Changed Mount Rushmore color → bronze
-- Changed NYE color → champagne
-- Created QuickPlayScreen prototype (hidden for NYE, needs iteration)
-- Added CLAUDE.md technical handoff document
-- Documented v4 vision: voice-first BOB as interface
-- Archived 5 inactive GitHub repos
-
----
-
 ## Active Experiments
 
 ### QuickPlayScreen (Dec 28, 2025)
@@ -220,13 +219,39 @@ All tables use Row Level Security. The anon key in code is intentional and safe.
 
 ---
 
-## Next Session Ideas
+## v3.0 Roadmap: Party Mode
 
-1. **Polish QuickPlayScreen** — Get feedback on what's clunky, iterate
-2. **Single-screen refinement** — Maybe bracket should be more prominent?
-3. **App.jsx refactor** — It's 500+ lines, could split by concern
-4. **Sound in QuickPlay** — Currently silent
-5. **Supabase for QuickPlay** — Track these games too
+> Full spec: `docs/V3-PARTY-MODE-SPEC.md`
+
+**The vision:** Turn BOB from a bracket tool into a party game that competes with Hitster and Herd Mentality.
+
+**New mechanics (v3):**
+| Mechanic | What It Does |
+|----------|--------------|
+| **Halftime Speech** | 30-second advocacy speech before voting |
+| **Challenge** | Secret power to reverse results (Round 1 only) |
+| **Block** | Counter someone's Challenge |
+| **3-2-1 Reveal** | Simultaneous voting with countdown |
+| **Blowout Immunity** | 3+ margin = no Challenge allowed |
+| **Upset Windows** | Underdog wins get longer Challenge time |
+
+**The philosophy:** "The bracket isn't the game. The bracket is the STAGE for the game."
+
+**Implementation priority:**
+1. 3-2-1 countdown + simultaneous voting
+2. Halftime Speech timer
+3. Challenge system (secret distribution)
+4. Block system
+5. Blowout immunity + upset windows
+
+---
+
+## Parked Ideas (Post-v3)
+
+1. **QuickPlayScreen iteration** — Hidden for now, needs UX work
+2. **App.jsx refactor** — 500+ lines, could split by concern
+3. **Multi-device voting** — Everyone on their own phone
+4. **Voice-first BOB** — See v4 vision below
 
 ---
 
@@ -296,20 +321,48 @@ BOB: "Done. Shared with the caption 'Pineapple truthers unite.'"
 
 ---
 
-## Next Session: December 29, 2025
+## Current Session: December 29, 2025
 
-**Focus:** NYE polish — ship solid, not half-baked
+**Focus:** NYE Edition — ship improvements by EOD Dec 30
 
-**Priority tasks:**
-- Test full game flow on mobile end-to-end
-- Consider featuring NYE categories more prominently
-- Any visual polish needed?
-- Confirm everything works for party use case
+**What we're shipping (realistic for 24 hours):**
+- [ ] Feature NYE categories more prominently on HomeScreen
+- [ ] Add 3-2-1 countdown animation before vote lock-in
+- [ ] Improve voting UX for group play (bigger buttons, clearer feedback)
+- [ ] Test full game flow on mobile
+- [ ] Any quick visual polish
 
-**Parked for v3:**
-- QuickPlayScreen iteration (hidden for now)
-- Voice-first BOB vision
-- Banners & Banter Phase 2
+**What we're NOT shipping (save for v3):**
+- Full Challenge/Block system (needs more design)
+- Halftime Speech mechanic (needs UI work)
+- Multi-device voting
+- QuickPlayScreen (still clunky)
 
 **Success criteria for NYE:**
-When someone plays BOB at a party, it works smoothly and they have fun.
+- Game feels faster and more engaging for groups
+- NYE categories are easy to find
+- No bugs or friction during party play
+
+---
+
+## Changelog
+
+### v2.9 (Dec 30, 2025) — NYE Edition
+- TBD based on today's work
+
+### v2.8 (Dec 28, 2025) — Stabilization
+- Fixed iOS Safari safe-area issues
+- Added compact SetupScreen for library picks
+- Created QuickPlayScreen prototype (hidden)
+- Added CLAUDE.md documentation
+- Documented v4 vision
+
+### v2.7 (Dec 27, 2025) — NYE Release
+- Mount Rushmore mode
+- OG meta tags for social sharing
+- NYE 2025 category theme
+
+### v2.6 (Dec 26, 2025) — Architecture Overhaul
+- Migrated from single HTML to Vite + React
+- 40+ modular files
+- Added Year in Review mode

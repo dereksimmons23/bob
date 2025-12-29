@@ -3,7 +3,8 @@ import { Button, Logo, CategoryCard, ThemePill } from '../components/ui'
 import { CATEGORY_LIBRARY } from '../data/categories'
 
 export function CategoryLibrary({ onSelect, onCustom, onBack, customCategories }) {
-  const [activeTheme, setActiveTheme] = useState('food')
+  // Default to NYE theme for New Year's Eve 2025
+  const [activeTheme, setActiveTheme] = useState('nye')
   const themes = Object.keys(CATEGORY_LIBRARY)
   const currentThemeData = CATEGORY_LIBRARY[activeTheme]
 
@@ -61,6 +62,85 @@ export function CategoryLibrary({ onSelect, onCustom, onBack, customCategories }
         </div>
         <Button variant="secondary" onClick={onCustom}>Create Custom</Button>
         <Button variant="primary" onClick={handleSurpriseMe}>Surprise Me!</Button>
+      </div>
+
+      {/* NYE 2025 Featured Banner */}
+      <div style={{
+        marginBottom: '24px',
+        background: 'linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(251, 191, 36, 0.1) 50%, rgba(245, 158, 11, 0.15) 100%)',
+        border: '2px solid #f59e0b',
+        borderRadius: '16px',
+        padding: '20px',
+        textAlign: 'center',
+      }}>
+        <div style={{
+          fontFamily: 'var(--font-display)',
+          fontSize: '22px',
+          color: '#fbbf24',
+          letterSpacing: '3px',
+          marginBottom: '12px',
+        }}>
+          🥂 NYE 2025 PARTY PACK 🥂
+        </div>
+        <div style={{
+          fontSize: '14px',
+          color: 'var(--text-secondary)',
+          marginBottom: '16px',
+        }}>
+          Ring in 2026 with these debate-starters
+        </div>
+        <div style={{
+          display: 'flex',
+          gap: '10px',
+          justifyContent: 'center',
+          flexWrap: 'wrap',
+        }}>
+          {CATEGORY_LIBRARY.nye?.categories.slice(0, 4).map((cat) => (
+            <button
+              key={cat.name}
+              onClick={() => onSelect(cat, 'nye')}
+              style={{
+                background: 'rgba(245, 158, 11, 0.2)',
+                border: '1px solid #f59e0b',
+                borderRadius: '10px',
+                padding: '10px 16px',
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+              }}
+              onMouseOver={e => {
+                e.currentTarget.style.background = 'rgba(245, 158, 11, 0.4)'
+                e.currentTarget.style.transform = 'scale(1.05)'
+              }}
+              onMouseOut={e => {
+                e.currentTarget.style.background = 'rgba(245, 158, 11, 0.2)'
+                e.currentTarget.style.transform = 'scale(1)'
+              }}
+            >
+              <div style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: '13px',
+                color: '#fbbf24',
+                letterSpacing: '1px',
+              }}>
+                {cat.name}
+              </div>
+            </button>
+          ))}
+        </div>
+        <button
+          onClick={() => setActiveTheme('nye')}
+          style={{
+            marginTop: '12px',
+            background: 'transparent',
+            border: 'none',
+            color: '#f59e0b',
+            fontSize: '13px',
+            cursor: 'pointer',
+            textDecoration: 'underline',
+          }}
+        >
+          See all NYE categories →
+        </button>
       </div>
 
       {/* Featured Categories */}

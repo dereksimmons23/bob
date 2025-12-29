@@ -1,4 +1,5 @@
 import { Button } from '../components/ui'
+import { APP_VERSION, APP_VERSION_NAME } from '../lib/constants'
 
 export function AboutModal({ onClose }) {
   const SectionTitle = ({ children }) => (
@@ -54,7 +55,7 @@ export function AboutModal({ onClose }) {
             BATTLE O' BRACKETS
           </div>
           <div style={{ fontSize: '14px', color: 'var(--text-muted)' }}>
-            Version 2.6
+            v{APP_VERSION} — {APP_VERSION_NAME}
           </div>
         </div>
 

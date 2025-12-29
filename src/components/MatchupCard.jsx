@@ -11,11 +11,12 @@ export function MatchupCard({ matchup, onVote, playerCount, isChampionship, cate
   const [showTieBreaker, setShowTieBreaker] = useState(false)
   const [winnerSide, setWinnerSide] = useState(null)
   const [voteKey, setVoteKey] = useState(0) // For vote pop animation
+  const [countdown, setCountdown] = useState(null) // 3, 2, 1, or null
 
   // Keyboard navigation: Left arrow = vote A, Right arrow = vote B
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (locked || showTieBreaker) return
+      if (locked || showTieBreaker || countdown !== null) return
       if (e.key === 'ArrowLeft') {
         e.preventDefault()
         setVotesA(v => v + 1)
@@ -34,10 +35,10 @@ export function MatchupCard({ matchup, onVote, playerCount, isChampionship, cate
     }
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [locked, showTieBreaker, votesA, votesB])
+  }, [locked, showTieBreaker, countdown, votesA, votesB])
 
   const handleVote = (side) => {
-    if (locked) return
+    if (locked || countdown !== null) return
     SoundEffects.play('vote')
     setVoteKey(k => k + 1) // Trigger pop animation
     if (side === 'A') setVotesA(v => v + 1)
@@ -55,14 +56,31 @@ export function MatchupCard({ matchup, onVote, playerCount, isChampionship, cate
       SoundEffects.play('tie')
       setShowTieBreaker(true)
     } else {
-      SoundEffects.play('lock')
-      const winner = votesA > votesB ? matchup.entrantA : matchup.entrantB
-      const loser = votesA > votesB ? matchup.entrantB : matchup.entrantA
-      const margin = Math.abs(votesA - votesB)
-      setWinnerSide(votesA > votesB ? 'A' : 'B')
-      setLocked(true)
-      // Small delay to show winner animation before advancing
-      setTimeout(() => onVote(winner, votesA, votesB, margin, false, loser), 800)
+      // Start 3-2-1 countdown
+      setCountdown(3)
+      SoundEffects.play('vote') // Tick sound
+
+      setTimeout(() => {
+        setCountdown(2)
+        SoundEffects.play('vote')
+      }, 600)
+
+      setTimeout(() => {
+        setCountdown(1)
+        SoundEffects.play('vote')
+      }, 1200)
+
+      setTimeout(() => {
+        setCountdown(null)
+        SoundEffects.play('lock')
+        const winner = votesA > votesB ? matchup.entrantA : matchup.entrantB
+        const loser = votesA > votesB ? matchup.entrantB : matchup.entrantA
+        const margin = Math.abs(votesA - votesB)
+        setWinnerSide(votesA > votesB ? 'A' : 'B')
+        setLocked(true)
+        // Small delay to show winner animation before advancing
+        setTimeout(() => onVote(winner, votesA, votesB, margin, false, loser), 800)
+      }, 1800)
     }
   }
 
@@ -73,6 +91,47 @@ export function MatchupCard({ matchup, onVote, playerCount, isChampionship, cate
     setWinnerSide(winner === matchup.entrantA ? 'A' : 'B')
     setLocked(true)
     setTimeout(() => onVote(winner, votesA, votesB, 0, true, loser), 800)
+  }
+
+  // Countdown overlay
+  if (countdown !== null) {
+    return (
+      <div style={{
+        background: 'linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 215, 0, 0.02) 100%)',
+        border: '3px solid var(--accent-gold)',
+        borderRadius: '20px',
+        padding: '48px 32px',
+        textAlign: 'center',
+        animation: 'pulse 0.6s ease-in-out',
+      }}>
+        <div style={{
+          fontFamily: 'var(--font-display)',
+          fontSize: '80px',
+          color: 'var(--accent-gold)',
+          letterSpacing: '4px',
+          animation: 'countdownPop 0.5s ease-out',
+          textShadow: '0 0 30px rgba(255, 215, 0, 0.5)',
+        }}>
+          {countdown}
+        </div>
+        <div style={{
+          fontFamily: 'var(--font-display)',
+          fontSize: '20px',
+          color: 'var(--text-secondary)',
+          marginTop: '16px',
+          letterSpacing: '4px',
+        }}>
+          {countdown === 3 ? 'GET READY...' : countdown === 2 ? 'SET...' : 'REVEAL!'}
+        </div>
+        <style>{`
+          @keyframes countdownPop {
+            0% { transform: scale(0.5); opacity: 0; }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); opacity: 1; }
+          }
+        `}</style>
+      </div>
+    )
   }
 
   if (showTieBreaker) {
@@ -178,9 +237,24 @@ export function MatchupCard({ matchup, onVote, playerCount, isChampionship, cate
           >
             {votesA}
           </div>
-          <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
-            <Button variant="primary" size="small" onClick={() => handleVote('A')} disabled={locked}>+1</Button>
-            <Button variant="secondary" size="small" onClick={() => handleUndo('A')} disabled={locked || votesA === 0}>-1</Button>
+          <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
+            <Button
+              variant="primary"
+              size="medium"
+              onClick={() => handleVote('A')}
+              disabled={locked || countdown !== null}
+              style={{ minWidth: '70px', fontSize: '20px' }}
+            >
+              +1
+            </Button>
+            <Button
+              variant="secondary"
+              size="small"
+              onClick={() => handleUndo('A')}
+              disabled={locked || votesA === 0 || countdown !== null}
+            >
+              -1
+            </Button>
           </div>
         </div>
 
@@ -228,9 +302,24 @@ export function MatchupCard({ matchup, onVote, playerCount, isChampionship, cate
           >
             {votesB}
           </div>
-          <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
-            <Button variant="primary" size="small" onClick={() => handleVote('B')} disabled={locked}>+1</Button>
-            <Button variant="secondary" size="small" onClick={() => handleUndo('B')} disabled={locked || votesB === 0}>-1</Button>
+          <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
+            <Button
+              variant="primary"
+              size="medium"
+              onClick={() => handleVote('B')}
+              disabled={locked || countdown !== null}
+              style={{ minWidth: '70px', fontSize: '20px' }}
+            >
+              +1
+            </Button>
+            <Button
+              variant="secondary"
+              size="small"
+              onClick={() => handleUndo('B')}
+              disabled={locked || votesB === 0 || countdown !== null}
+            >
+              -1
+            </Button>
           </div>
         </div>
       </div>
