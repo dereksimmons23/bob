@@ -9,6 +9,7 @@ import {
   CategoryLibrary,
   SharedBracketView,
   SharedVaultView,
+  BrandShowcase,
   // QuickPlayScreen, // v3 experiment - hidden for NYE
 } from './screens'
 import {
@@ -369,6 +370,7 @@ function AppContent() {
           onClearAll={() => { localStorage.clear(); window.location.reload() }}
           onResetFirstVisit={() => { localStorage.removeItem('bob-has-visited'); window.location.reload() }}
           onResetVault={resetVault}
+          onBrandShowcase={() => setScreen('brand')}
         />
       )}
     </>
@@ -416,6 +418,13 @@ function AppContent() {
         />
         {renderModals()}
       </>
+    )
+  }
+
+  // Brand showcase (dev only)
+  if (screen === 'brand') {
+    return (
+      <BrandShowcase onBack={() => setScreen('home')} />
     )
   }
 

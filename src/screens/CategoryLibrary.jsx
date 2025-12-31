@@ -1,10 +1,11 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { Button, Logo, CategoryCard, ThemePill } from '../components/ui'
 import { CATEGORY_LIBRARY } from '../data/categories'
 
 export function CategoryLibrary({ onSelect, onCustom, onBack, customCategories }) {
   // Default to NYE theme for New Year's Eve 2025
   const [activeTheme, setActiveTheme] = useState('nye')
+  const categoryGridRef = useRef(null)
   const themes = Object.keys(CATEGORY_LIBRARY)
   const currentThemeData = CATEGORY_LIBRARY[activeTheme]
 
@@ -128,7 +129,12 @@ export function CategoryLibrary({ onSelect, onCustom, onBack, customCategories }
           ))}
         </div>
         <button
-          onClick={() => setActiveTheme('nye')}
+          onClick={() => {
+            setActiveTheme('nye')
+            setTimeout(() => {
+              categoryGridRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+            }, 100)
+          }}
           style={{
             marginTop: '12px',
             background: 'transparent',
@@ -222,12 +228,15 @@ export function CategoryLibrary({ onSelect, onCustom, onBack, customCategories }
       </div>
 
       {/* Category Grid */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
-        gap: '16px',
-        marginBottom: '24px',
-      }}>
+      <div
+        ref={categoryGridRef}
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+          gap: '16px',
+          marginBottom: '24px',
+        }}
+      >
         {currentThemeData.categories.map((cat, i) => (
           <CategoryCard
             key={cat.name}

@@ -55,7 +55,8 @@ export function VaultScreen({ history, onBack, onNewGame, onClearHistory, onDele
       setTimeout(() => setShareCopied(false), 2000)
     } catch (err) {
       console.error('Error sharing entry:', err)
-      alert('Failed to create share link. Please try again.')
+      console.error('Entry data:', JSON.stringify(entry, null, 2))
+      alert(`Failed to create share link: ${err.message || 'Unknown error'}. Please try again.`)
     } finally {
       setIsSharing(false)
     }
@@ -362,7 +363,11 @@ export function VaultScreen({ history, onBack, onNewGame, onClearHistory, onDele
 
               <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
                 <button
-                  onClick={() => shareEntry(entry)}
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    shareEntry(entry)
+                  }}
                   disabled={isSharing}
                   style={{
                     background: shareCopied ? 'var(--accent-gold)' : 'var(--bg-deep)',

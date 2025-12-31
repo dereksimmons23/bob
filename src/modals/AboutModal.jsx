@@ -42,7 +42,7 @@ export function AboutModal({ onClose }) {
       }}>
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: '24px' }}>
-          <div style={{ fontFamily: 'var(--font-display)', fontSize: '48px', marginBottom: '8px', letterSpacing: '4px', color: 'var(--accent-gold)', fontWeight: 'bold' }}>
+          <div style={{ fontFamily: 'var(--font-display)', fontSize: '48px', marginBottom: '8px', letterSpacing: '4px', color: 'var(--accent-gold)', fontWeight: 'bold', fontStyle: 'normal' }}>
             ]-[
           </div>
           <div style={{

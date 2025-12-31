@@ -1,6 +1,6 @@
 import { Button } from '../components/ui'
 
-export function DevToolsModal({ onClose, onClearAll, onResetFirstVisit, onResetVault }) {
+export function DevToolsModal({ onClose, onClearAll, onResetFirstVisit, onResetVault, onBrandShowcase }) {
   return (
     <div style={{
       position: 'fixed',
@@ -35,6 +35,9 @@ export function DevToolsModal({ onClose, onClearAll, onResetFirstVisit, onResetV
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <Button variant="primary" onClick={() => { onBrandShowcase(); onClose(); }}>
+            Brand Showcase
+          </Button>
           <Button variant="secondary" onClick={() => { onResetFirstVisit(); onClose(); }}>
             Reset First Visit (show About)
           </Button>

@@ -84,7 +84,7 @@ export function LegalModal({ onClose }) {
             LEGAL STUFF
           </div>
           <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '4px' }}>
-            Last updated: December 2024
+            Last updated: December 2025
           </div>
         </div>
 
