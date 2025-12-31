@@ -1,7 +1,7 @@
 # CLAUDE.md — Technical Handoff for BOB
 
-> Last updated: December 29, 2025 (end of session)
-> Current version: v2.9 — NYE Edition
+> Last updated: December 30, 2025 (end of session)
+> Current version: v2.9 — NYE Edition (deployed)
 > Next milestone: v3.0 — Party Mode (January 2026)
 
 ## Current State
@@ -15,19 +15,26 @@
 - Sound effects (optional, toggle in settings)
 - iOS Safari safe-area handling
 - Supabase analytics + feedback system
+- "See all NYE categories" button scrolls to grid
+- 3-2-1 countdown before vote reveal
 
 **What's experimental (hidden for NYE):**
 - `QuickPlayScreen` — Single-screen mode prototype (Dec 28, 2025)
   - Works but clunky — needs UX iteration
   - Hidden from UI, code preserved for v3
   - Goal: Open → Tap → Play (no setup required)
+- `BrandShowcase` — Logo exploration tool (Dec 30, 2025)
+  - Access via `?dev=true` → Settings → Dev Tools → Brand Showcase
+  - Font toggle with 10 typefaces
+  - Backwards B experiments for future branding
 
 **What's broken:**
-- Nothing critical as of v2.9
+- Vault individual share button — Supabase insert failing (see known bugs below)
+- "defeated 0" bug — runner-up sometimes shows as "0" on champion screen (needs investigation)
 
 **Known cosmetic issues:**
 - `public/og-image.png` has gray box behind "BRACKETS" text — needs manual fix in image editor
-- Social share previews show static og-image, not dynamic champion card (expected; would need server-side image generation)
+- Social share previews show static og-image, not dynamic champion card (expected; would need server-side generation)
 
 ---
 
@@ -86,7 +93,8 @@ src/
 │   ├── PlayingScreen.jsx # Active gameplay
 │   ├── ChampionScreen.jsx # Winner celebration
 │   ├── VaultScreen.jsx   # History carousel
-│   ├── QuickPlayScreen.jsx # NEW: Single-screen prototype
+│   ├── QuickPlayScreen.jsx # Single-screen prototype (hidden)
+│   ├── BrandShowcase.jsx # Logo exploration dev tool
 │   └── Shared*View.jsx   # Public share pages
 ├── modals/               # Settings, feedback, about, legal
 ├── hooks/                # useBracket, useVault, useSound (some unused)
@@ -336,39 +344,52 @@ BOB: "Done. Shared with the caption 'Pineapple truthers unite.'"
 
 ---
 
-## Next Session: December 30, 2025
+## Next Session: January 2026
 
-**Focus:** Final NYE polish before shipping EOD
+**Focus:** Bug fixes + Party Mode v3.0 groundwork
 
-**What's ready:**
-- [x] NYE theme is default in Category Library
-- [x] NYE Party Pack banner at top of library
-- [x] 3-2-1 countdown before vote reveal
-- [x] Bigger +1 vote buttons for mobile
-- [x] BracketPathView hidden (was broken)
-- [x] Version workflow in src/lib/constants.js
-- [x] "defeated X" share text bug fixed
+**Priority bugs to fix:**
+- [ ] "defeated 0" bug — runner-up shows as "0" on champion screen (needs reproduction + fix)
+- [ ] Vault individual share — Supabase `shared_brackets` insert failing (check schema/RLS)
+- [ ] og-image.png gray box (manual image edit)
 
-**What's left:**
-- [ ] Fix og-image.png gray box (manual image edit)
-- [ ] Final mobile testing
-- [ ] Any last-minute polish
+**Mobile testing feedback (from Dec 30 video review):**
+- [ ] Settings panel: consolidate to 4 buttons (combine feedback, move coffee to About)
+- [ ] Voter count selector: needs better UI for 8+ players (stepper or input)
+- [ ] Matchup box: alignment issues, text straddling border
+- [ ] Winner display: double crown icons — reduce or remove
+- [ ] "2 of 8 advancing" text too small/gray
+- [ ] "Go back" option disappears too fast
+- [ ] Category picker: potentially overwhelming (needs rethinking)
+- [ ] Too much scrolling on many screens
 
-**What we're NOT shipping (save for v3):**
+**Dev tools available:**
+- Brand Showcase: `?dev=true` → Settings → Dev Tools → Brand Showcase
+  - Font toggle with 10 typefaces
+  - Backwards B logo experiments
+  - Dark/light background toggle
+
+**Substack draft:** `docs/SUBSTACK-DRAFT.md` — ready for Derek's intro, publish early January
+
+**What we're NOT shipping yet (save for v3):**
 - Full Challenge/Block system (needs more design)
 - Halftime Speech mechanic (needs UI work)
 - Multi-device voting
 - QuickPlayScreen (still clunky)
 - Dynamic share preview images (needs server-side generation)
 
-**Success criteria for NYE:**
-- Game feels faster and more engaging for groups
-- NYE categories are easy to find
-- No bugs or friction during party play
-
 ---
 
 ## Changelog
+
+### v2.9.1 (Dec 30, 2025) — NYE Polish
+- Fixed "See all NYE categories" button (now scrolls to category grid)
+- Fixed About modal ]-[ logo font (non-italic for better bracket readability)
+- Updated Legal modal date to December 2025
+- Added Brand Showcase dev tool (font exploration, backwards B experiments)
+- Improved Vault share error logging
+- Mobile testing video review — catalogued 20 issues for January
+- Updated Substack draft with Christmas learnings + Party Mode vision
 
 ### v2.9 (Dec 29, 2025) — NYE Edition
 - NYE theme now default in Category Library

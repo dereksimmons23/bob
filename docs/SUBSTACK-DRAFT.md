@@ -1,30 +1,16 @@
-# How I Built a Party Game with AI in a Week
+# How I Built a Party Game with AI (and What My Family Taught Me About It)
 
 **Draft Substack Post — December 2025**
 
-*Chapters 1-3 ready. Chapters 4-6 coming after Christmas Eve.*
+---
+
+## [Your Intro Here]
+
+*[Space for Derek to write the runway intro]*
 
 ---
 
-## Chapter 1: The Problem
-
-Every family gathering, the same debates happen.
-
-Best pizza topping. Best Christmas movie. Best 90s band. Best side dish.
-
-They start friendly. They escalate. Someone brings up pineapple on pizza and suddenly aunt Sue isn't talking to cousin Sam.
-
-It's the kind of pettiness that needs some structure. Maybe a little democracy. Winners. Losers. The kind of stuff that becomes party lore.
-
-So I built an app to capture it.
-
-A game that turns these debates (let's face it, arguments) into something formal. With rounds, eliminations, a definitive champion at the end, and a vault to record it all.
-
-A bracket. Like March Madness, but for arguing about whether Die Hard is a Christmas movie. And if so, can it beat It's a Wonderful Life?
-
----
-
-## Chapter 2: Meet BOB
+## Meet BOB
 
 Every game show needs a host. And I knew exactly who mine would be based on.
 
@@ -56,68 +42,107 @@ The result is a host who says things like:
 
 > "By the power vested in me by absolutely no one — we have a champion."
 
-He's not mean. He's just ... seen enough family drama to be unimpressed but amused by yours.
+He's not mean. He's just ... seen enough family drama to be unimpressed by yours.
 
 ---
 
-## Chapter 3: Building with Claude
+## Building with Claude
 
 I built Battle o' Brackets in about a week. With Claude.
 
 Not "Claude wrote the code and I watched." More like pair programming with someone who never gets tired, never gets frustrated when I change my mind, and has read every programming book ever written.
 
-The whole thing is one HTML file. No build process. No npm. No webpack. Just React via CDN, Babel for JSX transpilation, and about 4,000 lines of code in a single index.html.
+It started as a single HTML file. React via CDN, everything inline, "just push the file" as a deployment strategy. That lasted about three days before I needed real architecture.
 
-Why? Because I wanted to see how far I could push it. And because "just push the file" is a deployment strategy I can actually remember.
+So Claude and I rebuilt it. Vite. React 19. Forty-plus files. Supabase for the backend. Proper components and state management. The kind of structure that lets you iterate fast without everything breaking.
 
-Here's what surprised me about building with AI:
+The migration took a few hours. That's the thing about building with AI — you can be scrappy, hit the wall, and restructure without losing momentum. The code is malleable when you have a partner who can hold the whole thing in context.
+
+Here's what surprised me about the process:
 
 **It's not about the code.** Claude can write bracket math and voting logic all day. The interesting part was the creative collaboration. Developing BOB's personality. Writing dialogue that felt right. Figuring out what makes a tie-breaker *fun* instead of just annoying.
 
 The character bible for BOB is now 300+ lines. Every dialogue trigger, every edge case, every personality note. That document is as important as the code.
 
-**Technical decisions that worked:**
+**What worked:**
 
-- Single-file PWA — no build errors, ever
-- localStorage for everything — works offline, no server costs
-- Canvas API for share images — native sharing, no external APIs
+- Vite for instant hot reload — change a line, see it immediately
+- Inline styles for rapid iteration — no CSS file management
+- localStorage for vault history — works offline, persists forever
+- Supabase for sharing — public links without authentication headaches
 - Sound effects that fail silently — audio is hard, don't crash over it
 
-**Things I'd do differently:**
+**What I'd do differently:**
 
+- Start with proper architecture (but scrappy-first taught me what I actually needed)
 - TypeScript would've caught some dumb bugs
-- Component organization in one file is "creative"
-- Hot reload means manual refresh (old school)
+- More mobile testing earlier (spoiler: this becomes important)
 
-I won't pretend I understand every line. That's the point. I knew what I wanted. Claude knew how to build it.
-
-But for a side project meant to debut at Christmas dinner? It shipped.
+I won't pretend I understand every line. That's not the point. I knew what I wanted. Claude knew how to build it. Together we shipped something real.
 
 ---
 
-## Chapter 4: Christmas Eve
+## Christmas Eve
 
-*Coming soon.*
+This is where theory met reality.
 
-*This is where the real testing happens. The kids. The debates. The chaos.*
+The plan: Debut BOB at Christmas Eve dinner. Let the family debate pizza toppings, Christmas movies, whatever. Crown some champions. Create some memories.
 
-*Video footage incoming.*
+What actually happened: The kids played one bracket. Then they asked to play Hitster.
+
+We played Hitster for an hour. Then Herd Mentality. Then Hitster again.
+
+BOB sat there on my phone, technically flawless, while everyone had more fun with games I didn't build.
+
+Ouch.
+
+But also: data.
 
 ---
 
-## Chapter 5: What the Kids Taught Me
+## What They Taught Me
 
-*Coming soon.*
+Here's why those games won the room:
 
-*They're brutal. They're honest. They found every UX problem in 30 seconds.*
+**Instant engagement.** Hitster and Herd Mentality require zero setup. You open the box and play. BOB had setup screens, category selection, entrant lists. Friction before fun.
+
+**Everyone plays every round.** In Hitster, everyone's engaged simultaneously — listening, guessing, arguing. In BOB, one person runs the bracket while others watch and vote. There's a facilitator problem.
+
+**Memory triggers beat abstract preferences.** "Where does this song go in your timeline?" hits different than "which pizza topping is better?" One triggers nostalgia and stories. The other triggers opinions.
+
+**Fast loops.** Hitster rounds take 30-60 seconds. A full BOB bracket can be 15+ matchups before you crown a champion. The payoff is too delayed.
+
+**Social tension.** "Am I thinking what everyone else is thinking?" is a different kind of fun than "which option wins?" Herd Mentality creates moments. BOB creates results.
+
+The insight that stuck with me:
+
+> BOB works great solo. But it's not a party game yet.
+
+The bracket isn't the game. The bracket is the *stage* for the game. I'd built a good stage. Now I needed to figure out what happens on it.
 
 ---
 
-## Chapter 6: What's Next
+## What's Next
 
-*Coming soon.*
+I'm calling it Party Mode.
 
-*The roadmap. The social features. Whether anyone besides my family actually uses this thing.*
+The core idea: Keep the bracket structure, but add mechanics that create moments. Simultaneous voting. Countdown reveals. Ways to challenge results. Reasons to argue *during* the bracket, not just about the outcome.
+
+Some things I'm exploring:
+
+**3-2-1 Countdown.** Everyone locks in their vote, then a countdown builds tension before the reveal. (This one's already shipped for NYE.)
+
+**Halftime Speech.** Before a big matchup, someone gets 30 seconds to advocate for their pick. Put a timer on it. Make them perform.
+
+**Challenges.** Secret powers that let you reverse a result. Limited uses. Creates drama when someone plays one.
+
+**Blowout immunity.** If something wins by a landslide, it can't be challenged. Rewards decisive victories.
+
+The goal: Make BOB the stage, the emcee, and the memory keeper. Not just a voting tool.
+
+Further out, I'm thinking about what happens when BOB becomes the interface entirely. Voice-controlled brackets. "Hey BOB, pizza bracket." And he just... runs it. Suggests entrants. Calls out voters. Makes callbacks to previous games. Becomes a character you interact with, not a UI you tap through.
+
+That's the north star. For now, I'm shipping what works and learning from every family game night.
 
 ---
 
@@ -131,4 +156,6 @@ BOB will be unimpressed by your choices. That's the point.
 
 ---
 
-*Built with Claude. Inspired by Uncle Bob. Tested on family and friends.*
+*Built with Claude. Inspired by Uncle Bob. Battle-tested on family.*
+
+*The debates will happen anyway. Might as well make them official.*
