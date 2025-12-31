@@ -1,6 +1,6 @@
 {
   "name": "bob",
-  "version": "2.9.0",
+  "version": "2.9.2",
   "description": "Battle o' Brackets - The party game where democracy gets dumb. Hosted by BOB.",
   "type": "module",
   "scripts": {

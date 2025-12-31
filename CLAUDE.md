@@ -1,6 +1,6 @@
 # CLAUDE.md — Technical Handoff for BOB
 
-> Last updated: December 30, 2025 (end of session)
+> Last updated: December 31, 2025 (NYE session)
 > Current version: v2.9 — NYE Edition (deployed)
 > Next milestone: v3.0 — Party Mode (January 2026)
 
@@ -384,6 +384,11 @@ BOB: "Done. Shared with the caption 'Pineapple truthers unite.'"
 ---
 
 ## Changelog
+
+### v2.9.2 (Dec 31, 2025) — NYE Quick Fixes
+- Voter selector now uses stepper UI (−/+) instead of button grid
+- Added v3 backlog: vault og-image edge middleware, banner-shaped vault cards, bracket recap visualization, custom bracket discovery
+- Documented: solo play (0-1) margin display is correct behavior, not a bug
 
 ### v2.9.1 (Dec 30, 2025) — NYE Polish
 - Fixed "See all NYE categories" button (now scrolls to category grid)
