@@ -103,7 +103,7 @@ export function SetupScreen({
 
         {bobMessage && <BobSays message={bobMessage} mood={bobMood} />}
 
-        {/* Voter Count - Compact */}
+        {/* Voter Count - Stepper */}
         <div style={{
           background: 'var(--bg-card)',
           borderRadius: '16px',
@@ -120,24 +120,46 @@ export function SetupScreen({
           }}>
             HOW MANY VOTERS?
           </div>
-          <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', flexWrap: 'wrap' }}>
-            {[1, 2, 3, 4, 5, 6, 7, 8].map(n => (
-              <button
-                key={n}
-                onClick={() => setPlayerCount(n)}
-                style={{
-                  width: '44px', height: '44px', borderRadius: '12px',
-                  border: playerCount === n ? '2px solid var(--accent-gold)' : '2px solid var(--text-muted)',
-                  background: playerCount === n ? 'rgba(255, 215, 0, 0.15)' : 'var(--bg-elevated)',
-                  color: playerCount === n ? 'var(--accent-gold)' : 'var(--text-primary)',
-                  fontFamily: 'var(--font-display)',
-                  fontSize: '18px',
-                  cursor: 'pointer',
-                }}
-              >
-                {n}
-              </button>
-            ))}
+          <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', alignItems: 'center' }}>
+            <button
+              onClick={() => setPlayerCount(Math.max(1, playerCount - 1))}
+              disabled={playerCount <= 1}
+              style={{
+                width: '48px', height: '48px', borderRadius: '12px',
+                border: '2px solid var(--text-muted)',
+                background: 'var(--bg-elevated)',
+                color: playerCount <= 1 ? 'var(--text-muted)' : 'var(--text-primary)',
+                fontFamily: 'var(--font-display)',
+                fontSize: '24px',
+                cursor: playerCount <= 1 ? 'not-allowed' : 'pointer',
+                opacity: playerCount <= 1 ? 0.5 : 1,
+              }}
+            >
+              −
+            </button>
+            <div style={{
+              minWidth: '80px',
+              textAlign: 'center',
+              fontFamily: 'var(--font-display)',
+              fontSize: '32px',
+              color: 'var(--accent-gold)',
+            }}>
+              {playerCount}
+            </div>
+            <button
+              onClick={() => setPlayerCount(playerCount + 1)}
+              style={{
+                width: '48px', height: '48px', borderRadius: '12px',
+                border: '2px solid var(--accent-gold)',
+                background: 'rgba(255, 215, 0, 0.15)',
+                color: 'var(--accent-gold)',
+                fontFamily: 'var(--font-display)',
+                fontSize: '24px',
+                cursor: 'pointer',
+              }}
+            >
+              +
+            </button>
           </div>
         </div>
 
@@ -212,7 +234,7 @@ export function SetupScreen({
           <Input value={category} onChange={setCategory} placeholder="Best Pizza Topping..." />
         </div>
 
-        {/* Player Count - Compact */}
+        {/* Player Count - Stepper */}
         <div style={{ marginBottom: '20px' }}>
           <label style={{
             display: 'block',
@@ -220,28 +242,50 @@ export function SetupScreen({
             fontSize: '14px',
             color: 'var(--text-secondary)',
             letterSpacing: '2px',
-            marginBottom: '6px',
+            marginBottom: '8px',
           }}>
-            VOTERS: {playerCount}
+            VOTERS
           </label>
-          <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(n => (
-              <button
-                key={n}
-                onClick={() => setPlayerCount(n)}
-                style={{
-                  width: '36px', height: '36px', borderRadius: '8px',
-                  border: playerCount === n ? '2px solid var(--accent-gold)' : '2px solid var(--text-muted)',
-                  background: playerCount === n ? 'rgba(255, 215, 0, 0.1)' : 'var(--bg-card)',
-                  color: playerCount === n ? 'var(--accent-gold)' : 'var(--text-primary)',
-                  fontFamily: 'var(--font-display)',
-                  fontSize: '16px',
-                  cursor: 'pointer',
-                }}
-              >
-                {n}
-              </button>
-            ))}
+          <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+            <button
+              onClick={() => setPlayerCount(Math.max(1, playerCount - 1))}
+              disabled={playerCount <= 1}
+              style={{
+                width: '40px', height: '40px', borderRadius: '10px',
+                border: '2px solid var(--text-muted)',
+                background: 'var(--bg-elevated)',
+                color: playerCount <= 1 ? 'var(--text-muted)' : 'var(--text-primary)',
+                fontFamily: 'var(--font-display)',
+                fontSize: '20px',
+                cursor: playerCount <= 1 ? 'not-allowed' : 'pointer',
+                opacity: playerCount <= 1 ? 0.5 : 1,
+              }}
+            >
+              −
+            </button>
+            <div style={{
+              minWidth: '50px',
+              textAlign: 'center',
+              fontFamily: 'var(--font-display)',
+              fontSize: '24px',
+              color: 'var(--accent-gold)',
+            }}>
+              {playerCount}
+            </div>
+            <button
+              onClick={() => setPlayerCount(playerCount + 1)}
+              style={{
+                width: '40px', height: '40px', borderRadius: '10px',
+                border: '2px solid var(--accent-gold)',
+                background: 'rgba(255, 215, 0, 0.15)',
+                color: 'var(--accent-gold)',
+                fontFamily: 'var(--font-display)',
+                fontSize: '20px',
+                cursor: 'pointer',
+              }}
+            >
+              +
+            </button>
           </div>
         </div>
 

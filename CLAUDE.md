@@ -355,7 +355,7 @@ BOB: "Done. Shared with the caption 'Pineapple truthers unite.'"
 
 **Mobile testing feedback (from Dec 30 video review):**
 - [ ] Settings panel: consolidate to 4 buttons (combine feedback, move coffee to About)
-- [ ] Voter count selector: needs better UI for 8+ players (stepper or input)
+- [x] Voter count selector: needs better UI for 8+ players (stepper or input) — **DONE Dec 31**
 - [ ] Matchup box: alignment issues, text straddling border
 - [ ] Winner display: double crown icons — reduce or remove
 - [ ] "2 of 8 advancing" text too small/gray
@@ -376,7 +376,10 @@ BOB: "Done. Shared with the caption 'Pineapple truthers unite.'"
 - Halftime Speech mechanic (needs UI work)
 - Multi-device voting
 - QuickPlayScreen (still clunky)
-- Dynamic share preview images (needs server-side generation)
+- Dynamic share preview images (needs Vercel edge middleware for route-specific og:image)
+- Vault cards → championship banner shape (see `screenshots/banner-outline.png`)
+- Bracket Recap → show full bracket + champion's path visualization
+- Custom brackets → needs better discovery/prominence
 
 ---
 

@@ -511,6 +511,179 @@ BOB.round1Complete = [
 
 ---
 
+## v3.5: Invite Links & Multi-Device
+
+> Added: December 29, 2025
+
+### The Vision
+
+```
+Derek starts a game on his phone
+→ Generates shareable link
+→ Sends to family group chat
+→ Everyone clicks link
+→ Joins the same game session
+→ Multi-device voting (everyone on their own phone)
+→ Real-time sync via Supabase
+```
+
+### What This Solves
+
+| Problem | Solution |
+|---------|----------|
+| Facilitator tallying | Everyone votes on own device |
+| Sequential voting | True simultaneous 3-2-1 countdown |
+| Public votes | Secret votes until reveal |
+| Challenge buttons awkward | Everyone taps on their own device |
+| Room-bound | Could play remotely |
+
+### Technical Stack (Already Have It)
+
+- Supabase real-time subscriptions
+- Game state in database
+- Invite links with game_id
+- Join flow exists (just needs UI)
+
+### URL Format Options
+
+```
+bob.claudewill.io/game/abc123
+```
+or
+```
+bob.claudewill.io/join?code=ABC123
+```
+
+**Priority:** High — this unlocks the full v3 vision
+
+---
+
+## v3.5: Bob Personalities
+
+> Added: December 29, 2025
+
+### Why Rename "Salty/Spicy Bob"
+
+| Old Name | Problem |
+|----------|---------|
+| Salty Bob | Sounds passive-aggressive |
+| Spicy Bob | Sounds like a menu item |
+| **Bad-A** Bob** | Sounds like a personality choice |
+
+### The B-Word Bob Lineup
+
+| Personality | Vibe | Example Line |
+|-------------|------|--------------|
+| **Classic Bob** | Deadpan, measured (default) | "The people have spoken." |
+| **Bad-A** Bob** | Sharp, roasts, no mercy | "That's what you chose? Alright." |
+| **Bold Bob** | Takes strong stances | "Pepperoni is obviously superior. I don't make the rules." |
+| **Bitter Bob** | Passive-aggressive | "Pineapple won. Again. As if that makes it right." |
+| **Boisterous Bob** | Loud energy | "THE CROWD GOES WILD! By crowd I mean six of you!" |
+| **Bored Bob** | Deeply unimpressed | "Another food bracket. Riveting." |
+| **Benevolent Bob** | Kind, encouraging | "What a thoughtful vote. Both should be proud." |
+| **British Bob** | Dry UK wit | "Quite the upset, that. Proper shocker." |
+| **Brooklyn Bob** | NYC attitude | "Youse guys really voted for Coldplay? Get outta here." |
+| **Bookish Bob** | Intellectual, verbose | "The dialectic between pizza toppings reveals much about late-stage capitalism." |
+| **Bewildered Bob** | Confused by everything | "Wait, what? How did that win? I don't even know anymore." |
+| **Belligerent Bob** | Actively combative | "That vote was WRONG. Someone had to say it." |
+
+### Personality Selection UI
+
+```
+┌─────────────────────────────────┐
+│  Bob's Personality:             │
+│  ○ Classic Bob (default)        │
+│  ○ Bad-A** Bob                  │
+│  ○ Wholesome Bob                │
+│  ○ Bewildered Bob               │
+│  ○ British Bob                  │
+│  ○ Brooklyn Bob                 │
+│  ○ Surprise Me (random)         │
+│                                 │
+│  ☐ Change personality each round│
+└─────────────────────────────────┘
+```
+
+### Dynamic Personality Shifts (Optional Mode)
+
+Mood shifts based on game events:
+- Close game → Bewildered Bob
+- Blowout → Bad-A** Bob
+- Upset → Bitter Bob (if favorite lost)
+- Championship → Bold Bob
+
+### Implementation: Dialogue Structure
+
+**Current:**
+```javascript
+BOB.normal = [
+  "The people have spoken.",
+  "Moving on.",
+];
+```
+
+**With Personalities:**
+```javascript
+BOB.normal = {
+  classic: [
+    "The people have spoken.",
+    "Moving on."
+  ],
+  badass: [
+    "That's what you chose? Alright. Moving on.",
+    "Democracy in action. Questionable action, but action."
+  ],
+  wholesome: [
+    "What a thoughtful decision! Well done, everyone.",
+    "Both entrants gave it their all. Onto the next!"
+  ],
+  bewildered: [
+    "Okay. Sure. That happened. Next?",
+    "I guess we're doing this. Moving on, I suppose."
+  ],
+  british: [
+    "Right then. Sorted. Moving along.",
+    "The voters have had their say. Onwards."
+  ],
+  brooklyn: [
+    "Aight, we got a winner. Let's keep it movin'.",
+    "There it is. Next up."
+  ]
+};
+```
+
+**Function:**
+```javascript
+function getBobLine(context, personality) {
+  return BOB[context][personality][random()];
+}
+```
+
+### Storage
+
+Per-user preference:
+```javascript
+localStorage.setItem('bob-personality', 'badass');
+```
+
+Or per-game:
+```javascript
+gameState.bobPersonality = 'bewildered';
+```
+
+---
+
+## Updated Roadmap
+
+| Version | Focus | Key Features |
+|---------|-------|--------------|
+| **v2.9** | NYE Edition | 3-2-1 countdown, bigger buttons, NYE theme |
+| **v3.0** | Party Mode | Challenge, Block, Halftime Speech, Blowout immunity |
+| **v3.5** | Multi-Device | Invite links, real-time sync, Bob personalities |
+| **v4.0** | Voice-First | BOB speaks, voice recognition, AI commentary |
+
+---
+
 ## Final Note
 
 > "Delicious and dumb are not mutually exclusive."
