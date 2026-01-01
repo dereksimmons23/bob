@@ -10,6 +10,7 @@ export const STORAGE_KEYS = {
   HAS_VISITED: 'bob-has-visited',
   SOUND_ENABLED: 'bob-sound-enabled',
   CUSTOM_CATEGORIES: 'bob-custom-categories',
+  DEVICE_ID: 'bob-device-id',
 }
 
 /**
@@ -113,4 +114,17 @@ export function hasVisited() {
  */
 export function markVisited() {
   localStorage.setItem(STORAGE_KEYS.HAS_VISITED, 'true')
+}
+
+/**
+ * Get or create a unique device ID for analytics
+ * @returns {string} Device ID (UUID v4 format)
+ */
+export function getDeviceId() {
+  let deviceId = localStorage.getItem(STORAGE_KEYS.DEVICE_ID)
+  if (!deviceId) {
+    deviceId = crypto.randomUUID()
+    localStorage.setItem(STORAGE_KEYS.DEVICE_ID, deviceId)
+  }
+  return deviceId
 }

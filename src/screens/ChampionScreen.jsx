@@ -6,6 +6,7 @@ import { ShareCard } from '../components/ShareCard'
 import { BOB } from '../data/bob'
 import { SoundEffects } from '../lib/sound'
 import { supabase } from '../lib/supabase'
+import { getDeviceId } from '../lib/storage'
 
 export function ChampionScreen({ champion, category, runnerUp, categoryType, bobComment, entrants, playerCount, matchupResults = [], isMountRushmore = false, onNewGame, onViewVault }) {
   const [showShare, setShowShare] = useState(false)
@@ -61,6 +62,7 @@ export function ChampionScreen({ champion, category, runnerUp, categoryType, bob
             entrants: entrants || [],
             player_count: playerCount || 1,
             bob_comment: displayComment || '',
+            device_id: getDeviceId(),
           })
           .select('id')
           .single()

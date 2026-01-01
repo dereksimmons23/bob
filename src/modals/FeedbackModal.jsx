@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Button } from '../components/ui'
 import { supabase } from '../lib/supabase'
+import { getDeviceId } from '../lib/storage'
 
 export function FeedbackModal({ onClose }) {
   const [message, setMessage] = useState('')
@@ -13,7 +14,7 @@ export function FeedbackModal({ onClose }) {
     try {
       const { error } = await supabase
         .from('feedback')
-        .insert([{ message: message.trim(), category: 'general' }])
+        .insert([{ message: message.trim(), category: 'general', device_id: getDeviceId() }])
 
       if (error) throw error
       setStatus('sent')

@@ -3,6 +3,7 @@ import { Button, Logo } from '../components/ui'
 import { BobSays } from '../components/BobSays'
 import { BOB } from '../data/bob'
 import { supabase } from '../lib/supabase'
+import { getDeviceId } from '../lib/storage'
 
 export function VaultScreen({ history, onBack, onNewGame, onClearHistory, onDeleteEntry, onEditEntry, onConfirmDelete }) {
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -28,6 +29,7 @@ export function VaultScreen({ history, onBack, onNewGame, onClearHistory, onDele
           player_count: entry.playerCount || 1,
           bob_comment: entry.bobComment || entry.note || '',
           matchup_results: entry.matchupResults || [],
+          device_id: getDeviceId(),
         })
         .select('id')
         .single()
@@ -79,6 +81,7 @@ export function VaultScreen({ history, onBack, onNewGame, onClearHistory, onDele
             bobComment: h.bobComment || h.note || '',
           })),
           champion_count: history.length,
+          device_id: getDeviceId(),
         })
         .select('id')
         .single()

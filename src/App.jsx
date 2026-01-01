@@ -27,6 +27,7 @@ import { BOB } from './data/bob'
 import { CATEGORY_LIBRARY } from './data/categories'
 import { SEED_VAULT_DATA } from './data/seedVault'
 import { supabase } from './lib/supabase'
+import { getDeviceId } from './lib/storage'
 
 function AppContent() {
   const {
@@ -235,6 +236,7 @@ function AppContent() {
             player_count: playerCount,
             entrant_count: entrants.length,
             matchup_results: JSON.stringify(finalResults),
+            device_id: getDeviceId(),
           }).then(() => {}).catch(() => {})
 
           setChampion(winner)

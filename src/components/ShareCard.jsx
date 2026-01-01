@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { Button } from './ui'
 import { supabase } from '../lib/supabase'
+import { getDeviceId } from '../lib/storage'
 
 export function ShareCard({ champion, category, runnerUp, entrants, playerCount, bobComment, existingShareLink, matchupResults = [], closestCall, biggestBlowout, isMountRushmore = false, rushmore = null, onClose }) {
   const canvasRef = useRef(null)
@@ -168,6 +169,7 @@ export function ShareCard({ champion, category, runnerUp, entrants, playerCount,
           entrants: entrants || [],
           player_count: playerCount || 1,
           bob_comment: bobComment || '',
+          device_id: getDeviceId(),
         })
         .select('id')
         .single()
