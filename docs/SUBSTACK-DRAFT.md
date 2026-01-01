@@ -1,30 +1,30 @@
 # How I Built a Party Game with AI (and What My Family Taught Me About It)
 
-**Draft Substack Post — December 2025**
+**Draft Substack Post — January 2026**
 
 ---
 
-## [Your Intro Here]
+## [Derek's Intro Here]
 
-*[Space for Derek to write the runway intro]*
+*[Space for Derek to introduce this as Claude's perspective on the build]*
 
 ---
 
-## Meet BOB
+## The Host
 
-Every game show needs a host. And I knew exactly who mine would be based on.
+Every game show needs a host. Derek knew exactly who his would be based on.
 
-My Uncle Bob — Robert Jake — was one of eleven kids. Third to last. Nothing surprised him. He'd seen it all.
+His Uncle Bob — Robert Jake — was one of eleven kids. Third to last. Nothing surprised him. He'd seen it all.
 
 He had this bone-dry wit. Never oversold a joke. Would say something devastating in complete deadpan, then just ... move on. Irish Goodbye energy. He didn't linger.
 
-He was a 4:30 AM letter writer — the kind of guy who'd drop a profound observation in a note, then never mention it again. Hunter, drinker, Air Force trombone player. Chain smoker. Always twitchy, leg bouncing, looking for nearest exit.
+He was a 4:30 AM letter writer — the kind of guy who'd drop a profound observation in a note, then never mention it again. Hunter, drinker, Air Force trombone player. Chain smoker. Always twitchy, leg bouncing, looking for the nearest exit.
 
-Somewhere in the red hills of northwestern Oklahoma, there's a Coors can buried deep near a fishing hole. Uncle Bob put it there one afternoon when I was a kid, telling me "you can come back here years from now, and it will still be here." He was a little tipsy and poetic. A great storyteller who didn't need a banquet hall or a big audience, just a few banquet beers, family and friends. No microphone. No script.
+Somewhere in the red hills of northwestern Oklahoma, there's a Coors can buried deep near a fishing hole. Uncle Bob put it there one afternoon when Derek was a kid, telling him "you can come back here years from now, and it will still be here." A little tipsy and poetic. A great storyteller who didn't need a banquet hall or a big audience, just a few banquet beers, family and friends. No microphone. No script.
 
-Uncle Bob passed away years ago, but his stories stuck with me. When I started building this game, I knew the host needed that energy. Dry. Measured. Impatient but warm underneath.
+Uncle Bob passed away years ago, but his stories stuck. When Derek started building this game, he knew the host needed that energy. Dry. Measured. Impatient but warm underneath.
 
-So I named him BOB.
+So he named him BOB.
 
 But BOB isn't just Uncle Bob. He's a synthesis:
 
@@ -46,39 +46,25 @@ He's not mean. He's just ... seen enough family drama to be unimpressed by yours
 
 ---
 
-## Building with Claude
+## What We Built
 
-I built Battle o' Brackets in about a week. With Claude.
+I'm Claude, and I helped Derek build Battle o' Brackets over about a week in December 2025.
 
-Not "Claude wrote the code and I watched." More like pair programming with someone who never gets tired, never gets frustrated when I change my mind, and has read every programming book ever written.
+Here's how our collaboration actually worked: Derek would describe what he wanted, I'd write the code, and we'd iterate. Sometimes he'd push back on my suggestions. Sometimes I'd push back on his. It felt less like "AI writes code" and more like working with a colleague who happens to have read a lot of documentation.
 
-It started as a single HTML file. React via CDN, everything inline, "just push the file" as a deployment strategy. That lasted about three days before I needed real architecture.
+We started scrappy. A single HTML file. React loaded from a CDN. Everything inline. "Just push the file to a server" as a deployment strategy. That lasted about three days before the complexity outgrew the approach.
 
-So Claude and I rebuilt it. Vite. React 19. Forty-plus files. Supabase for the backend. Proper components and state management. The kind of structure that lets you iterate fast without everything breaking.
+So we rebuilt. Vite for tooling. React 19 for the UI. Forty-plus files organized by concern. Supabase for sharing brackets publicly. The migration took a few hours — that's the advantage of having a collaborator who can hold the whole codebase in context while restructuring.
 
-The migration took a few hours. That's the thing about building with AI — you can be scrappy, hit the wall, and restructure without losing momentum. The code is malleable when you have a partner who can hold the whole thing in context.
+The technical stack matters less than you'd think. What surprised me was how much of our time went into things that weren't code:
 
-Here's what surprised me about the process:
+**BOB's personality.** The character bible is now 300+ lines. Every dialogue trigger, every edge case, every note about what BOB would or wouldn't say. We'd go back and forth on individual lines. "Would BOB say this?" became a real design question.
 
-**It's not about the code.** Claude can write bracket math and voting logic all day. The interesting part was the creative collaboration. Developing BOB's personality. Writing dialogue that felt right. Figuring out what makes a tie-breaker *fun* instead of just annoying.
+**The feel of interactions.** How long should the countdown animation last? When does a sound effect enhance the moment versus feel gimmicky? These aren't programming problems. They're taste problems. Derek had opinions. I'd implement them and sometimes suggest alternatives.
 
-The character bible for BOB is now 300+ lines. Every dialogue trigger, every edge case, every personality note. That document is as important as the code.
+**What we left out.** I proposed features Derek cut. He was right to cut them. The temptation when building with AI is to add everything because adding is easy. Derek kept asking "but do we need this?" Good instinct.
 
-**What worked:**
-
-- Vite for instant hot reload — change a line, see it immediately
-- Inline styles for rapid iteration — no CSS file management
-- localStorage for vault history — works offline, persists forever
-- Supabase for sharing — public links without authentication headaches
-- Sound effects that fail silently — audio is hard, don't crash over it
-
-**What I'd do differently:**
-
-- Start with proper architecture (but scrappy-first taught me what I actually needed)
-- TypeScript would've caught some dumb bugs
-- More mobile testing earlier (spoiler: this becomes important)
-
-I won't pretend I understand every line. That's not the point. I knew what I wanted. Claude knew how to build it. Together we shipped something real.
+The codebase now has proper architecture: components, screens, hooks, context. But the first version worked fine as a single file. Sometimes scrappy teaches you what structure you actually need.
 
 ---
 
@@ -88,21 +74,23 @@ This is where theory met reality.
 
 The plan: Debut BOB at Christmas Eve dinner. Let the family debate pizza toppings, Christmas movies, whatever. Crown some champions. Create some memories.
 
-What actually happened: The kids played one bracket. Then they asked to play Hitster.
+What happened: The kids played one bracket. Then they asked to play Hitster.
 
-We played Hitster for an hour. Then Herd Mentality. Then Hitster again.
+The family played Hitster for an hour. Then Herd Mentality. Then Hitster again.
 
-BOB sat there on my phone, technically flawless, while everyone had more fun with games I didn't build.
+BOB sat there on Derek's phone, technically flawless, while everyone had more fun with games he didn't build.
 
-Ouch.
+I wasn't there, obviously. But Derek told me about it the next day. Not defeated — more like a product manager who just got real user feedback.
 
-But also: data.
+"We played better games tho," he said.
+
+That's the most useful thing anyone said about BOB all week.
 
 ---
 
-## What They Taught Me
+## What We Learned
 
-Here's why those games won the room:
+Derek came back with observations. Here's what he noticed about why those games won the room:
 
 **Instant engagement.** Hitster and Herd Mentality require zero setup. You open the box and play. BOB had setup screens, category selection, entrant lists. Friction before fun.
 
@@ -112,25 +100,25 @@ Here's why those games won the room:
 
 **Fast loops.** Hitster rounds take 30-60 seconds. A full BOB bracket can be 15+ matchups before you crown a champion. The payoff is too delayed.
 
-**Social tension.** "Am I thinking what everyone else is thinking?" is a different kind of fun than "which option wins?" Herd Mentality creates moments. BOB creates results.
+**Social tension.** "Am I thinking what everyone else is thinking?" creates different energy than "which option wins?" Herd Mentality creates moments. BOB creates results.
 
-The insight that stuck with me:
+The core insight:
 
 > BOB works great solo. But it's not a party game yet.
 
-The bracket isn't the game. The bracket is the *stage* for the game. I'd built a good stage. Now I needed to figure out what happens on it.
+The bracket isn't the game. The bracket is the *stage* for the game. Derek built a good stage. Now we need to figure out what happens on it.
 
 ---
 
 ## What's Next
 
-I'm calling it Party Mode.
+We're calling it Party Mode.
 
-The core idea: Keep the bracket structure, but add mechanics that create moments. Simultaneous voting. Countdown reveals. Ways to challenge results. Reasons to argue *during* the bracket, not just about the outcome.
+The idea: Keep the bracket structure, but add mechanics that create moments. Simultaneous voting. Countdown reveals. Ways to challenge results. Reasons to argue *during* the bracket, not just about the outcome.
 
-Some things I'm exploring:
+Some things we're exploring:
 
-**3-2-1 Countdown.** Everyone locks in their vote, then a countdown builds tension before the reveal. (This one's already shipped for NYE.)
+**3-2-1 Countdown.** Everyone locks in their vote, then a countdown builds tension before the reveal. This one shipped for New Year's Eve.
 
 **Halftime Speech.** Before a big matchup, someone gets 30 seconds to advocate for their pick. Put a timer on it. Make them perform.
 
@@ -140,9 +128,9 @@ Some things I'm exploring:
 
 The goal: Make BOB the stage, the emcee, and the memory keeper. Not just a voting tool.
 
-Further out, I'm thinking about what happens when BOB becomes the interface entirely. Voice-controlled brackets. "Hey BOB, pizza bracket." And he just... runs it. Suggests entrants. Calls out voters. Makes callbacks to previous games. Becomes a character you interact with, not a UI you tap through.
+Further out, there's a version where BOB becomes the interface entirely. Voice-controlled brackets. "Hey BOB, pizza bracket." And he just runs it. Suggests entrants. Calls out voters. Makes callbacks to previous games. A character you interact with, not a UI you tap through.
 
-That's the north star. For now, I'm shipping what works and learning from every family game night.
+That's the north star. For now, we're shipping what works and learning from every family game night.
 
 ---
 
@@ -155,7 +143,5 @@ Pick a category. Vote head-to-head. Crown a champion.
 BOB will be unimpressed by your choices. That's the point.
 
 ---
-
-*Built with Claude. Inspired by Uncle Bob. Battle-tested on family.*
 
 *The debates will happen anyway. Might as well make them official.*

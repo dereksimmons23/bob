@@ -1,8 +1,9 @@
 # CLAUDE.md — Technical Handoff for BOB
 
-> Last updated: December 31, 2025 (NYE session)
-> Current version: v2.9 — NYE Edition (deployed)
-> Next milestone: v3.0 — Party Mode (January 2026)
+> Last updated: January 1, 2026
+> Current version: v2.9.2 — NYE Edition (deployed)
+> Next milestone: v3.0 — Party Mode (March 1, 2026 for March Madness)
+> Project status: PAUSED until mid-February 2026
 
 ## Current State
 
@@ -344,46 +345,60 @@ BOB: "Done. Shared with the caption 'Pineapple truthers unite.'"
 
 ---
 
-## Next Session: January 2026
+## Next Session: Mid-February 2026
 
-**Focus:** Bug fixes + Party Mode v3.0 groundwork
+**Target:** v3.0 Party Mode for March Madness (ship by March 1, 2026)
 
-**Priority bugs to fix:**
-- [ ] "defeated 0" bug — runner-up shows as "0" on champion screen (needs reproduction + fix)
-- [ ] Vault individual share — Supabase `shared_brackets` insert failing (check schema/RLS)
+**See:** `docs/MARCH-MADNESS-RELEASE.md` for full plan and effort estimates
+
+### Priority bugs to fix (before Party Mode work):
+- [ ] "defeated 0" bug — runner-up shows as "0" on champion screen
+- [ ] Vault individual share — Supabase insert failing
 - [ ] og-image.png gray box (manual image edit)
 
-**Mobile testing feedback (from Dec 30 video review):**
-- [ ] Settings panel: consolidate to 4 buttons (combine feedback, move coffee to About)
-- [x] Voter count selector: needs better UI for 8+ players (stepper or input) — **DONE Dec 31**
-- [ ] Matchup box: alignment issues, text straddling border
-- [ ] Winner display: double crown icons — reduce or remove
-- [ ] "2 of 8 advancing" text too small/gray
-- [ ] "Go back" option disappears too fast
-- [ ] Category picker: potentially overwhelming (needs rethinking)
-- [ ] Too much scrolling on many screens
+### Mobile UX issues (from Dec 30 review):
+- [ ] Settings panel: consolidate to 4 buttons
+- [x] Voter count selector: stepper UI — **DONE Dec 31**
+- [ ] Matchup box alignment
+- [ ] Double crown icons on winner
+- [ ] "2 of 8 advancing" text visibility
+- [ ] Category picker overwhelming
+- [ ] Too much scrolling
 
-**Dev tools available:**
-- Brand Showcase: `?dev=true` → Settings → Dev Tools → Brand Showcase
-  - Font toggle with 10 typefaces
-  - Backwards B logo experiments
-  - Dark/light background toggle
+### v3.0 Party Mode features:
+- [ ] Halftime Speech (30-sec timer)
+- [ ] Challenge system (secret distribution, Round 1 only)
+- [ ] Block system
+- [ ] Blowout immunity (3+ margin = no challenge)
+- [ ] Upset windows (extended challenge time)
+- [ ] Party Mode toggle in settings
+- [ ] March Madness category theme
 
-**Substack draft:** `docs/SUBSTACK-DRAFT.md` — ready for Derek's intro, publish early January
+### Deferred to v3.5+:
+- Multi-device voting (invite links, real-time sync)
+- QuickPlayScreen iteration
+- Dynamic share preview images
+- Bob personalities
+- Voice-first BOB (v4)
 
-**What we're NOT shipping yet (save for v3):**
-- Full Challenge/Block system (needs more design)
-- Halftime Speech mechanic (needs UI work)
-- Multi-device voting
-- QuickPlayScreen (still clunky)
-- Dynamic share preview images (needs Vercel edge middleware for route-specific og:image)
-- Vault cards → championship banner shape (see `screenshots/banner-outline.png`)
-- Bracket Recap → show full bracket + champion's path visualization
-- Custom brackets → needs better discovery/prominence
+### Analytics
+Device tracking added Jan 1, 2026:
+- All tables now have `device_id` column
+- Derek's devices in `test_devices` table
+- Query real users: `WHERE device_id NOT IN (SELECT device_id FROM test_devices)`
+
+### Substack
+`docs/SUBSTACK-DRAFT.md` — rewritten as Claude's perspective, ready for Derek's intro
 
 ---
 
 ## Changelog
+
+### v2.9.3 (Jan 1, 2026) — Analytics
+- Added device_id tracking to all Supabase tables (games, feedback, shared_brackets, shared_vaults)
+- Created test_devices table to filter out Derek's testing from real user data
+- Backfilled existing records with 'derek-testing-backfill' marker
+- Updated Substack draft to Claude's perspective
 
 ### v2.9.2 (Dec 31, 2025) — NYE Quick Fixes
 - Voter selector now uses stepper UI (−/+) instead of button grid

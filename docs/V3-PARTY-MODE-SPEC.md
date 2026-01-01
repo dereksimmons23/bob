@@ -1,8 +1,12 @@
 # BOB v3 — Party Mode Specification
 
 > Created: December 29, 2025
+> Updated: January 1, 2026
 > Status: Design Complete, Implementation Pending
+> Target: March 1, 2026 (March Madness launch)
 > Origin: Christmas Eve 2025 playtesting insights
+>
+> See also: `MARCH-MADNESS-RELEASE.md` for implementation plan
 
 ---
 
@@ -380,25 +384,27 @@ BOB should sound like ESPN, not C-SPAN.
 
 ## Implementation Priorities
 
-### MVP (NYE 2025)
-- [ ] 3-2-1 countdown reveal
-- [ ] Simultaneous voting UX (raise hands, single device counts)
-- [ ] Feature NYE categories prominently
+### v2.9 NYE 2025 (SHIPPED)
+- [x] 3-2-1 countdown reveal
+- [x] Simultaneous voting UX (raise hands, single device counts)
+- [x] Feature NYE categories prominently
 
-### v3.0 (January 2026)
+### v3.0 March Madness (Target: March 1, 2026)
 - [ ] Halftime Speech (30-sec timer)
-- [ ] Challenge system (secret distribution)
+- [ ] Challenge system (secret distribution, Round 1 only)
 - [ ] Block system
-- [ ] Blowout immunity
-- [ ] Upset windows
+- [ ] Blowout immunity (3+ margin)
+- [ ] Upset windows (extended Challenge time)
 - [ ] Party Mode toggle in settings
+- [ ] March Madness category theme
 
-### v3.5 (Future)
+### v3.5 (Summer 2026)
 - [ ] Multi-device voting (everyone on their own phone)
 - [ ] Live vote tally streaming
 - [ ] QR code room join
+- [ ] Bob personalities
 
-### v4.0 (Voice-First)
+### v4.0 (Voice-First, TBD)
 - [ ] BOB speaks all announcements
 - [ ] Voice recognition for voting
 - [ ] AI-driven Challenge/Block commentary
@@ -675,12 +681,12 @@ gameState.bobPersonality = 'bewildered';
 
 ## Updated Roadmap
 
-| Version | Focus | Key Features |
-|---------|-------|--------------|
-| **v2.9** | NYE Edition | 3-2-1 countdown, bigger buttons, NYE theme |
-| **v3.0** | Party Mode | Challenge, Block, Halftime Speech, Blowout immunity |
-| **v3.5** | Multi-Device | Invite links, real-time sync, Bob personalities |
-| **v4.0** | Voice-First | BOB speaks, voice recognition, AI commentary |
+| Version | Target | Focus | Key Features |
+|---------|--------|-------|--------------|
+| **v2.9** | Dec 2025 | NYE Edition (SHIPPED) | 3-2-1 countdown, bigger buttons, NYE theme |
+| **v3.0** | Mar 1, 2026 | Party Mode | Challenge, Block, Halftime Speech, Blowout immunity |
+| **v3.5** | Summer 2026 | Multi-Device | Invite links, real-time sync, Bob personalities |
+| **v4.0** | TBD | Voice-First | BOB speaks, voice recognition, AI commentary |
 
 ---
 

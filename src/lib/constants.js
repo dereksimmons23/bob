@@ -7,7 +7,7 @@
  * 3. Commit with message "Release vX.X"
  */
 
-export const APP_VERSION = '2.9.2'
+export const APP_VERSION = '2.9.3'
 export const APP_VERSION_NAME = 'NYE Edition'
 
 // For display: "v2.9 — NYE Edition"
