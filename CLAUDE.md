@@ -1,7 +1,7 @@
 # CLAUDE.md — Technical Handoff for BOB
 
-> Last updated: January 1, 2026
-> Current version: v2.9.2 — NYE Edition (deployed)
+> Last updated: January 3, 2026
+> Current version: v2.9.4 — January Update (deployed)
 > Next milestone: v3.0 — Party Mode (March 1, 2026 for March Madness)
 > Project status: PAUSED until mid-February 2026
 
@@ -16,10 +16,9 @@
 - Sound effects (optional, toggle in settings)
 - iOS Safari safe-area handling
 - Supabase analytics + feedback system
-- "See all NYE categories" button scrolls to grid
 - 3-2-1 countdown before vote reveal
 
-**What's experimental (hidden for NYE):**
+**What's experimental (hidden):**
 - `QuickPlayScreen` — Single-screen mode prototype (Dec 28, 2025)
   - Works but clunky — needs UX iteration
   - Hidden from UI, code preserved for v3
@@ -393,6 +392,11 @@ Device tracking added Jan 1, 2026:
 ---
 
 ## Changelog
+
+### v2.9.4 (Jan 3, 2026) — January Update
+- Removed NYE Party Pack banner from Category Library
+- Changed default theme from 'nye' to 'random'
+- Discovered new use case: personal decision-making brackets (e.g., "Best dream job for Derek")
 
 ### v2.9.3 (Jan 1, 2026) — Analytics
 - Added device_id tracking to all Supabase tables (games, feedback, shared_brackets, shared_vaults)

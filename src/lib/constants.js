@@ -7,8 +7,8 @@
  * 3. Commit with message "Release vX.X"
  */
 
-export const APP_VERSION = '2.9.3'
-export const APP_VERSION_NAME = 'NYE Edition'
+export const APP_VERSION = '2.9.4'
+export const APP_VERSION_NAME = 'January Update'
 
-// For display: "v2.9 — NYE Edition"
+// For display: "v2.9.4 — January Update"
 export const getVersionString = () => `v${APP_VERSION} — ${APP_VERSION_NAME}`
