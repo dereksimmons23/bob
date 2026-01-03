@@ -517,21 +517,74 @@ BOB.round1Complete = [
 
 ---
 
-## v3.5: Invite Links & Multi-Device
+## v3.5: Invite Links & Multi-Device (Jackbox-Style)
 
 > Added: December 29, 2025
+> Updated: January 3, 2026 — Christmas vacation use case
 
-### The Vision
+### The Jackbox Inspiration
 
+**What Jackbox.tv does right:**
+- One person hosts on a TV/laptop
+- Everyone else joins on their phones via simple URL
+- Room code gets you in instantly
+- Simultaneous voting/input from all players
+- Results revealed together on the main screen
+
+**The BOB version:**
 ```
-Derek starts a game on his phone
-→ Generates shareable link
-→ Sends to family group chat
-→ Everyone clicks link
-→ Joins the same game session
-→ Multi-device voting (everyone on their own phone)
-→ Real-time sync via Supabase
+DINNER TABLE SCENARIO:
+"Where should we go for Christmas 2026 vacation?"
+
+Derek: "Let's BOB it."
+→ Opens bob.claudewill.io
+→ Picks "Tropical Vacation" category (or creates custom)
+→ Taps "Start Party Game"
+→ Gets room code: BOB-7X4K
+→ Shares code to family group chat
+
+Everyone else:
+→ Goes to bob.claudewill.io/join
+→ Enters BOB-7X4K
+→ Joins as "Mom", "Dad", "Sarah", etc.
+
+Gameplay:
+→ Derek's phone shows the bracket (or cast to TV)
+→ Matchup appears: "Puerto Rico vs Belize"
+→ Everyone votes on their OWN phone
+→ "3... 2... 1... REVEAL!"
+→ Votes appear simultaneously
+→ "Puerto Rico advances 4-2!"
+→ Next matchup...
+
+Result:
+→ Champion: Dominican Republic
+→ Everyone saw the journey
+→ Decision made, no one to blame
 ```
+
+### Real Use Cases That Sparked This
+
+1. **Christmas 2026 Vacation** (Jan 2026 dinner): Families discussing tropical destinations. Should've used BOB to vote together.
+
+2. **Dream Job Clarity** (Jan 2026): Derek used a solo custom bracket to think through career paths. Could work for couples deciding together.
+
+3. **Family Game Night Pick**: Instead of "what does everyone want to play?" → run a quick bracket.
+
+### The Two-Screen Experience
+
+**HOST DEVICE (TV or shared screen):**
+- Shows current matchup
+- Displays bracket progress
+- Reveals vote results with drama
+- BOB commentary visible to all
+
+**PLAYER DEVICES (everyone's phone):**
+- Simple voting interface
+- Just the two choices
+- Big tap targets
+- Vote submitted → waiting animation
+- Challenge/Block buttons (if applicable)
 
 ### What This Solves
 
@@ -541,7 +594,8 @@ Derek starts a game on his phone
 | Sequential voting | True simultaneous 3-2-1 countdown |
 | Public votes | Secret votes until reveal |
 | Challenge buttons awkward | Everyone taps on their own device |
-| Room-bound | Could play remotely |
+| Room-bound | Could play remotely (Zoom holiday call!) |
+| "Who wants to vote?" friction | Everyone's already holding their phone |
 
 ### Technical Stack (Already Have It)
 
@@ -550,17 +604,108 @@ Derek starts a game on his phone
 - Invite links with game_id
 - Join flow exists (just needs UI)
 
-### URL Format Options
+### UX Flow
+
+**Starting a Game:**
+```
+1. Home Screen → "Party Game" button
+2. Pick category (or custom)
+3. Configure: entrant count, party mode on/off
+4. → Room created: "BOB-7X4K"
+5. Show QR code + room code + shareable link
+6. Wait for players to join (show who's in)
+7. Host taps "Start Game" when ready
+```
+
+**Joining a Game:**
+```
+1. bob.claudewill.io/join
+2. Enter room code: BOB-7X4K
+3. Enter your name: "Mom"
+4. Wait for host to start
+5. (Or scan QR code → auto-fills room code)
+```
+
+**During a Matchup:**
+```
+HOST SCREEN:          PLAYER PHONE:
+┌─────────────────┐   ┌───────────────┐
+│  MATCHUP 3/15   │   │    VOTE!      │
+│                 │   │               │
+│  [HAWAII]       │   │  ┌─────────┐  │
+│     vs          │   │  │ HAWAII  │  │
+│  [BELIZE]       │   │  └─────────┘  │
+│                 │   │               │
+│  Waiting for    │   │  ┌─────────┐  │
+│  votes...       │   │  │ BELIZE  │  │
+│  4/6 voted      │   │  └─────────┘  │
+└─────────────────┘   └───────────────┘
+```
+
+**Vote Reveal:**
+```
+HOST SCREEN:
+┌─────────────────────────────────┐
+│        3... 2... 1...           │
+│                                 │
+│  HAWAII        ████████ 5      │
+│  BELIZE        ██████ 3        │
+│                                 │
+│  "Hawaii advances! Pack your   │
+│   sunscreen and your opinions."│
+│                                 │
+│       [NEXT MATCHUP →]          │
+└─────────────────────────────────┘
+```
+
+### URL Format
 
 ```
-bob.claudewill.io/game/abc123
-```
-or
-```
-bob.claudewill.io/join?code=ABC123
+bob.claudewill.io/join?code=BOB-7X4K
+bob.claudewill.io/play/BOB-7X4K  (players)
+bob.claudewill.io/host/BOB-7X4K  (host view)
 ```
 
-**Priority:** High — this unlocks the full v3 vision
+Room codes: `BOB-XXXX` (4 characters, alphanumeric, easy to say aloud)
+
+### Database Schema Addition
+
+```sql
+-- Party game sessions
+CREATE TABLE party_games (
+  id UUID PRIMARY KEY,
+  room_code VARCHAR(8) UNIQUE NOT NULL,  -- "BOB-7X4K"
+  host_device_id UUID NOT NULL,
+  category_name TEXT NOT NULL,
+  entrants JSONB NOT NULL,
+  current_matchup_index INT DEFAULT 0,
+  game_state JSONB,  -- bracket, results
+  status VARCHAR(20) DEFAULT 'waiting',  -- waiting, playing, finished
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  expires_at TIMESTAMPTZ  -- auto-cleanup
+);
+
+-- Players in a party game
+CREATE TABLE party_players (
+  id UUID PRIMARY KEY,
+  game_id UUID REFERENCES party_games(id),
+  device_id UUID NOT NULL,
+  display_name VARCHAR(20) NOT NULL,
+  joined_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Votes (real-time)
+CREATE TABLE party_votes (
+  id UUID PRIMARY KEY,
+  game_id UUID REFERENCES party_games(id),
+  matchup_index INT NOT NULL,
+  player_id UUID REFERENCES party_players(id),
+  vote VARCHAR(100) NOT NULL,  -- entrant name
+  voted_at TIMESTAMPTZ DEFAULT NOW()
+);
+```
+
+**Priority:** High — this unlocks the full v3 vision and is the path to Jackbox-level party energy
 
 ---
 

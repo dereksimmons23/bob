@@ -149,4 +149,24 @@ export const CATEGORY_LIBRARY = {
       { name: "Greatest Comedians", mountRushmore: true, entrants: ["Richard Pryor", "George Carlin", "Eddie Murphy", "Dave Chappelle", "Robin Williams", "Jerry Seinfeld", "Chris Rock", "Steve Martin", "Bill Murray", "Tina Fey", "Amy Poehler", "Kevin Hart", "Jim Carrey", "Louis C.K.", "Ellen DeGeneres", "Wanda Sykes"] },
     ]
   },
+  decisions: {
+    name: "Life Decisions",
+    icon: "🤔",
+    color: "#10b981",
+    description: "Real choices, real stakes — let the bracket decide",
+    categories: [
+      { name: "Tropical Vacation Destination", featured: true, entrants: ["Hawaii", "Cancun", "Puerto Rico", "Dominican Republic", "Jamaica", "Bahamas", "Costa Rica", "Belize", "Turks & Caicos", "Aruba", "St. Lucia", "Cabo San Lucas", "Key West", "Barbados", "US Virgin Islands", "Cozumel"] },
+      { name: "European City to Visit", featured: true, entrants: ["Paris", "Rome", "Barcelona", "London", "Amsterdam", "Prague", "Vienna", "Lisbon", "Florence", "Dublin", "Copenhagen", "Athens", "Edinburgh", "Berlin", "Bruges", "Reykjavik"] },
+      { name: "US Road Trip Destination", entrants: ["Grand Canyon", "Yellowstone", "Yosemite", "Zion", "Glacier National Park", "Acadia", "Smoky Mountains", "Big Sur", "Sedona", "Joshua Tree", "Outer Banks", "New Orleans", "Nashville", "Austin", "Portland", "San Diego"] },
+      { name: "Weekend Activity", featured: true, entrants: ["Hiking", "Beach Day", "Movie Marathon", "Game Night", "Cooking Together", "Day Trip", "Spa Day", "Brunch", "Farmers Market", "Museum Visit", "Live Music", "Sports Event", "Picnic", "Wine Tasting", "DIY Project", "Absolutely Nothing"] },
+      { name: "Date Night Idea", entrants: ["Fancy Dinner", "Comedy Show", "Cooking Class", "Wine Bar", "Movie Night", "Live Music", "Mini Golf", "Escape Room", "Bowling", "Karaoke", "Picnic in the Park", "Trivia Night", "Art Gallery", "Stargazing", "Food Tour", "Stay Home & Order In"] },
+      { name: "What to Watch Tonight", entrants: ["New Release", "Comfort Rewatch", "Documentary", "TV Series Binge", "Classic Film", "Comedy Special", "Action Movie", "Rom-Com", "Thriller", "Animated Film", "Foreign Film", "Reality TV", "Sports", "True Crime", "Sci-Fi", "Just Scroll Forever"] },
+      { name: "Family Game Night Pick", entrants: ["Codenames", "Ticket to Ride", "Catan", "Uno", "Scrabble", "Charades", "Pictionary", "Trivial Pursuit", "Monopoly", "Clue", "Cards Against Humanity", "Jackbox", "Mario Kart", "Wii Sports", "Poker Night", "Just Dance"] },
+      { name: "Next Home Project", entrants: ["Kitchen Refresh", "Bathroom Update", "Paint Refresh", "New Furniture", "Outdoor Space", "Organization", "Smart Home", "Lighting Update", "Flooring", "Landscaping", "Garage Cleanup", "Home Office", "Guest Room", "Kids Room", "Basement Finish", "Nothing (It's Fine)"] },
+      { name: "What Car to Buy", entrants: ["Tesla Model 3", "Toyota Camry", "Honda CR-V", "Ford F-150", "Toyota RAV4", "Mazda CX-5", "Subaru Outback", "BMW 3 Series", "Jeep Wrangler", "Honda Accord", "Porsche 911", "Rivian R1S", "Lexus RX", "Audi Q5", "Chevy Tahoe", "Keep the Current One"] },
+      { name: "What Hobby to Start", entrants: ["Golf", "Tennis", "Photography", "Cooking", "Gardening", "Guitar", "Painting", "Pottery", "Woodworking", "Running", "Yoga", "Reading More", "Chess", "Pickleball", "Podcasting", "Writing"] },
+      { name: "Where to Eat Dinner", entrants: ["Italian", "Mexican", "Sushi", "Thai", "Steakhouse", "BBQ", "Indian", "Chinese", "Burger Joint", "Pizza", "Mediterranean", "Seafood", "Korean", "Vietnamese", "That New Place", "Just Cook at Home"] },
+      { name: "Next Pet to Get", entrants: ["Golden Retriever", "Labrador", "French Bulldog", "Cat", "Rescue Dog", "German Shepherd", "Corgi", "Goldendoodle", "Cavalier King Charles", "Beagle", "Poodle", "Australian Shepherd", "Fish", "Hamster", "No Pet", "One We Already Have"] },
+    ]
+  },
 }

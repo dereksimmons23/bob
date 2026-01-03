@@ -396,7 +396,9 @@ Device tracking added Jan 1, 2026:
 ### v2.9.4 (Jan 3, 2026) — January Update
 - Removed NYE Party Pack banner from Category Library
 - Changed default theme from 'nye' to 'random'
+- Added "Life Decisions" theme (12 categories for real choices: vacations, date nights, home projects)
 - Discovered new use case: personal decision-making brackets (e.g., "Best dream job for Derek")
+- Expanded v3.5 spec with Jackbox-style multiplayer vision (room codes, host/player views, real-time voting)
 
 ### v2.9.3 (Jan 1, 2026) — Analytics
 - Added device_id tracking to all Supabase tables (games, feedback, shared_brackets, shared_vaults)
