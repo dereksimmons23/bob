@@ -5,6 +5,13 @@
 > Next milestone: v3.0 — Party Mode (March 1, 2026 for March Madness)
 > Project status: PAUSED until mid-February 2026
 
+## Taglines
+
+- **"Let's BOB it."** — The call to action. When a group needs to decide something, you BOB it.
+- **"Think it through. Bracket it out."** — For personal decisions. Structured intuition via elimination.
+
+---
+
 ## Current State
 
 **What works:**
