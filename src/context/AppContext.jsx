@@ -24,6 +24,22 @@ export function AppProvider({ children }) {
   // First-time visitor
   const [isFirstVisit, setIsFirstVisit] = useState(() => !hasVisited())
 
+  // Tutorial completion tracking
+  const [hasCompletedTutorial, setHasCompletedTutorial] = useState(() => {
+    return localStorage.getItem(STORAGE_KEYS.TUTORIAL_COMPLETED) === 'true'
+  })
+
+  // Tutorial callbacks
+  const completeTutorial = useCallback(() => {
+    setHasCompletedTutorial(true)
+    localStorage.setItem(STORAGE_KEYS.TUTORIAL_COMPLETED, 'true')
+  }, [])
+
+  const resetTutorial = useCallback(() => {
+    setHasCompletedTutorial(false)
+    localStorage.removeItem(STORAGE_KEYS.TUTORIAL_COMPLETED)
+  }, [])
+
   // Custom categories
   const [customCategories, setCustomCategories] = useState(() => {
     try {
@@ -170,6 +186,11 @@ export function AppProvider({ children }) {
     setShowDevTools,
     confirmModal,
     setConfirmModal,
+
+    // Tutorial
+    hasCompletedTutorial,
+    completeTutorial,
+    resetTutorial,
 
     // Dev tools
     clearAllStorage,

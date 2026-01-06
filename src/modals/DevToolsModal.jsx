@@ -1,6 +1,6 @@
 import { Button } from '../components/ui'
 
-export function DevToolsModal({ onClose, onClearAll, onResetFirstVisit, onResetVault, onBrandShowcase }) {
+export function DevToolsModal({ onClose, onClearAll, onResetFirstVisit, onResetVault, onBrandShowcase, onResetTutorial }) {
   return (
     <div style={{
       position: 'fixed',
@@ -43,6 +43,9 @@ export function DevToolsModal({ onClose, onClearAll, onResetFirstVisit, onResetV
           </Button>
           <Button variant="secondary" onClick={() => { onResetVault(); onClose(); }}>
             Reset Vault to Seed Data
+          </Button>
+          <Button variant="secondary" onClick={onResetTutorial}>
+            Replay Tutorial
           </Button>
           <Button variant="danger" onClick={() => { onClearAll(); onClose(); }}>
             Clear All localStorage

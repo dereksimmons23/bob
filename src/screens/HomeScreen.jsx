@@ -13,6 +13,7 @@ export function HomeScreen({
   onViewVault,
   onYearInReview,
   onOpenSettings,
+  onHowToPlay,
 }) {
   const [welcomeMessage] = useState(() => BOB.random(BOB.welcome))
 
@@ -37,10 +38,15 @@ export function HomeScreen({
         </Button>
       </div>
 
-      <div style={{ marginTop: '20px' }}>
+      <div style={{ marginTop: '20px', display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
         <Button variant="ghost" onClick={onViewVault}>
           🏆 The Vault{historyCount > 0 ? ` (${historyCount})` : ''}
         </Button>
+        {onHowToPlay && (
+          <Button variant="ghost" onClick={onHowToPlay}>
+            ❓ How to Play
+          </Button>
+        )}
       </div>
 
       {/* Year in Review - special NYE mode */}

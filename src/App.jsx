@@ -10,6 +10,7 @@ import {
   SharedBracketView,
   SharedVaultView,
   BrandShowcase,
+  TutorialScreen,
   // QuickPlayScreen, // v3 experiment - hidden for NYE
 } from './screens'
 import {
@@ -44,6 +45,9 @@ function AppContent() {
     playerCount,
     setPlayerCount,
     isDevMode,
+    hasCompletedTutorial,
+    completeTutorial,
+    resetTutorial,
   } = useApp()
 
   // Screen state
@@ -104,6 +108,14 @@ function AppContent() {
       setScreen('shared-vault')
     }
   }, [])
+
+  // Auto-launch tutorial for first-time visitors
+  useEffect(() => {
+    // Only on home screen, not on shared routes
+    if (!hasCompletedTutorial && screen === 'home' && !sharedData) {
+      setScreen('tutorial')
+    }
+  }, [hasCompletedTutorial, screen, sharedData])
 
   // Reset game
   const resetGame = useCallback(() => {
@@ -373,6 +385,7 @@ function AppContent() {
           onResetFirstVisit={() => { localStorage.removeItem('bob-has-visited'); window.location.reload() }}
           onResetVault={resetVault}
           onBrandShowcase={() => setScreen('brand')}
+          onResetTutorial={() => { resetTutorial(); setScreen('tutorial'); setShowDevTools(false) }}
         />
       )}
     </>
@@ -417,6 +430,7 @@ function AppContent() {
           onViewVault={() => setScreen('vault')}
           onYearInReview={startYearInReview}
           onOpenSettings={() => setShowSettings(!showSettings)}
+          onHowToPlay={() => setScreen('tutorial')}
         />
         {renderModals()}
       </>
@@ -427,6 +441,22 @@ function AppContent() {
   if (screen === 'brand') {
     return (
       <BrandShowcase onBack={() => setScreen('home')} />
+    )
+  }
+
+  // Tutorial screen
+  if (screen === 'tutorial') {
+    return (
+      <TutorialScreen
+        onComplete={() => {
+          completeTutorial()
+          setScreen('home')
+        }}
+        onSkip={() => {
+          completeTutorial()
+          setScreen('home')
+        }}
+      />
     )
   }
 

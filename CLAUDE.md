@@ -1,7 +1,7 @@
 # CLAUDE.md — Technical Handoff for BOB
 
 > Last updated: January 6, 2026
-> Current version: v2.9.5 — Security Audit (deployed)
+> Current version: v2.9.6 — Interactive Tutorial (deployed)
 > Next milestone: v3.0 — Party Mode (March 1, 2026 for March Madness)
 > Project status: PAUSED until mid-February 2026
 
@@ -24,6 +24,7 @@
 - iOS Safari safe-area handling
 - Supabase analytics + feedback system
 - 3-2-1 countdown before vote reveal
+- **Interactive Tutorial** — Auto-launches for first-time visitors, teaches gameplay with Pizza Toppings bracket
 
 **What's experimental (hidden):**
 - `QuickPlayScreen` — Single-screen mode prototype (Dec 28, 2025)
@@ -99,6 +100,7 @@ src/
 │   ├── PlayingScreen.jsx # Active gameplay
 │   ├── ChampionScreen.jsx # Winner celebration
 │   ├── VaultScreen.jsx   # History carousel
+│   ├── TutorialScreen.jsx # Interactive tutorial (5-step state machine)
 │   ├── QuickPlayScreen.jsx # Single-screen prototype (hidden)
 │   ├── BrandShowcase.jsx # Logo exploration dev tool
 │   └── Shared*View.jsx   # Public share pages
@@ -113,6 +115,7 @@ src/
 ├── data/
 │   ├── categories.js     # CATEGORY_LIBRARY — all preset categories
 │   ├── bob.js            # BOB personality — all dialogue
+│   ├── tutorialCategory.js # Tutorial data (Pizza Toppings + BOB dialogue)
 │   └── seedVault.js      # Pre-populated vault entries
 └── styles/
     └── index.css         # CSS variables, base styles
@@ -203,6 +206,7 @@ useEffect(() => {
 | Custom categories | localStorage (`bob-custom-categories`) | User-created content |
 | Sound preference | localStorage (`bob-sound-enabled`) | User preference |
 | Player count | localStorage (`bob-player-count`) | Remembers last used |
+| Tutorial completed | localStorage (`bob-tutorial-completed`) | Prevents re-showing tutorial |
 
 ### Context API
 `AppContext` exists but is underutilized. Most state is still in `App.jsx`. Could refactor to move game state into context, but works fine as-is.
@@ -413,6 +417,20 @@ Device tracking added Jan 1, 2026:
 ---
 
 ## Changelog
+
+### v2.9.6 (Jan 6, 2026) — Interactive Tutorial
+- **New feature:** Interactive tutorial bracket for first-time visitors
+  - Auto-launches on first visit (skippable)
+  - 5-step flow: Welcome → Vote → Lock In → Championship → Victory
+  - Uses Pizza Toppings category (Pepperoni, Mushroom, Sausage, Peppers)
+  - BOB narrates every step with personality
+  - Pulsing gold animation guides users to buttons
+  - Full 3-2-1 countdown before vote reveal
+- Added "How to Play" button to HomeScreen for returning users
+- Added "Replay Tutorial" option in Dev Tools
+- New files: `src/screens/TutorialScreen.jsx`, `src/data/tutorialCategory.js`
+- New storage key: `bob-tutorial-completed`
+- Tutorial state tracked in AppContext (`hasCompletedTutorial`, `completeTutorial`, `resetTutorial`)
 
 ### v2.9.5 (Jan 6, 2026) — Security Audit + Bug Fixes
 - **Security:** Fixed 3 high-severity RLS issues found via Supabase advisor

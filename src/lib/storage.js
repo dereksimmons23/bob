@@ -11,6 +11,7 @@ export const STORAGE_KEYS = {
   SOUND_ENABLED: 'bob-sound-enabled',
   CUSTOM_CATEGORIES: 'bob-custom-categories',
   DEVICE_ID: 'bob-device-id',
+  TUTORIAL_COMPLETED: 'bob-tutorial-completed',
 }
 
 /**

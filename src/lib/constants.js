@@ -7,8 +7,8 @@
  * 3. Commit with message "Release vX.X"
  */
 
-export const APP_VERSION = '2.9.5'
-export const APP_VERSION_NAME = 'Security Audit'
+export const APP_VERSION = '2.9.6'
+export const APP_VERSION_NAME = 'Interactive Tutorial'
 
 // For display: "v2.9.4 — January Update"
 export const getVersionString = () => `v${APP_VERSION} — ${APP_VERSION_NAME}`
