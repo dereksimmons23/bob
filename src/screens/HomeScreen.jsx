@@ -69,7 +69,7 @@ export function HomeScreen({
             e.currentTarget.style.boxShadow = '0 4px 15px rgba(245, 158, 11, 0.4)'
           }}
         >
-          🥂 YEAR IN REVIEW 2025
+          🥂 YEAR IN REVIEW
         </button>
         <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '8px', textAlign: 'center' }}>
           4 brackets → 1 MVP

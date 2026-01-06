@@ -28,7 +28,7 @@ export function VaultScreen({ history, onBack, onNewGame, onClearHistory, onDele
           entrants: entry.entrants || [],
           player_count: entry.playerCount || 1,
           bob_comment: entry.bobComment || entry.note || '',
-          matchup_results: entry.matchupResults || [],
+          bracket_results: entry.matchupResults || [],
           device_id: getDeviceId(),
         })
         .select('id')

@@ -1,7 +1,7 @@
 # CLAUDE.md — Technical Handoff for BOB
 
-> Last updated: January 3, 2026
-> Current version: v2.9.4 — January Update (deployed)
+> Last updated: January 6, 2026
+> Current version: v2.9.5 — Security Audit (deployed)
 > Next milestone: v3.0 — Party Mode (March 1, 2026 for March Madness)
 > Project status: PAUSED until mid-February 2026
 
@@ -36,8 +36,7 @@
   - Backwards B experiments for future branding
 
 **What's broken:**
-- Vault individual share button — Supabase insert failing (see known bugs below)
-- "defeated 0" bug — runner-up sometimes shows as "0" on champion screen (needs investigation)
+- Nothing major! (Fixed v2.9.5: Vault share, "defeated 0" bug)
 
 **Known cosmetic issues:**
 - `public/og-image.png` has gray box behind "BRACKETS" text — needs manual fix in image editor
@@ -218,8 +217,23 @@ useEffect(() => {
 | `feedback` | User feedback from in-app form |
 | `shared_brackets` | Public bracket shares |
 | `shared_vaults` | Public vault shares |
+| `custom_categories` | User-created categories |
+| `test_devices` | Device IDs to filter from analytics |
 
 All tables use Row Level Security. The anon key in code is intentional and safe.
+
+### RLS Policy Summary (audited Jan 6, 2026)
+
+| Table | SELECT | INSERT | UPDATE | DELETE |
+|-------|--------|--------|--------|--------|
+| `games` | anon | anon | — | — |
+| `feedback` | anon | anon | — | — |
+| `shared_brackets` | anon | anon | view_count only | — |
+| `shared_vaults` | anon | anon | view_count only | — |
+| `custom_categories` | anon | anon | — | — |
+| `test_devices` | authenticated | — | — | — |
+
+Migrations tracked in `supabase/migrations/`.
 
 ---
 
@@ -358,8 +372,8 @@ BOB: "Done. Shared with the caption 'Pineapple truthers unite.'"
 **See:** `docs/MARCH-MADNESS-RELEASE.md` for full plan and effort estimates
 
 ### Priority bugs to fix (before Party Mode work):
-- [ ] "defeated 0" bug — runner-up shows as "0" on champion screen
-- [ ] Vault individual share — Supabase insert failing
+- [x] "defeated 0" bug — **FIXED v2.9.5** (was parameter mismatch, cleaned up one bad record)
+- [x] Vault individual share — **FIXED v2.9.5** (column name mismatch)
 - [ ] og-image.png gray box (manual image edit)
 
 ### Mobile UX issues (from Dec 30 review):
@@ -399,6 +413,18 @@ Device tracking added Jan 1, 2026:
 ---
 
 ## Changelog
+
+### v2.9.5 (Jan 6, 2026) — Security Audit + Bug Fixes
+- **Security:** Fixed 3 high-severity RLS issues found via Supabase advisor
+  - Removed `feedback` DELETE policy (anyone could delete all feedback)
+  - Restricted `shared_brackets` UPDATE to view_count only (was allowing any field)
+  - Restricted `shared_vaults` UPDATE to view_count only (was allowing any field)
+- Added `supabase/migrations/` folder to track database changes in repo
+- Added `test_devices` RLS (authenticated read-only)
+- **Bug fix:** "defeated 0" bug — one corrupted record from Dec 31 (parameter mismatch in v2.9, already fixed; cleaned up bad data)
+- **Bug fix:** Vault individual share — fixed column name mismatch (`matchup_results` → `bracket_results`)
+- **Cleanup:** Removed year-specific references (NYE 2025 → "New Year's", timeless BOB dialogue)
+- Updated CLAUDE.md with full RLS policy matrix
 
 ### v2.9.4 (Jan 3, 2026) — January Update
 - Removed NYE Party Pack banner from Category Library

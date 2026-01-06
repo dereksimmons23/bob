@@ -203,7 +203,7 @@ function AppContent() {
         if (roundWinners.length === 1) {
           // Champion!
           const comment = isYearInReview
-            ? "The MVP of 2025. All four champions competed. One prevailed. This is the one that defined your year."
+            ? "The MVP of the year. All four champions competed. One prevailed. This is the one that defined your year."
             : BOB.random(categoryType === 'nye' ? BOB.championNYE : BOB.champion)
           setChampionComment(comment)
 
