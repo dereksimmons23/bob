@@ -33,9 +33,21 @@ These files serve as documentation and version control for schema changes.
 
 ## RLS Status
 
-All tables use Row Level Security:
-- `test_devices`: Authenticated read-only (Jan 6, 2026)
-- Other tables: Configured at creation
+All tables have RLS enabled. Security audit completed Jan 6, 2026:
+
+| Table | SELECT | INSERT | UPDATE | DELETE |
+|-------|--------|--------|--------|--------|
+| `games` | anon | anon | — | — |
+| `feedback` | anon | anon | — | — |
+| `shared_brackets` | anon | anon | view_count only | — |
+| `shared_vaults` | anon | anon | view_count only | — |
+| `custom_categories` | anon | anon | — | — |
+| `test_devices` | authenticated | — | — | — |
+
+**Security fixes applied Jan 6, 2026:**
+- Removed `feedback` DELETE policy (was allowing anyone to delete all feedback)
+- Restricted `shared_brackets` UPDATE to view_count field only
+- Restricted `shared_vaults` UPDATE to view_count field only
 
 ## Service Role vs Anon Key
 
