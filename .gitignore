@@ -14,3 +14,10 @@ dist/
 
 # Dev screenshots for review
 screenshots/
+
+# Session state and internal docs (local only)
+HANDOFF.md
+SESSION_CLOSEOUT.md
+CLAUDE.md
+.claude/
+.config/
