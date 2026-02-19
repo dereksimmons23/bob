@@ -1,6 +1,6 @@
 /**
  * BOB Voice Module — ElevenLabs TTS via serverless proxy
- * API key stays server-side (/api/speak). Client just sends text.
+ * API key stays server-side (/.netlify/functions/speak). Client just sends text.
  * Gracefully degrades when voice isn't configured or calls fail.
  */
 
@@ -17,7 +17,7 @@ export const BobVoice = {
   async checkAvailable() {
     if (available !== null) return available
     try {
-      const res = await fetch('/api/speak', {
+      const res = await fetch('/.netlify/functions/speak', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text: 'test' }),
@@ -41,7 +41,7 @@ export const BobVoice = {
   },
 
   /**
-   * Speak text via /api/speak proxy
+   * Speak text via /.netlify/functions/speak proxy
    */
   async speak(text) {
     if (!enabled || !text) return
@@ -58,7 +58,7 @@ export const BobVoice = {
     }
 
     try {
-      const response = await fetch('/api/speak', {
+      const response = await fetch('/.netlify/functions/speak', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text }),
