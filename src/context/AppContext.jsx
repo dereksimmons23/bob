@@ -18,7 +18,7 @@ export function AppProvider({ children }) {
   // App-wide settings
   const [soundEnabled, setSoundEnabled] = useState(true)
   const [voiceEnabled, setVoiceEnabled] = useState(() => {
-    return localStorage.getItem(STORAGE_KEYS.VOICE_ENABLED) === 'true'
+    return localStorage.getItem(STORAGE_KEYS.VOICE_ENABLED) !== 'false'
   })
   const [voiceAvailable, setVoiceAvailable] = useState(false)
   const [playerCount, setPlayerCount] = useState(() => getPlayerCount())
