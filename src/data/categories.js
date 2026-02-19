@@ -149,6 +149,22 @@ export const CATEGORY_LIBRARY = {
       { name: "Greatest Comedians", mountRushmore: true, entrants: ["Richard Pryor", "George Carlin", "Eddie Murphy", "Dave Chappelle", "Robin Williams", "Jerry Seinfeld", "Chris Rock", "Steve Martin", "Bill Murray", "Tina Fey", "Amy Poehler", "Kevin Hart", "Jim Carrey", "Louis C.K.", "Ellen DeGeneres", "Wanda Sykes"] },
     ]
   },
+  marchmadness: {
+    name: "March Madness",
+    icon: "🏀",
+    color: "#FF6D00",
+    description: "Tournament time. Settle the debates.",
+    categories: [
+      { name: "Greatest Cinderella Run", featured: true, entrants: ["Loyola Chicago 2018", "Saint Peter's 2022", "George Mason 2006", "VCU 2011", "Florida Gulf Coast 2013", "Butler 2010", "UMBC 2018", "Oral Roberts 2021", "Fairleigh Dickinson 2023", "Middle Tennessee 2016", "Norfolk State 2012", "Lehigh 2012", "Mercer 2014", "Princeton 2023", "Stephen F. Austin 2016", "Richmond 2011"] },
+      { name: "Greatest Tournament Player", featured: true, entrants: ["Christian Laettner", "Carmelo Anthony", "Danny Manning", "Magic Johnson", "Steph Curry", "Anthony Davis", "Glen Rice", "Bill Walton", "Kemba Walker", "Hakeem Olajuwon", "Dwyane Wade", "Patrick Ewing", "Lew Alcindor", "Mateen Cleaves", "Shabazz Napier", "Keith Smart"] },
+      { name: "Best March Madness Moment", featured: true, entrants: ["Laettner's Shot (1992)", "Kris Jenkins Buzzer-Beater (2016)", "NC State Cuts the Net (1983)", "Bryce Drew's Miracle (1998)", "UMBC Shocks Virginia (2018)", "Villanova's Perfect Game (1985)", "Steph Curry's Breakout (2008)", "Mario Chalmers Forces OT (2008)", "Gordon Hayward Half-Court (2010)", "Kemba's UConn Run (2011)", "Jalen Suggs Half-Court (2021)", "Ali Farokhmanesh's Dagger (2010)", "Trey Burke vs Kansas (2013)", "Keith Smart's Baseline (1987)", "Lorenzo Charles Dunk (1983)", "Saint Peter's Elite Eight (2022)"] },
+      { name: "Best College Basketball Arena", entrants: ["Cameron Indoor (Duke)", "Allen Fieldhouse (Kansas)", "Rupp Arena (Kentucky)", "Dean Smith Center (UNC)", "Mackey Arena (Purdue)", "Hinkle Fieldhouse (Butler)", "Assembly Hall (Indiana)", "The Palestra (Penn)", "Gallagher-Iba Arena (Oklahoma State)", "Pauley Pavilion (UCLA)", "McKale Center (Arizona)", "Thompson-Boling Arena (Tennessee)", "Crisler Center (Michigan)", "Williams Arena (Minnesota)", "Hilton Coliseum (Iowa State)", "The Kennel (Gonzaga)"] },
+      { name: "Greatest Championship Game", featured: true, entrants: ["Villanova vs UNC 2016", "Duke vs Butler 2010", "Kansas vs Memphis 2008", "NC State vs Houston 1983", "Villanova vs Georgetown 1985", "Indiana vs Syracuse 1987", "Virginia vs Texas Tech 2019", "Kansas vs UNC 2022", "Syracuse vs Kansas 2003", "Duke vs Wisconsin 2015", "Baylor vs Gonzaga 2021", "UNC vs Gonzaga 2017", "Louisville vs Michigan 2013", "UConn vs San Diego State 2023", "Villanova vs Michigan 2018", "Kentucky vs Kansas 2012"] },
+      { name: "Greatest College Basketball Program", entrants: ["UCLA", "Kentucky", "Duke", "UNC", "Kansas", "Indiana", "UConn", "Louisville", "Michigan State", "Gonzaga", "Villanova", "Syracuse", "Arizona", "Michigan", "Georgetown", "Ohio State"] },
+      { name: "Best One-and-Done Player", entrants: ["Anthony Davis", "Kevin Durant", "Zion Williamson", "Carmelo Anthony", "Derrick Rose", "John Wall", "Kyrie Irving", "Karl-Anthony Towns", "Ben Simmons", "Brandon Ingram", "Jayson Tatum", "Cade Cunningham", "Deandre Ayton", "Andrew Wiggins", "Greg Oden", "Jabari Parker"] },
+      { name: "Best Tournament Mascot", entrants: ["Purdue Pete", "The Oregon Duck", "Bucky Badger (Wisconsin)", "Ralphie (Colorado)", "Blue Devil (Duke)", "Jayhawk (Kansas)", "Wildcat (Kentucky)", "Sparty (Michigan State)", "Rameses (UNC)", "Brutus Buckeye (Ohio State)", "Cy (Iowa State)", "Big Red (Western Kentucky)", "The Leprechaun (Notre Dame)", "Smokey (Tennessee)", "Mike the Tiger (LSU)", "Aubie (Auburn)"] },
+    ]
+  },
   decisions: {
     name: "Life Decisions",
     icon: "🤔",

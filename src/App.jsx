@@ -24,6 +24,7 @@ import {
 import { ConfirmModal } from './components'
 import { generateBracket, advanceToNextRound } from './lib/bracket'
 import { SoundEffects } from './lib/sound'
+import { BobVoice } from './lib/voice'
 import { BOB } from './data/bob'
 import { CATEGORY_LIBRARY } from './data/categories'
 import { SEED_VAULT_DATA } from './data/seedVault'
@@ -42,6 +43,9 @@ function AppContent() {
     addCustomCategory,
     soundEnabled,
     toggleSound,
+    voiceEnabled,
+    voiceAvailable,
+    toggleVoice,
     playerCount,
     setPlayerCount,
     isDevMode,
@@ -52,6 +56,7 @@ function AppContent() {
 
   // Screen state
   const [screen, setScreen] = useState('home')
+  const [libraryTheme, setLibraryTheme] = useState(null)
 
   // Game state
   const [category, setCategory] = useState('')
@@ -116,6 +121,13 @@ function AppContent() {
       setScreen('tutorial')
     }
   }, [hasCompletedTutorial, screen, sharedData])
+
+  // Voice follows BOB's message
+  useEffect(() => {
+    if (bobMessage) {
+      BobVoice.speak(bobMessage)
+    }
+  }, [bobMessage])
 
   // Reset game
   const resetGame = useCallback(() => {
@@ -218,6 +230,7 @@ function AppContent() {
             ? "The MVP of the year. All four champions competed. One prevailed. This is the one that defined your year."
             : BOB.random(categoryType === 'nye' ? BOB.championNYE : BOB.champion)
           setChampionComment(comment)
+          BobVoice.speak(comment)
 
           if (isYearInReview) {
             setIsYearInReview(false)
@@ -356,6 +369,9 @@ function AppContent() {
         <SettingsPanel
           soundEnabled={soundEnabled}
           onToggleSound={toggleSound}
+          voiceEnabled={voiceEnabled}
+          voiceAvailable={voiceAvailable}
+          onToggleVoice={toggleVoice}
           onFeedback={() => setShowFeedback(true)}
           onAdmin={() => setShowAdmin(true)}
           onAbout={() => setShowAbout(true)}
@@ -422,13 +438,13 @@ function AppContent() {
       <>
         <HomeScreen
           historyCount={history.length}
-          onQuickStart={() => setScreen('library')}
+          onQuickStart={() => { setLibraryTheme(null); setScreen('library') }}
           onCustomBracket={() => {
             setCategoryType('custom')
             setScreen('setup')
           }}
           onViewVault={() => setScreen('vault')}
-          onYearInReview={startYearInReview}
+          onMarchMadness={() => { setLibraryTheme('marchmadness'); setScreen('library') }}
           onOpenSettings={() => setShowSettings(!showSettings)}
           onHowToPlay={() => setScreen('tutorial')}
         />
@@ -472,6 +488,7 @@ function AppContent() {
           }}
           onBack={() => setScreen('home')}
           customCategories={customCategories}
+          initialTheme={libraryTheme}
         />
         {renderModals()}
       </>

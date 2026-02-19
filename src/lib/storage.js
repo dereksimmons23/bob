@@ -12,6 +12,7 @@ export const STORAGE_KEYS = {
   CUSTOM_CATEGORIES: 'bob-custom-categories',
   DEVICE_ID: 'bob-device-id',
   TUTORIAL_COMPLETED: 'bob-tutorial-completed',
+  VOICE_ENABLED: 'bob-voice-enabled',
 }
 
 /**

@@ -1,6 +1,6 @@
 import { Button } from '../components/ui'
 
-export function SettingsPanel({ soundEnabled, onToggleSound, onFeedback, onAdmin, onAbout, onLegal, onDevTools, isDevMode, onClose }) {
+export function SettingsPanel({ soundEnabled, onToggleSound, voiceEnabled, voiceAvailable, onToggleVoice, onFeedback, onAdmin, onAbout, onLegal, onDevTools, isDevMode, onClose }) {
   return (
     <div style={{
       position: 'fixed',
@@ -41,6 +41,27 @@ export function SettingsPanel({ soundEnabled, onToggleSound, onFeedback, onAdmin
           {soundEnabled ? 'ON' : 'OFF'}
         </span>
       </div>
+
+      {voiceAvailable && (
+        <div
+          onClick={onToggleVoice}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            padding: '12px',
+            background: 'var(--bg-card-hover)',
+            borderRadius: '8px',
+            cursor: 'pointer',
+            marginBottom: '12px',
+          }}
+        >
+          <span style={{ color: 'var(--text-primary)' }}>BOB's Voice</span>
+          <span style={{ color: voiceEnabled ? 'var(--accent-green)' : 'var(--text-muted)' }}>
+            {voiceEnabled ? 'ON' : 'OFF'}
+          </span>
+        </div>
+      )}
 
       <div
         onClick={() => { onClose(); onFeedback(); }}

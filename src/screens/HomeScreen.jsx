@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Logo, Button } from '../components/ui'
 import { BobSays } from '../components'
 import { BOB } from '../data/bob'
+import { BobVoice } from '../lib/voice'
 
 /**
  * Home screen with main navigation
@@ -11,11 +12,15 @@ export function HomeScreen({
   onQuickStart,
   onCustomBracket,
   onViewVault,
-  onYearInReview,
+  onMarchMadness,
   onOpenSettings,
   onHowToPlay,
 }) {
   const [welcomeMessage] = useState(() => BOB.random(BOB.welcome))
+
+  useEffect(() => {
+    BobVoice.speak(welcomeMessage)
+  }, [welcomeMessage])
 
   return (
     <div style={{
@@ -49,12 +54,12 @@ export function HomeScreen({
         )}
       </div>
 
-      {/* Year in Review - special NYE mode */}
+      {/* March Madness */}
       <div style={{ marginTop: '16px' }}>
         <button
-          onClick={onYearInReview}
+          onClick={onMarchMadness}
           style={{
-            background: 'linear-gradient(135deg, #f59e0b 0%, #fbbf24 50%, #f59e0b 100%)',
+            background: 'linear-gradient(135deg, #FF6D00 0%, #FF8F00 50%, #FF6D00 100%)',
             border: 'none',
             borderRadius: '12px',
             padding: '14px 28px',
@@ -63,24 +68,42 @@ export function HomeScreen({
             fontFamily: 'var(--font-display)',
             color: '#1a1a2e',
             letterSpacing: '2px',
-            boxShadow: '0 4px 15px rgba(245, 158, 11, 0.4)',
+            boxShadow: '0 4px 15px rgba(255, 109, 0, 0.4)',
             transition: 'transform 0.2s, box-shadow 0.2s',
           }}
           onMouseOver={e => {
             e.currentTarget.style.transform = 'scale(1.05)'
-            e.currentTarget.style.boxShadow = '0 6px 20px rgba(245, 158, 11, 0.6)'
+            e.currentTarget.style.boxShadow = '0 6px 20px rgba(255, 109, 0, 0.6)'
           }}
           onMouseOut={e => {
             e.currentTarget.style.transform = 'scale(1)'
-            e.currentTarget.style.boxShadow = '0 4px 15px rgba(245, 158, 11, 0.4)'
+            e.currentTarget.style.boxShadow = '0 4px 15px rgba(255, 109, 0, 0.4)'
           }}
         >
-          🥂 YEAR IN REVIEW
+          🏀 MARCH MADNESS
         </button>
         <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '8px', textAlign: 'center' }}>
-          4 brackets → 1 MVP
+          8 tournament brackets · settle the debates
         </div>
       </div>
+
+      <a
+        href="https://claudewill.io"
+        style={{
+          marginTop: '32px',
+          fontFamily: 'var(--font-body)',
+          fontSize: '13px',
+          color: 'var(--text-muted)',
+          textDecoration: 'none',
+          letterSpacing: '0.5px',
+          opacity: 0.6,
+          transition: 'opacity 0.2s',
+        }}
+        onMouseOver={e => { e.currentTarget.style.opacity = '1' }}
+        onMouseOut={e => { e.currentTarget.style.opacity = '0.6' }}
+      >
+        claudewill<span style={{ color: 'var(--accent-gold)' }}>*</span>
+      </a>
 
       <button
         onClick={onOpenSettings}

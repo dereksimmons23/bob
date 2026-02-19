@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useCallback, useEffect } from 'react'
 import { SoundEffects } from '../lib/sound'
+import { BobVoice } from '../lib/voice'
 import { SEED_VAULT_DATA } from '../data/seedVault'
 import {
   getVaultHistory,
@@ -16,6 +17,10 @@ const AppContext = createContext(null)
 export function AppProvider({ children }) {
   // App-wide settings
   const [soundEnabled, setSoundEnabled] = useState(true)
+  const [voiceEnabled, setVoiceEnabled] = useState(() => {
+    return localStorage.getItem(STORAGE_KEYS.VOICE_ENABLED) === 'true'
+  })
+  const [voiceAvailable, setVoiceAvailable] = useState(false)
   const [playerCount, setPlayerCount] = useState(() => getPlayerCount())
 
   // Vault (history of brackets)
@@ -80,11 +85,33 @@ export function AppProvider({ children }) {
     SoundEffects.setEnabled(soundEnabled)
   }, [soundEnabled])
 
+  useEffect(() => {
+    BobVoice.setEnabled(voiceEnabled)
+  }, [voiceEnabled])
+
+  // Check if voice is available (server has ElevenLabs configured)
+  useEffect(() => {
+    BobVoice.checkAvailable().then(ok => {
+      setVoiceAvailable(ok)
+      if (ok && voiceEnabled) BobVoice.setEnabled(true)
+    })
+  }, [])
+
   // Sound toggle
   const toggleSound = useCallback(() => {
     setSoundEnabled(prev => {
       const newValue = !prev
       SoundEffects.setEnabled(newValue)
+      return newValue
+    })
+  }, [])
+
+  // Voice toggle
+  const toggleVoice = useCallback(() => {
+    setVoiceEnabled(prev => {
+      const newValue = !prev
+      BobVoice.setEnabled(newValue)
+      localStorage.setItem(STORAGE_KEYS.VOICE_ENABLED, newValue.toString())
       return newValue
     })
   }, [])
@@ -143,6 +170,9 @@ export function AppProvider({ children }) {
     // Settings
     soundEnabled,
     toggleSound,
+    voiceEnabled,
+    voiceAvailable,
+    toggleVoice,
     playerCount,
     setPlayerCount,
     isDevMode,

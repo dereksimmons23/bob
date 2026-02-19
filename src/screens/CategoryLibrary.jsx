@@ -2,9 +2,8 @@ import { useState, useRef } from 'react'
 import { Button, Logo, CategoryCard, ThemePill } from '../components/ui'
 import { CATEGORY_LIBRARY } from '../data/categories'
 
-export function CategoryLibrary({ onSelect, onCustom, onBack, customCategories }) {
-  // Default to random for variety
-  const [activeTheme, setActiveTheme] = useState('random')
+export function CategoryLibrary({ onSelect, onCustom, onBack, customCategories, initialTheme }) {
+  const [activeTheme, setActiveTheme] = useState(initialTheme || 'random')
   const categoryGridRef = useRef(null)
   const themes = Object.keys(CATEGORY_LIBRARY)
   const currentThemeData = CATEGORY_LIBRARY[activeTheme]
