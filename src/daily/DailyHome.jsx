@@ -1,7 +1,7 @@
 import { getStreak } from '../lib/daily'
 
 const MODE_COPY = {
-  room:  { label: 'Read the Room', sub: 'Match the crowd. Beat BOB.' },
+  room:  { label: 'Read the Room', sub: 'Match the board. Beat BOB.' },
   panel: { label: 'Beat the Panel', sub: 'Blind. You vs 12 models.' },
 }
 

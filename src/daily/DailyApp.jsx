@@ -127,8 +127,8 @@ function SettingsSheet({ sound, onToggleSound, voice, voiceAvailable, onToggleVo
 
         <p className="bd-dim" style={{ fontSize: 14, lineHeight: 1.5, margin: '10px 0 18px' }}>
           One bracket a day. You pick. <b style={{ color: 'var(--bd-bob)' }}>BOB</b> — chairing a
-          panel of 12 AI models — has already picked. Then the whole crowd weighs in.
-          Read the room better than BOB and the streak is yours.
+          panel of 12 AI models — has already picked. The board shows where the room leans.
+          Read it better than BOB and the streak is yours.
         </p>
 
         <Row label="Sound effects" on={sound} onClick={onToggleSound} />

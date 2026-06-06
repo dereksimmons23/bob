@@ -96,9 +96,17 @@ Both modes run on the same daily bracket and the same underlying data. B is a to
 
 ## Scope: What Survives, What Gets Shelved
 
+> **Update (June 6, 2026):** Supabase is **deferred out of the v3.0 critical path.**
+> Real crowd data has a cold-start problem (no players day one = worse than a
+> projection), so for launch the gold entity is **"The Board"** — a deterministic,
+> clearly-labeled *projection* of where the room leans, not live tallies. No
+> backend ships in v3.0. Real per-matchup voting (Supabase or Netlify Blobs)
+> turns on once there are players; `crowd.js` already flips `estimate → live`
+> per matchup with no rearchitecting.
+
 ### Keep / reuse (the engine works — don't rebuild it)
 - `lib/bracket.js` — bracket math (generate/advance). Daily uses a **date-seeded** shuffle so everyone gets the same matchup order.
-- `lib/supabase.js` — restore the paused project; add `daily_votes`.
+- `lib/supabase.js` — **deferred.** Not in the Daily path. Restore later for live crowd + analytics.
 - `lib/voice.js` + `netlify/functions/speak.js` — BOB speaks his takes (optional toggle, already built).
 - Share infra / confetti / sound.
 - The Vault → repurposed as **"Your Record"** (streaks + daily history).
@@ -183,6 +191,7 @@ BOB's panel (`panel.js` / the serverless ensemble) is a natural **showcase for O
 
 ## Non-Goals (v3.0)
 
+- **Any backend.** "The Board" is a deterministic projection; live crowd voting waits for players.
 - Multi-device / room codes (→ Family Mode).
 - Accounts/login (anonymous device-id only, as today).
 - The full 100+ category library as a front-door.

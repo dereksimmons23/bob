@@ -72,7 +72,7 @@ export default function DailyResult({ result, onReplay, onFreeplay, onHome }) {
           {/* three champions */}
           <div className="bd-champ-grid bd-anim bd-d2">
             <Champ who="You" name={result.youChampion} cls="you" />
-            <Champ who="The Crowd" name={result.crowdChampion} cls="crowd" />
+            <Champ who="The Board" name={result.crowdChampion} cls="crowd" />
             <Champ who="BOB" name={result.bobChampion} cls="bob" />
           </div>
 

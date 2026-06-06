@@ -196,7 +196,7 @@ export default function DailyPlay({ bracket, mode, onComplete, onExit }) {
 
         {mode === 'panel' && phase === 'choose' && (
           <p className="bd-center bd-dim" style={{ marginTop: 18, fontSize: 13 }}>
-            Blind mode. BOB and the crowd stay hidden until the end. Trust your gut.
+            Blind mode. BOB and the board stay hidden until the end. Trust your gut.
           </p>
         )}
 
@@ -241,8 +241,8 @@ function CrowdBar({ a, b, crowd, filled, className }) {
   return (
     <div className={`bd-crowd-row ${className}`}>
       <div className="bd-crowd-head">
-        <span>The Crowd</span>
-        <span>{crowd.winner} takes it</span>
+        <span>The Board</span>
+        <span>{crowd.winner} favored</span>
       </div>
       <div className="bd-bar">
         <div className="bd-bar-seg bd-bar-a" style={{ width: `${pctA}%` }}>
@@ -254,7 +254,7 @@ function CrowdBar({ a, b, crowd, filled, className }) {
         </div>
       </div>
       {crowd.source === 'estimate' && (
-        <div className="bd-estimate">◦ early read — live crowd data coming soon</div>
+        <div className="bd-estimate">◦ projected board · real votes coming soon</div>
       )}
     </div>
   )
